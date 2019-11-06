@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<style>
+  div{ 
+    width: 100px;
+    height: 100px;
+    background: red;
+  }
+</style>
+<body>
+  <div id="oDiv"></div>
+</body>
+<script src="./throttle.js"></script>
+<script>
+  var odiv = document.getElementById('oDiv');
+  var i = 0
+  function count() {
+    console.log(++i)
+    return i;
+  }
+  odiv.onmousemove = throttle2(count, 1000, 1)
+  // setTimeout(() => {
+  //   debounce(count, 1000)
+  // }, 3000)
+</script>
+</html>
