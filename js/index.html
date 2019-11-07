@@ -14,19 +14,23 @@
   }
 </style>
 <body>
-  <div id="oDiv"></div>
+  <!-- <div id="oDiv"></div> -->
 </body>
-<script src="./throttle.js"></script>
+<script src="./bind.js"></script>
 <script>
-  var odiv = document.getElementById('oDiv');
-  var i = 0
-  function count() {
-    console.log(++i)
-    return i;
+
+  var foo = {
+    value: 999
+  };
+  function bar(a, b, c, d) {
+    console.log(Array.prototype.slice.call(arguments, 1), arguments)
+    console.log(this.value);
   }
-  odiv.onmousemove = throttle2(count, 1000, 1)
-  // setTimeout(() => {
-  //   debounce(count, 1000)
-  // }, 3000)
+  bar(1,2,3,4);
+  // 返回了一个函数
+  // var bindFoo = bar.myBind(foo); 
+  // console.log(bindFoo)
+  // bindFoo(1,2,3,4);
+
 </script>
 </html>
