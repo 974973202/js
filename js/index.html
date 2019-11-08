@@ -18,7 +18,7 @@
 <body>
   <!-- <div id="oDiv"></div> -->
 </body>
-<script src="./call&apply.js"></script>
+<script src="../especially/quickSort.js"></script>
 <script>
 
   // var value = 2;
@@ -45,19 +45,7 @@
   // }
   // test(1,2,3,4)
 
-  var arr = [1, [2, [3, [4, 5]]], 6];
-  let result = [];
-  function test(arr) {
-    arr.forEach(ele => {
-      if(Array.isArray(ele)) {
-        test(ele)
-      } else {
-        result.push(ele)
-      }
-    });
-    return result
-  }
-  console.log(test(arr))
+  
 
 
 </script>
