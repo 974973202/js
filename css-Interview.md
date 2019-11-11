@@ -42,3 +42,25 @@
 >  > <p>:before	p:before	在每个p 元素之前插入内容
 >  > <p>:after	p:after	在每个p 元素之后插入内容
 >  > <p>:lang(language)	p:lang(it)	为p 元素的lang属性选择一个开始值
+
+### BFC
+* 什么是BFC
+> 是块级格式化上下文，决定元素如何对其内容进行定位 以及 与其他元素的关系和相互作用
+* 触发BFC的条件
+> <p>根元素或其它包含它的元素
+> <p>浮动元素 (元素的 float 不是 none)
+> <p>绝对定位元素 (元素具有 position 为 absolute 或 fixed)
+> <p>内联块 (元素具有 display: inline-block)
+> <p>表格单元格 (元素具有 display: table-cell，HTML表格单元格默认属性)
+> <p>表格标题 (元素具有 display: table-caption, HTML表格标题默认属性)
+> <p>具有overflow 且值不是 visible 的块元素
+> <p>弹性盒（flex或inline-flex）
+> <p>display: flow-root
+> <p>column-span: all
+* BFC的效果
+> <p> 内部的盒会在垂直方向一个接一个排列（可以看作BFC中有一个的常规流）
+> <p> 处于同一个BFC中的元素相互影响，可能会发生外边距重叠
+> <p> 每个元素的margin box的左边，与容器块border box的左边相接触(对于从左往右的格式化，否则相反)，即使存在浮动也是如此
+- BFC就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素，反之亦然
+- 计算BFC的高度时，考虑BFC所包含的所有元素，连浮动元素也参与计算
+- 浮动盒区域不叠加到BFC上

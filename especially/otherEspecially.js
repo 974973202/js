@@ -85,3 +85,5 @@ function flatten(arr) {
 }
 // es6
 // const flatten = array => array.reduce((acc, cur) => (Array.isArray(cur) ? [...acc, ...flatten(cur)] : [...acc, cur]), [])
+
+// 找数组最大值与最小值的差

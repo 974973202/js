@@ -8,15 +8,34 @@
   <title>Document</title>
 </head>
 <style>
-  div {
+  #Div1 {
+     /* overflow: hidden; */
+    /* margin-bottom: 50px; */
+    /* display: inline-block; */
+    /* float: left; */
+  }
+  #oDiv {
     width: 100px;
     height: 100px;
     background: red;
+    /* display: inline-block; */
+    float: left;
+    /* margin-bottom: 50px; */
+  }
+  #Div2 {
+    /* margin-top: 50px; */
+    width: 100px;
+    height: 100px;
+    background: green;
+    float: left;
   }
 </style>
 
 <body>
-  <!-- <div id="oDiv"></div> -->
+  <div id="Div1">
+    <div id="oDiv"></div>
+  </div>
+  <div id="Div2">123</div>
   <input type="file" id="file" multiple="multiple" onchange="handleFile()">
 </body>
 <script src="./especially/otherEspecially.js"></script>
