@@ -60,7 +60,7 @@ function unique(arr) {
 }
 
 // 数组扁平化加去重
-var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];
+// var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];
 function flattenFn() {
   let result = [];
   return function flatten(arr) {
@@ -74,7 +74,7 @@ function flattenFn() {
     return result
   }
 }
-console.log(unique(flattenFn()(arr)))
+// console.log(unique(flattenFn()(arr)))
 
 // 迭代的方式实现数组扁平化
 function flatten(arr) {
@@ -86,4 +86,3 @@ function flatten(arr) {
 // es6
 // const flatten = array => array.reduce((acc, cur) => (Array.isArray(cur) ? [...acc, ...flatten(cur)] : [...acc, cur]), [])
 
-// 找数组最大值与最小值的差
