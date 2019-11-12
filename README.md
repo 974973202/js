@@ -1,4 +1,1 @@
-## js
-
-- 1.**debounce**
-- 2.**throttle**
+[腾讯]https://juejin.im/post/5b37534be51d4558d9236404#heading-4
