@@ -91,6 +91,11 @@ super，指向当前对象的原型对象。
 
 对象的新增方法
 Object.is它用来比较两个值是否严格相等，与严格比较运算符（===）的行为基本一致。
+// +0 === -0 //true
+// NaN === NaN // false
+// Object.is(+0, -0) // false
+// Object.is(NaN, NaN) // true
+
 Object.assign方法用于对象的合并，将源对象（source）的所有可枚举属性，复制到目标对象（target）Object.assign方法实行的是浅拷贝，而不是深拷贝。
 Object.getOwnPropertyDescriptors()方法，返回指定对象所有自身属性（非继承属性）的描述对象。
 Object.setPrototypeOf方法的作用与__proto__相同，用来设置一个对象的prototype对象，返回参数对象本身。它是 ES6 正式推荐的设置原型对象的方法。Object.getPrototypeOf()与Object.setPrototypeOf方法配套，用于读取一个对象的原型对象。

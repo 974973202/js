@@ -9,25 +9,26 @@
 </head>
 <style>
   .box {
-    height: 200px;
-    display: flex;
-  }
-
-  .box>div {
-    height: 100%;
-  }
-
-  .box-left {
-    width: 200px;
-    /* float: left; */
-    background-color: blue;
-  }
-
-  .box-right {
-    /* margin-left: 210px; */
-    /* flex: 1; */
+    height: 100px;
+    width: 100px;
     background-color: red;
+    position: fixed;
+    top: 100px;
+    left: 0;
+    border: 50px solid black;
+    padding: 50px;
+    margin: 50px;
   }
+  .box-left {
+    height: 100px;
+    width: 100px;
+    background-color: blue;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  
 </style>
 
 <body>

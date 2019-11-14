@@ -86,3 +86,23 @@ function flatten(arr) {
 // es6
 // const flatten = array => array.reduce((acc, cur) => (Array.isArray(cur) ? [...acc, ...flatten(cur)] : [...acc, cur]), [])
 
+// 斐波那契数列
+// 这个数列从第3项开始，每一项都等于前两项之和
+function fb1(n) {
+  if(n <= 1) {
+    return 1
+  } else {
+    return fb1(n-1) + fb2(n-2)
+  }
+}
+
+function fb2(n) {
+  var b = 1; // 记录 n - 1次的数
+  var sum = 1;
+  for (var i = 1; i < n; i++) {
+    var tmp = sum;
+    sum += b;
+    b = tmp;
+  }
+  return sum;
+}
