@@ -128,16 +128,21 @@ console.log(string.match(regex)[0]);
 ```
 
 - 三位前面加，
+```
 var result = "12345678".replace(/(?=\w{3}$)/g, ',')
 console.log(result); 
 // => "12345,678"
+```
 
 - 所有三位前加，
+```
 var result = "12345678".replace(/(?=(\w{3})+$)/g, ',')
 console.log(result); 
 // => "12,345,678"
+```
 
 - 偶数情况
+```
 var string1 = "12345678",
 string2 = "123456789";
 reg = /(?!^)(?=(\d{3})+$)/g;
@@ -147,31 +152,41 @@ console.log(result);
 result = string2.replace(reg, ',');
 console.log(result); 
 // => "123,456,789"
+```
 
 - 其他形式
+```
 var string = "12345678 123456789",
 reg = /(?!\b)(?=(\d{3})+\b)/g;
 var result = string.replace(reg, ',')
 console.log(result); 
 // => "12,345,678 123,456,789"
+```
 
 - 密码长度6-12位，由数字、小写字符和大写字母组成，但必须至少包括2种字符
+```
 var reg = /(?=.*[0-9])(?=.*[a-z])^[0-9A-Za-z]{6,12}$/
+```
 - 加强
 > 1. 同时包含数字和小写字母
 > 2. 同时包含数字和大写字母
 > 3. 同时包含小写字母和大写字母
 > 4. 同时包含数字、小写字母和大写字母
+```
 var reg = /((?=.*[0-9])(?=.*[a-z])|(?=.*[0-9])(?=.*[A-Z])|(?=.*[a-z])(?=.*[A-Z]))^[0-9A-Za-z]{6,12}$/;
 var reg = /(?!^[0-9]{6,12}$)(?!^[a-z]{6,12}$)(?!^[A-Z]{6,12}$)^[0-9A-Za-z]{6,12}$/;
+```
 
 - 把yyyy-mm-dd格式，替换成mm/dd/yyyy
+```
 var regex = /(\d{4})-(\d{2})-(\d{2})/;
 var string = "2017-06-12";
 var result = string.replace(regex, "$2/$3/$1");
 console.log(result); 
 // => "06/12/2017"
+```
 > 其中replace中的，第二个参数里用$1、$2、$3指代相应的分组。等价于如下的形式：
+```
 var regex = /(\d{4})-(\d{2})-(\d{2})/;
 var string = "2017-06-12";
 var result = string.replace(regex, function() {
@@ -179,7 +194,9 @@ var result = string.replace(regex, function() {
 });
 console.log(result); 
 // => "06/12/2017"
+```
 > 也等价于：
+```
 var regex = /(\d{4})-(\d{2})-(\d{2})/;
 var string = "2017-06-12";
 var result = string.replace(regex, function(match, year, month, day) {
@@ -187,3 +204,4 @@ var result = string.replace(regex, function(match, year, month, day) {
 });
 console.log(result); 
 // => "06/12/2017"
+```
