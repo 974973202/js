@@ -53,3 +53,32 @@ display 属性切换元素的可见性
 将按键修饰符用于 “enter”，“tab”，“esc”，“space” 等常见按键
 > 例如： <textarea @keyup.enter="storeComment"></textarea>
 
+### 12. 如何在单页 Vue 应用（SPA）中实现路由？
+>  vue-router 包括嵌套路线、路线参数和通配符、过渡、HTML5 历史与哈希模
+式和自定义滚动行为等功能
+
+### 13. 使用 Vue 时调用 event.preventDefault() 的最佳方式是什么？
+> 阻止默认事件 在事件侦听器上调用 event.preventDefault() 的最佳方式是
+将 .prevent 修饰符与 v-on 指令一起使用
+> 例如： <a @click.prevent='doSomethingWhenClicked'>Do Something</a>
+
+### 14. 什么是过滤器？
+> 过滤器是在 Vue 程序中实现自定义文本格式的一种非常简单的方法。它们就像
+可以在表达式中通过管道传递（使用管道字符）以取得结果的运算符, 简单来说就
+是处理过滤数据的方法
+
+### 15. 如何动态地在元素上切换 CSS 类？
+> 三目运算符 动态控制变量的true false 来改变
+
+### 21. 什么是生命周期hook？列出一些生命周期hook。
+> Vue 实例（组件）从其初始化到销毁和删除都经历生命周期。在整个过程中，
+Vue 允许开发人员运行自定义函数的几个阶段。这些函数称为生命周期 hook
+> 以下是一些生命周期 hook 的列表:
+> created
+> mounted
+> updated
+> destroyed
+
+### 24. 如何从子组件发出自定义事件？
+> 可以用 $emit('event-name', eventPayload)发出自定义事件。然后可以像
+其他事件一样，用 v-on 指令在父组件上拦截
