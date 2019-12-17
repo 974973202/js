@@ -37,12 +37,13 @@
     <div class="box-right">456</div>
   </div> -->
 </body>
-<script src="./js/await.js"></script>
-<script src="./js/curry.js"></script>
 <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script>
-
-
+  function test() {
+    let key = [].shift.call(arguments);
+    console.log(key)
+  }
+  test('pet', ['二哈', '波斯猫'])
 </script>
 
 </html>
