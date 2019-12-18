@@ -1,0 +1,3 @@
+### $emit $on
+
+### directive
