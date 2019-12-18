@@ -20,9 +20,9 @@ Function.prototype.myBind = function (context, ...args) {
   var fNOP = function () { };
 
   var fbound = function () {
-    self.apply(this instanceof self ?
-      this :
-      context, args.concat(Array.prototype.slice.call(arguments)));
+    self.apply(this instanceof self 
+      ? this : context,
+      args.concat(Array.prototype.slice.call(arguments)));
   }
 
   fNOP.prototype = this.prototype;
