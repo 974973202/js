@@ -1,5 +1,26 @@
-### 事件委托[https://www.jianshu.com/p/0c1d21a631a0]
+### 事件委托
 事件委托[https://www.jianshu.com/p/0c1d21a631a0]
+
+### 惰性函数
+惰性函数[http://www.zhangyunling.com/375.html]
+```
+let addEvent1 = (type, element, fun) => {
+  if (element.addEventListener) {
+    addEvent1 = (type, element, fun) => {
+      element.addEventListener(type, fun, false);
+    }
+  } else if (element.attachEvent) {
+    addEvent1 =  (type, element, fun) => {
+      element.attachEvent('on' + type, fun);
+    }
+  } else {
+    addEvent1 = (type, element, fun) => {
+      element['on' + type] = fun;
+    }
+  }
+  return addEvent1(type, element, fun);
+}
+```
 
 ### 作用域链 原型链 继承 闭包
 - 作用域
