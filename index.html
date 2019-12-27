@@ -19,6 +19,7 @@
     padding: 50px;
     margin: 50px;
   }
+
   .box-left {
     height: 100px;
     width: 100px;
@@ -27,8 +28,6 @@
     top: 0;
     left: 0;
   }
-
-  
 </style>
 
 <body>
@@ -39,11 +38,26 @@
 </body>
 <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script>
-  function test() {
-    let key = [].shift.call(arguments);
-    console.log(key)
+  async function test() {
+    await test1()
+    console.log(2)
   }
-  test('pet', ['二哈', '波斯猫'])
+
+  test()
+
+  async function test1() {
+    await function () {
+      setTimeout(() => {
+        console.log(1)
+      }, 3000)
+    }
+    // return new Promise((resolve, reject) => {
+    //   setTimeout(() => {
+    //     console.log(1)
+    //     resolve(1)
+    //   }, 3000)
+    // })
+  }
 
 </script>
 

@@ -3,6 +3,8 @@
 
 ### 惰性函数
 惰性函数[http://www.zhangyunling.com/375.html]
+- 惰性加载表示函数执行的分支仅会发生一次。有两种实现惰性加载的方式：在函数被
+调用时再处理函数；在声明函数时就指定适当函数。
 ```
 let addEvent1 = (type, element, fun) => {
   if (element.addEventListener) {
