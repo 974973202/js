@@ -31,33 +31,34 @@
 </style>
 
 <body>
-  <div class="box">
+  <!-- <div class="box">
     <div class="box-left">123</div>
     <div class="box-right">456</div>
-  </div>
+  </div> -->
 </body>
 <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script>
-  async function test() {
-    await test1()
-    console.log(2)
-  }
-
-  test()
-
-  async function test1() {
-    await function () {
-      setTimeout(() => {
-        console.log(1)
-      }, 3000)
+  var dep = {
+    event: [],
+    listen: function (fn) {
+      this.event.push(fn)
+    },
+    trigger: function () {
+      for (let i = 0; i < this.event.length; i++) {
+        this.event[i].apply(this, arguments)
+      }
     }
-    // return new Promise((resolve, reject) => {
-    //   setTimeout(() => {
-    //     console.log(1)
-    //     resolve(1)
-    //   }, 3000)
-    // })
   }
+
+  dep.listen(function (price, squareMeter) {
+    console.log('价格= ' + price)
+    console.log('squareMeter= ' + squareMeter)
+  })
+
+  dep.trigger(20000000, 88)
+
+
+  
 
 </script>
 
