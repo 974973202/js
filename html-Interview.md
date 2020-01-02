@@ -1,3 +1,5 @@
+[audio-video属性方法表]https://www.jianshu.com/p/1fe701c9179f
+
 ### XSS漏洞
 ```
 不严谨的 content-type导致的 XSS 漏洞，想象一下 JSONP 就是你请求 http://youdomain.com?
