@@ -205,3 +205,66 @@ var A = {
 
 ### 组合模式
 
+### 职责链模式
+使多个对象都有机会处理请求，从而避免请求的发送者和接收者之间的耦合关系，将这些对象
+连成一条链，并沿着这条链传递该请求，直到有一个对象处理它为止
+最大优点：请求发送者只需要知道链中的第一个节点，从而弱化了发送者和一组接收者之间的
+强联系.
+```
+  //采用一种更灵活的方式，让各个节点可以灵活拆分和重组
+
+  // 500元订单
+  var order500 = function (orderType, pay, stock) {
+    if (orderType === 1 && pay === true) {
+      console.log('500元定金预定，得到100元优惠卷')
+    } else {
+      //我不知道下一个节点是谁，反正把请求往后传递
+      return 'nextSuccessor'
+    }
+  }
+  //200元订单
+  var order200 = function (orderType, pay, stock) {
+    if (orderType === 2 && pay === true) {
+      console.log('200元定金预定，得到50元优惠卷')
+    } else {
+      //我不知道下一个节点是谁，反正把请求往后传递
+      return 'nextSuccessor'
+    }
+  }
+  //普通的购买订单
+  var orderNormal = function (orderType, pay, stock) {
+    if (stock > 0) {
+      console.log('普通购买，无优惠卷');
+    } else {
+      console.log('手机库存不足');
+    }
+  }
+
+  var Chain = function (fn) {
+    this.fn = fn;
+    this.successor = null
+  }
+  Chain.prototype.setNextSuccessor = function (successor) {
+    return this.successor = successor
+  }
+  Chain.prototype.passRequest = function () {
+    var ret = this.fn.apply(this, arguments)
+    if (ret === 'nextSuccessor') {
+      return this.successor && this.successor.passRequest.apply(this.successor, arguments)
+    }
+    return ret
+  }
+
+  var chainOrder500 = new Chain(order500)
+  var chainOrder200 = new Chain(order200)
+  var chainOrderNormal = new Chain(orderNormal)
+
+  chainOrder500.setNextSuccessor(chainOrder200)
+  chainOrder200.setNextSuccessor(chainOrderNormal)
+
+  chainOrder500.passRequest(1, true, 500);
+  chainOrder500.passRequest(3, true, 500);
+  chainOrder500.passRequest(1, false, 0);
+  //假如又想出了300元方案，我们就在该链中加一个节点即可
+```
+
