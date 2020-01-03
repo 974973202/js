@@ -5,10 +5,16 @@ javascript 动态类型语言 弱类型语言
 - 单一职责原则
 > 一个程序只做好一件事
 > 如果功能过于复杂就拆分开，每个部分保持独立
+> 体现较多的设计模式 代理模式、迭代器模式、单例模式、装饰者模式
+
+- 最少知识原则
+> 体现较多的设计模式 中介者模式、外观模式
 
 - 开放/封闭原则
 > 对扩展开放，对修改封闭
 > 增加需求时，扩展新代码，而非修改已有代码
+> 1.可以放置挂钩 2.使用回调函数
+> 体现较多的设计模式 发布-订阅模式、模板方法模式、策略模式、代理模式、职责链模式
 
 - 里氏替换原则
 > 子类能覆盖父类
@@ -23,6 +29,21 @@ javascript 动态类型语言 弱类型语言
 > 使用方只关注接口而不关注具体类的实现
 
 ### 多态
+```
+var makeSound = function( animal ) {
+  if( animal instanceof Duck ) {
+    console.log('gagaga')
+  } else if( animal instanceof Chicken ) {
+    console.log('lololo')
+  }
+}
+var Duck = function () {}
+var Chicken = function () {}
+
+makeSound( new Dog() )
+makeSound( new Chicken() )
+```
+- 开闭原则拆分
 ```
 var makeSound = function ( animal ) {
   animal.sound();
@@ -40,7 +61,15 @@ Chicken.prototype.sound = function () {
 
 makeSound( new Dog() )
 makeSound( new Chicken() )
+
+// 添加动物叫声， 不用改原有的makeSound函数
+var Duck = function() {}
+Duck.prototype.sound = function() {
+  console.log('gagaga')
+}
+makeSound( new Duck() )
 ```
+
 
 ### 单例模式
 保证一个类仅有一个实例，并提供一个访问它的全局访问点。
@@ -515,3 +544,7 @@ var A = {
 
   a()
 ```
+
+### 状态模式
+
+### 适配器模式

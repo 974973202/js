@@ -38,24 +38,27 @@
 </body>
 <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script>
-  //采取不污染原型的方式
-  var before = function (fn, beforeFn) {
-    return function () {
-      beforeFn.apply(this, arguments)
-      return fn.apply(this, arguments)
-    }
+  async function test() {
+    await a();
+    await b();
+  }
+  test()
+
+  async function a() {
+    setTimeout(() => {
+        console.log('a')
+      }, 1000)
+    // return new Promise((res) => {
+    //   setTimeout(() => {
+    //     console.log('a')
+    //     res()
+    //   }, 1000)
+    // })
   }
 
-  var a = before(function () {
-    console.log('原函数')
-  }, function () {
-    console.log('before函数 1')
-  })
-  a = before(a, function () {
-    console.log('before函数 2')
-  })
-
-  a()
+  function b() {
+    console.log('b')
+  }
 
 
 
