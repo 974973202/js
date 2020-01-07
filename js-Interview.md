@@ -1,6 +1,14 @@
 ### 事件委托
 事件委托[https://www.jianshu.com/p/0c1d21a631a0]
 
+### JS异步加载
+- 动态生成script标签
+- 添加h5的async defer属性，前者乱序不适合依赖性加载
+- async 是“下载完就执行”， defer 是“渲染完再执行”
+
+### 原生JS中DOM节点相关API合集
+- [原生JS中DOM节点相关API合集]https://microzz.com/2017/04/06/jsdom/
+
 ### 惰性函数
 惰性函数[http://www.zhangyunling.com/375.html]
 - 惰性加载表示函数执行的分支仅会发生一次。有两种实现惰性加载的方式：在函数被
@@ -34,6 +42,7 @@ let addEvent1 = (type, element, fun) => {
 ```
 
 - 原型
+- 深度解析原型中的各个难点[https://juejin.im/post/5aa78fe66fb9a028d2079ca4]
 
 - 继承
 

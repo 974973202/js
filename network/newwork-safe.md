@@ -70,8 +70,13 @@ ctx.set('X-FRAME-OPTIONS', 'DENY')
 > 就是简单粗暴地送来⼤量正常的请求，超出服务器的最⼤承受量，导致宕机
 
 ### 跨域解决方案
-> JSONP
-> CORS
-> Nginx反向代理
-> postMessage
-> document.domain
+- [跨域解决方案]https://segmentfault.com/a/1190000011145364
+1、 通过jsonp跨域
+2、 document.domain + iframe跨域
+3、 location.hash + iframe
+4、 window.name + iframe跨域
+5、 postMessage跨域
+6、 跨域资源共享（CORS）
+7、 nginx代理跨域
+8、 nodejs中间件代理跨域
+9、 WebSocket协议跨域

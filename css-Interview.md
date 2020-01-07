@@ -86,6 +86,11 @@
 > 去除浮动
 > 自适用两列布局（float + overflow）
 
+### 清除浮动
+- clear:both;
+- overflow:hidden；
+- after伪类
+
 ### 盒模型
 > 包括内容区域(context)、 内边距区域(padding)、边框区域(border)、 外边距区域(margin)
 - box-sizing: content-box（W3C盒子模型）：**元素的宽高大小**表现为**内容的大小**。
@@ -114,3 +119,76 @@
 
 ### 首行缩进
 - 文本缩进，块级(block)用text-indent，内联(inline)用margin-left
+
+### flex 布局（display: flex）
+- 容器属性
+- flex-direction 决定主轴方向（容器排列方向）
+```
+  flex-direction: row | row-reverse | column | column-reverse;
+```
+
+- flex-wrap 如果一条轴线排不下，定义换行规则
+```
+  flex-wrap: nowrap | wrap | wrap-reverse;
+```
+
+- flex-flow flex-direction和flex-wrap的简写形式
+```
+  flex-flow: <flex-direction> || <flex-wrap>;
+```
+
+- justify-content 定义容器在主轴上的对齐方式
+```
+  justify-content: flex-start | flex-end | center | space-between | space-around;
+```
+
+- align-items 定义容器在交叉轴上的对齐方式
+```
+  align-items: flex-start | flex-end | center | baseline | stretch;
+```
+
+- align-content 定义多根轴线的对齐方式，如果容器只有一根轴线，该属性不起作用
+```
+  align-content: flex-start | flex-end | center | space-between | space-around | stretch;
+```
+
+- 项目属性
+- order 定义项目的排列顺序，数值越小，排列越靠前，默认为0
+- flex-grow 定义项目的放大比例，默认为0（即如果存在剩余空间，也不放大）
+- flex-shrink 定义项目的缩小比例，默认为1（即如果空间不足，该项目将缩小）
+- flex-basis 定义了在分配多余空间之前，项目占据的主轴空间。默认值为auto（项目本来大小）
+- flex 是flex-grow、flex-shrink和flex-basis的简写，默认值为 0 1 auto
+```
+flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]
+
+该属性有两个快捷值: auto(1 1 auto) 和 none(0 0 auto)
+
+建议优先使用这个属性，而不是单独写三个分离的属性
+
+因为浏览器会推算相关值
+```
+
+- align-self 允许单个项目有与其他项目不一样的对齐方式，可覆盖align-items属性，默认值为
+auto（表示继承父元素align-items属性，如果没有父元素，等同于stretch）
+```
+  align-self: auto | flex-start | flex-end | center | baseline | stretch;
+```
+
+### Css有哪些引入方式？ 通过link和@import引入有什么区别？
+- Css引入方式有4种 内联、内嵌、外链、导入
+
+- 外链link 除了可以加载css之外,还可以定义rss、rel等属性，没有兼容性问题，支持使用javascript改变样式
+
+- @import 是css提供的，只能用于加载css，不支持通过javascript修改样式
+
+- 页面被加载的时候，link会被同时加载，而@import则需等到页面加载完后再加载，可能出现无样式网页
+
+### 各种获得宽高的方式
+```
+获取屏幕的高度和宽度（屏幕分辨率）：window.screen.height/width
+获取屏幕工作区域的高度和宽度（去掉状态栏）：window.screen.availHeight/availWidth
+网页全文的高度和宽度：document.body.scrollHeight/Width
+滚动条卷上去的高度和向右卷的宽度：document.body.scrollTop/scrollLeft
+网页可见区域的高度和宽度（不加边线）：document.body.clientHeight/clientWidth
+网页可见区域的高度和宽度（加边线）：document.body.offsetHeight/offsetWidth
+```
