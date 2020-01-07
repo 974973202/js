@@ -8,54 +8,178 @@
   <title>Document</title>
 </head>
 <style>
-  .box {
-    height: 100px;
-    width: 100px;
-    background-color: red;
-    position: fixed;
-    top: 100px;
-    left: 0;
-    border: 50px solid black;
-    padding: 50px;
-    margin: 50px;
-  }
-  .box-left {
-    height: 100px;
-    width: 100px;
-    background-color: blue;
-    position: absolute;
-    top: 0;
-    left: 0;
+  :root {
+    width: 100%;
+    height: 100%;
+    position: relative;
+
   }
 
-  
+  .box {
+    height: 100px;
+    width: 250px;
+    display: flex;
+    border: 1px solid #ccc;
+    justify-items: center;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  .box1 {
+    width: 100px;
+    height: 40px;
+    background-color: aqua;
+  }
+
+  .box2 {
+    width: 100px;
+    height: 40px;
+    background-color: bisque;
+  }
+
+  .box3 {
+    width: 100px;
+    height: 40px;
+    background-color: brown;
+  }
+
+  .box4 {
+    width: 100px;
+    height: 40px;
+    background-color: burlywood;
+  }
+
+  .box5 {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    border: 1px solid red;
+  }
+
+  .box6 {
+    flex-basis: 200px;
+    background-color: aqua;
+  }
+
+  .box7 {
+    flex: 1;
+    background-color: aquamarine;
+  }
 </style>
 
 <body>
-  <!-- <div class="box">
-    <div class="box-left">123</div>
-    <div class="box-right">456</div>
-  </div> -->
+  <div class="box">
+    <div class="box1"></div>
+    <div class="box2"></div>
+    <div class="box3"></div>
+    <div class="box4"></div>
+  </div>
+  <input type="text" class="input">
+
+  <div class="box5">
+    <div class="box6"></div>
+    <div class="box7"></div>
+  </div>
+
+  <ul id="list"></ul>
 </body>
 <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="./myPromise.js"></script>
 <script>
-  function test() {
-    let key = [].shift.call(arguments);
-    console.log(key)
-  }
-  test('pet', ['二哈', '波斯猫'])
+  // async function test() {
+  //   await a();
+  //   await b();
+  // }
+  // test()
 
-  function test1 () {
-    // return function test2() {
-    //   var a = 1;
-    // }
-    return 2
-    // return {
-    //   a: 2
-    // } 
-  }
-  // test1()
-  console.log(test1())
+  // async function a() {
+  //   setTimeout(() => {
+  //     console.log('a')
+  //   }, 1000)
+  //   // return new Promise((res) => {
+  //   //   setTimeout(() => {
+  //   //     console.log('a')
+  //   //     res()
+  //   //   }, 1000)
+  //   // })
+  // }
+
+  // function b() {
+  //   console.log('b')
+  // }
+
+  // var list = document.getElementById('list');
+  // console.log(list)
+  // // if (!list) {
+  // //   return false;
+  // // }
+  // for (var i = 0; i < 3; i++) {
+  //   var li = document.createElement('li');
+  //   li.innerText = i;
+  //   li.addEventListener('click', function(e) {
+  //     // 事件委托
+  //     console.log(e.target.tagName == 'Li')
+  //   })
+  //   list.appendChild(li)
+  // }
+
+  let p1 = new MyPromise((resolve, reject) => {
+    setTimeout(() => {
+      resolve('111')
+    }, 2)
+  });
+  let p2 = new MyPromise((resolve, reject) => {
+    setTimeout(() => {
+      resolve('222')
+    }, 2)
+  });
+  let p3 = new MyPromise((resolve, reject) => {
+    setTimeout(() => {
+      resolve('333')
+    }, 1)
+  });
+
+  MyPromise.race([p1, p2, p3])
+  .then(res => {
+    console.log(res)
+  })
+
+  // let p = new MyPromise((resolve, reject) => {
+  //   // setTimeout(() => {
+  //     resolve('111')
+  //   // }, 2000)
+  // });
+  // console.log(p)
+  // let f1 = function (data) {
+  //   console.log(data)
+  //   return new MyPromise((resolve, reject) => {
+  //     // setTimeout(() => {
+  //       reject('333')
+  //       // throw new Error('333')
+  //     // }, 1000)
+  //   });
+  // }
+  // let f2 = function (data) {
+  //   console.log(data)
+  //   return new MyPromise((resolve, reject) => {
+  //     setTimeout(() => {
+  //       resolve('5555')
+  //     }, 1000)
+  //   });
+  // }
+  // let f3 = function (data) {
+  //   console.log(data);
+  // }
+  // let errorLog = function (error) {
+  //   console.log('error' + error)
+  // }
+
+  // p.then(f1, errorLog).then(f2, errorLog).then(f3, errorLog).catch(errorLog)
+
+
+
+
 </script>
 
 </html>
