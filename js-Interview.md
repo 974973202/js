@@ -41,13 +41,12 @@ let addEvent1 = (type, element, fun) => {
 上下文的变量对象构成的链表就叫做作用域链
 ```
 
-- 原型
-- 深度解析原型中的各个难点[https://juejin.im/post/5aa78fe66fb9a028d2079ca4]
-
-- 继承
+- 原型与继承
+- [深度解析原型中的各个难点]https://juejin.im/post/5aa78fe66fb9a028d2079ca4
+- [从prototype与__proto__窥探JS继承之源|掘金技术征文]https://juejin.im/post/58f9d0290ce46300611ada65
+- [原型链与继承]https://juejin.im/post/58f94c9bb123db411953691b
 
 - 闭包
-
 
 
 
