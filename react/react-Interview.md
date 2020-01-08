@@ -18,3 +18,6 @@
 
 ### React.Fiber 原理
 - [React.Fiber原理]https://www.youtube.com/watch?v=ZCuYPiUIONs
+
+### 基础react面试
+- [常见react面试题汇总（适合中级前端）]https://segmentfault.com/a/1190000016885832?utm_source=tag-newest

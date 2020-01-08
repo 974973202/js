@@ -15,6 +15,15 @@
 
   }
 
+  body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
   .box {
     height: 100px;
     width: 250px;
@@ -66,6 +75,31 @@
     flex: 1;
     background-color: aquamarine;
   }
+
+  .wp {
+    line-height: 300px;
+    text-align: center;
+    font-size: 0px;
+  }
+
+  .box0 {
+    font-size: 16px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: initial;
+    text-align: left;
+    /* 修正文字 */
+  }
+
+  .reflect-bottom-p {
+    padding-bottom: 300px;
+  }
+
+  .reflect-bottom {
+    width: 30px;
+    height: 30px;
+    -webkit-box-reflect: below;
+  }
 </style>
 
 <body>
@@ -83,6 +117,13 @@
   </div>
 
   <ul id="list"></ul>
+
+  <div class="wp">
+    <div class="box0">123123</div>
+  </div>
+
+  <p class="reflect-bottom-p"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K" class="reflect-bottom"></p>
+
 </body>
 <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="./myPromise.js"></script>
@@ -124,61 +165,38 @@
   //   list.appendChild(li)
   // }
 
-  let p1 = new MyPromise((resolve, reject) => {
-    setTimeout(() => {
-      resolve('111')
-    }, 2)
+
+  function jsonp(url, jsonpCallback, success) {
+    let script = document.createElement("script");
+    script.src = url;
+    script.async = true;
+    script.type = "text/javascript";
+    window[jsonpCallback] = function (data) {
+      success && success(data);
+    };
+    document.body.appendChild(script);
+  }
+  jsonp(
+    "https://pic.sogou.com/pics?query=剑网三",
+    "callback",
+    function (value) {
+      console.log(value.json(), 'ererer');
+    }
+  );
+
+  $.ajax({
+    type: "get",
+    async: false,
+    url: `https://pic.sogou.com/pics?query=剑网三`,
+    dataType: "jsonp",
+    jsonp: "callback", //传递给请求处理程序或页面的，用以获得jsonp回调函数名的参数名(一般默认为:callback)
+    success(res) {
+      console.log(res, 'resres')
+    },
+    error(e) {
+      console.error(e)
+    }
   });
-  let p2 = new MyPromise((resolve, reject) => {
-    setTimeout(() => {
-      resolve('222')
-    }, 2)
-  });
-  let p3 = new MyPromise((resolve, reject) => {
-    setTimeout(() => {
-      resolve('333')
-    }, 1)
-  });
-
-  MyPromise.race([p1, p2, p3])
-  .then(res => {
-    console.log(res)
-  })
-
-  // let p = new MyPromise((resolve, reject) => {
-  //   // setTimeout(() => {
-  //     resolve('111')
-  //   // }, 2000)
-  // });
-  // console.log(p)
-  // let f1 = function (data) {
-  //   console.log(data)
-  //   return new MyPromise((resolve, reject) => {
-  //     // setTimeout(() => {
-  //       reject('333')
-  //       // throw new Error('333')
-  //     // }, 1000)
-  //   });
-  // }
-  // let f2 = function (data) {
-  //   console.log(data)
-  //   return new MyPromise((resolve, reject) => {
-  //     setTimeout(() => {
-  //       resolve('5555')
-  //     }, 1000)
-  //   });
-  // }
-  // let f3 = function (data) {
-  //   console.log(data);
-  // }
-  // let errorLog = function (error) {
-  //   console.log('error' + error)
-  // }
-
-  // p.then(f1, errorLog).then(f2, errorLog).then(f3, errorLog).catch(errorLog)
-
-
-
 
 </script>
 

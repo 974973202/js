@@ -175,6 +175,33 @@ auto（表示继承父元素align-items属性，如果没有父元素，等同�
   align-self: auto | flex-start | flex-end | center | baseline | stretch;
 ```
 
+### CSS动画
+- transition: 过渡动画
+```
+  transition-property: 属性
+  transition-duration: 间隔
+  transition-timing-function: 曲线
+  transition-delay: 延迟
+  常用钩子: transitionend
+```
+
+- animation / keyframes
+```
+animation-name: 动画名称，对应@keyframes
+animation-duration: 间隔
+animation-timing-function: 曲线
+animation-delay: 延迟
+animation-iteration-count: 次数
+  infinite: 循环动画
+animation-direction: 方向
+  alternate: 反向播放
+animation-fill-mode: 静止模式
+  forwards: 停止时，保留最后一帧
+  backwards: 停止时，回到第一帧
+  both: 同时运用 forwards / backwards
+常用钩子: animationend
+```
+
 ### Css有哪些引入方式？ 通过link和@import引入有什么区别？
 - Css引入方式有4种 内联、内嵌、外链、导入
 
@@ -193,3 +220,13 @@ auto（表示继承父元素align-items属性，如果没有父元素，等同�
 网页可见区域的高度和宽度（不加边线）：document.body.clientHeight/clientWidth
 网页可见区域的高度和宽度（加边线）：document.body.offsetHeight/offsetWidth
 ```
+
+### CSS加载会造成阻塞吗
+- css加载不会阻塞DOM树的解析
+- css加载会阻塞DOM树的渲染
+- css加载会阻塞**后面js**语句的执行
+> [CSS加载会造成阻塞吗]https://segmentfault.com/a/1190000018130499
+
+- 怎么判断页面是否加载完成
+> onLoad 事件触发代表页面中的 DOM，CSS，JS，图片已经全部加载完毕。
+> DOMContentLoaded 事件触发代表初始的 HTML 被完全加载和解析，不需要等待 CSS，JS，图片加载。
