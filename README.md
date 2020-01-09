@@ -21,3 +21,8 @@ AST树进行遍历转译 ->得到新的AST树->用babel-generator通过AST树生
 
 - [一个合格(优秀)的前端都应该阅读这些文章]https://juejin.im/post/5d387f696fb9a07eeb13ea60
 - [JavaScript开发者应懂的33个概念]https://juejin.im/entry/5bc9aae56fb9a05d20687bf3
+
+### other
+- [2019年京东PLUS会员前端开发之路]https://juejin.im/post/5e156cb45188253aa666afa2
+- [京东Vue单页面应用脚手架Gaea-4.0]https://github.com/jdf2e/Gaea4
+- [你会成为你想的那个人|考拉掘金年终总结]https://juejin.im/post/5e0c4e0b6fb9a0480a5a71a9
