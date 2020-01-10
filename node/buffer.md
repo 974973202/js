@@ -243,8 +243,6 @@ server.listen(8000);
 `Buffer`虽好也不要瞎用，`Buffer`与`String`两者都可以存储字符串类型的数据，但是，`String`与`Buffer`不同，在内存分配上面，`String`直接使用`v8堆存储`，不用经过`c++`堆外分配内存，并且`Google`也对`String`进行优化，在实际的拼接测速对比中，`String`比`Buffer`快。但是`Buffer`的出现是为了处理二进制以及其他非`Unicode`编码的数据，所以在处理`非utf8`数据的时候需要使用到`Buffer`来处理。
 
 
-今天就分享这么多，如果对分享的内容感兴趣，可以关注公众号「程序员成长指北」，或者加入技术交流群，大家一起讨论。
-
 Node系列原创文章:
 
 [深入理解Node.js 中的进程与线程
@@ -260,7 +258,3 @@ Node系列原创文章:
 
 [Node.js 高级进阶之 fs 文件模块学习
 ](https://juejin.im/post/5d3f1664e51d4561a34618c1)
-### 关注我
-觉得不错点个Star，欢迎 加群 互相学习。
-![](http://img.xiaogangzai.cn/leading.png)
-

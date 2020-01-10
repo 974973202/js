@@ -613,7 +613,3 @@ coding | 编码简单、调试方便 |编码、调试复杂 | 编码、调试复
 - Node中child_process模块的使用:https://juejin.im/post/5b10a814f265da6e2a08a6f7
 - 朴灵老师的书籍【Node.js 深入浅出】
 - 淘宝前端团队cluster讲解:http://taobaofed.org/blog/2015/11/03/nodejs-cluster/
-
-加入我们一起学习吧！
-![](https://user-gold-cdn.xitu.io/2019/6/25/16b8a3d23a52b7d0?w=940&h=400&f=jpeg&s=217901)
-node学习交流群

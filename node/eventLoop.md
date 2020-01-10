@@ -210,8 +210,3 @@ node.js官网：
 - 事件循环：https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/#setimmediate-vs-settimeout
 - Timers：https://nodejs.org/dist/latest-v10.x/docs/api/timers.html
 
-<center>觉得本文对你有帮助？请分享给更多人<center>
-
-- ![](https://user-gold-cdn.xitu.io/2019/5/31/16b0e806929a3515?w=500&h=420&f=jpeg&s=39714)
-
-*欢迎大家关注我的公众号——程序员成长指北。请自行微信搜索——“程序员成长指北”*
