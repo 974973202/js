@@ -1,4 +1,4 @@
-- [腾讯]https://juejin.im/post/5b37534be51d4558d9236404#heading-4
+- [腾讯]https://juejin.im/post/5b37534be51d4558d9236404
 - [javascript运行原理]https://mp.weixin.qq.com/s/nGmFUDYeXSZ9Gq8-XNi8ig
 ### babel原理
 > ES6、7代码输入 -> babylon进行解析 -> 得到AST（抽象语法树）-> plugin用babel-traverse对
@@ -16,6 +16,7 @@ AST树进行遍历转译 ->得到新的AST树->用babel-generator通过AST树生
 - [面试]https://juejin.im/post/5df1e312f265da33d039d06d
 - [前端开发中79条不可忽视的知识点汇总]https://juejin.im/post/5d8989296fb9a06b1f147070
 - [2万5千字大厂面经|掘金技术征文]https://juejin.im/post/5ba34e54e51d450e5162789b
+- [前端100问：能搞懂80%的请把简历给我]https://juejin.im/post/5d23e750f265da1b855c7bbe
 
 - [musicApi接口]https://messoer.github.io/mess-api-doc/#/music/tencent
 
