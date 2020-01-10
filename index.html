@@ -122,7 +122,9 @@
     <div class="box0">123123</div>
   </div>
 
-  <p class="reflect-bottom-p"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K" class="reflect-bottom"></p>
+  <p class="reflect-bottom-p"><img
+      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K"
+      class="reflect-bottom"></p>
 
 </body>
 <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -130,16 +132,16 @@
 <script src="./js/deepClone.js"></script>
 <script>
 
-var obj1 = {
+  var obj1 = {
     a: 1,
     b: { f: { g: 1 } },
     c: [1, 2, 3]
-};
+  };
 
-var oo = deepClone(obj1);
-obj1.b.f.g = 10
-obj1.c[0] = 4
-console.log(oo, 'oooooooo', obj1)
+  var oo = deepClone(obj1);
+  obj1.b.f.g = 10
+  obj1.c[0] = 4
+  console.log(oo, 'oooooooo', obj1)
 
 
   // async function test() {
@@ -212,76 +214,9 @@ console.log(oo, 'oooooooo', obj1)
   //   }
   // });
 
-
-
-  // 每个构造函数(Test)都有一个原型对象(prototype),原型对象都包含一个指向构造函数的指针,而实例(instance)都包含一个指向原型对象的内部指针.
-
-  // 如果试图引用对象(实例instance)的某个属性,会首先在对象内部寻找该属性,直至找不到,然后才在该对象的原型(instance.prototype)里去找这个属性.
-
-  function Test(name = 'one') {
-    this.name = name
-    // return () => {}
-  }
-  Test.prototype.n = function () {
-    return this.name
-  }
-
-  function Test1(name,age = 1) {
-    Test.call(this, name);
-    this.age = age
-  }
-  Test1.prototype = new Test()
-
-
-
-  const test1 = new Test1('l', 99);
-  const test2 = new Test1('zx', 88);
-
-
-  // function T() {
-
-  // }
-
-  // Test1.prototype.constructor = T
-
-  console.warn(test1, test2)
-
-  // console.log(test1 instanceof Object)
-  // console.log(test1 instanceof Test)
-  // console.log(test1 instanceof Test1)
-  // console.log(test1 instanceof T)
-
-  // console.log(Object.prototype.isPrototypeOf(test1))
-  // console.log(Test.prototype.isPrototypeOf(test1))
-  // console.log(Test1.prototype.isPrototypeOf(test1))
-  // console.log(T.prototype.isPrototypeOf(test1))
-
-
-  const test3 = new Test1()
-
-  console.error(test3.__proto__ === Test1.prototype)
-  console.error(test3.__proto__.__proto__ === Test1.prototype.__proto__)
-  console.error(test3.__proto__.__proto__ , Test1.prototype.__proto__)
-  console.error(Test1.__proto__ === Function.prototype)
-
-  console.error(Function.prototype.__proto__ === Object.prototype)
-  // console.log(Function.prototype === Object.prototype)
-
-  console.log(Object instanceof Function)
-  console.log(Function instanceof Object)
-
-  console.log(Object.__proto__   == Function.prototype);
-  console.log(Function.__proto__ == Function.prototype);
-
-  console.log(Function.__proto__ == Object.__proto__);
-
-  console.warn(Function.__proto__.__proto__ == Object.prototype);
-  console.warn(Object.__proto__.__proto__ == Object.prototype);
-  console.log(Object.prototype, Object.prototype.__proto__);
-
   // 拷贝
 
-  var a = [ 1, 3, 5, { x: 1 } ];
+  var a = [1, 3, 5, { x: 1 }];
   var b = Array.prototype.slice.call(a);
   b[0] = 2;
   b[1] = 2;
@@ -289,7 +224,7 @@ console.log(oo, 'oooooooo', obj1)
   console.log(b); // [ 2, 3, 5, { x: 1 } ];
 
 
-  
+
 
 </script>
 

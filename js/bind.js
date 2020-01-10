@@ -6,10 +6,31 @@
 // 对于普通函数，绑定this指向
 // 对于构造函数，要保证原函数的原型对象上的属性不能丢失
 
+/**
+ * 模仿实现 instanceof
+ * @param   left  [左侧参数为一个实例对象]
+ * @param   right [右侧为要判断的构造器函数]
+ * @return  [true / false]
+ */
+function myinstanceof (left, right) {
+  let prototype = right.prototype; // 获取目标原型对象
+
+  left = left.__proto__;
+
+  while (true) {
+    if(left == null) {
+      return false;
+    } else if (left == prototype) {
+      return true;
+    }
+    left = left.__proto__
+  }
+}
+
 // instanceof 
 // 1.判断一个实例是否属于某种类型 
 // 2.在继承关系中用来判断一个实例是否属于它的父类型
-function myinstanceof(left, right) { // left 实例  right 构造函数
+function myinstanceof1(left, right) { // left 实例  right 构造函数
   // 获得类型的原型
   let prototype = right.prototype // 取 right 的显示原型
   // 获得对象的原型

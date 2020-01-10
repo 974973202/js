@@ -26,3 +26,12 @@ AST树进行遍历转译 ->得到新的AST树->用babel-generator通过AST树生
 - [2019年京东PLUS会员前端开发之路]https://juejin.im/post/5e156cb45188253aa666afa2
 - [京东Vue单页面应用脚手架Gaea-4.0]https://github.com/jdf2e/Gaea4
 - [你会成为你想的那个人|考拉掘金年终总结]https://juejin.im/post/5e0c4e0b6fb9a0480a5a71a9
+
+- #### Nodejs系列
+  - [了解nodejs][node.js究竟是什么](/node/what.md)
+  - [事件循环][node事件循环](/node/eventLoop.md)
+  - [path模块][node核心模块-path](/node/path.md)
+  - [fs模块][node核心模块-fs](/node/fs.md)
+  - [stream模块][node核心模块-stream](/node/stream.md)
+  - [进程与线程][深入理解进程与线程](/node/processAndThread.md)
+  - [常见误区][nodejs十个常见误区](/node/errors.md)
