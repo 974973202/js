@@ -1,3 +1,4 @@
+// https://juejin.im/post/5c41297cf265da613356d4ec
 // MyPromise
 // 支持同步任务
 // 支持三种状态
@@ -196,4 +197,4 @@ MyPromise.reject = function (error) {
 }
 
 
-// module.exports = MyPromise;
+module.exports = MyPromise;
