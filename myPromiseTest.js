@@ -1,7 +1,7 @@
-let P = require("./myPromise")
+let MyPromise = require("./myPromise")
 let fs = require("fs")
 
-let p = new P((resolve, reject) => {
+let p = new MyPromise((resolve, reject) => {
   // fs.readFile('../file/1.txt', "utf8", function(err, data) {
   //     err ? reject(err) : resolve(data)
   // });
@@ -9,7 +9,7 @@ let p = new P((resolve, reject) => {
 });
 let f1 = function(data) {
   console.log(data)
-  return new P((resolve, reject) => {
+  return new MyPromise((resolve, reject) => {
       // fs.readFile('../file/2.txt', "utf8", function(err, data) {
       //     err ? reject(err) : resolve(data)
       // });
@@ -20,7 +20,7 @@ let f1 = function(data) {
 }
 let f2 = function(data) {
   console.log(data)
-  return new P((resolve, reject) => {
+  return new MyPromise((resolve, reject) => {
       // fs.readFile('../file/3.txt', "utf8", function(err, data) {
       //     err ? reject(err) : resolve(data)
       // });
