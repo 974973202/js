@@ -29,10 +29,10 @@ function MyPromise(fn) {
     if (_this.status === PENDING) {
       // 利用setTimeout特性将具体执行放到then之后,支持同步方法
       // setTimeout(() => {
-        _this.status = FULFILLED;
-        _this.value = value;
-        // _this.onFulfilled(_this.value); // resolve时执行成功回调
-        _this.onFulfilledCB.forEach(Cb => Cb(_this.value)); // resolve时执行成功回调
+      _this.status = FULFILLED;
+      _this.value = value;
+      // _this.onFulfilled(_this.value); // resolve时执行成功回调
+      _this.onFulfilledCB.forEach(Cb => Cb(_this.value)); // resolve时执行成功回调
       // }, 0)
     }
   }
@@ -42,10 +42,10 @@ function MyPromise(fn) {
     if (_this.status === PENDING) {
       // 利用setTimeout特性将具体执行放到then之后,支持同步方法
       // setTimeout(() => {
-        _this.status = REJECTED;
-        _this.error = error;
-        // _this.onRejected(_this.error); // resolve时执行成功回调
-        _this.onRejectedCB.forEach(Cb => Cb(_this.error)); // resolve时执行成功回调
+      _this.status = REJECTED;
+      _this.error = error;
+      // _this.onRejected(_this.error); // resolve时执行成功回调
+      _this.onRejectedCB.forEach(Cb => Cb(_this.error)); // resolve时执行成功回调
       // }, 0)
     }
   }
@@ -82,6 +82,7 @@ function _resolvePromise(bridgePromise, x, resolve, reject) {
   }
 }
 
+/** Promise的then方法实现链式调用的原理是：返回一个新的Promise */ 
 MyPromise.prototype.then = function (onFulfilled, onRejected) {
 
   // 不支持串行异步任务
@@ -107,6 +108,7 @@ MyPromise.prototype.then = function (onFulfilled, onRejected) {
 
   let bridgePromise = new MyPromise((resolve, reject) => {
     if (_this.status === FULFILLED) {
+      console.log('FULFILLED')
       setTimeout(() => {
         try {
           let x = onFulfilled(_this.value);
@@ -119,6 +121,7 @@ MyPromise.prototype.then = function (onFulfilled, onRejected) {
     }
 
     if (_this.status === REJECTED) {
+      console.log('REJECTED')
       setTimeout(() => {
         try {
           let x = onRejected(_this.error);
@@ -131,6 +134,7 @@ MyPromise.prototype.then = function (onFulfilled, onRejected) {
     }
 
     if (_this.status === PENDING) {
+      console.log('PENDING')
       _this.onFulfilledCB.push((value) => {
         try {
           let x = onFulfilled(value);
@@ -140,20 +144,21 @@ MyPromise.prototype.then = function (onFulfilled, onRejected) {
         }
       });
       _this.onRejectedCB.push((error) => {
-          try {
-            let x = onRejected(error);
-            _resolvePromise(bridgePromise, x, resolve, reject);
-          } catch (e) {
-            reject(e);
-          }
+        try {
+          let x = onRejected(error);
+          _resolvePromise(bridgePromise, x, resolve, reject);
+        } catch (e) {
+          reject(e);
+        }
       });
     }
   })
 
-  return bridgePromise; // 返回this, 后续链式调用
+  return bridgePromise; // Promise的then方法实现链式调用的原理是：返回一个新的Promise
 }
 
 MyPromise.prototype.catch = function (onRejected) {
+  console.log('catch')
   return this.then(null, onRejected)
 }
 

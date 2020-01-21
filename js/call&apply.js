@@ -65,7 +65,7 @@ Function.prototype.myapply = function(thisArg) {
   const fn = Symbol('fn')
   thisArg[fn] = this;
 
-  const result = thisArg[fn](...arg);
+  const result = thisArg[fn](...args);
 
   delete thisArg[fn];
 
