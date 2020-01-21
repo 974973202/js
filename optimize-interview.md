@@ -1,3 +1,5 @@
+[浏览器的回流与重绘(Reflow&Repaint)]https://juejin.im/post/5a9923e9518825558251c96a
+
 ### 首屏加载优化
 - Vue-Router路由懒加载（利用Webpack的代码切割）
 - 使用CDN加速，将通用的库从vendor进行抽离

@@ -1,4 +1,7 @@
 [http]https://juejin.im/post/5e015a60e51d45583d426a15
+[get和post]https://juejin.im/post/59fc04ecf265da4317697f26
+[三次握手和四次挥手]https://juejin.im/post/5ccd0dfc6fb9a0324a08bb73
+
 ### HTTP1.0、HTTP1.1 和 HTTP2.0 的区别
 - 影响一个 HTTP 网络请求的因素主要有两个：带宽和延迟。(主要是延迟)
 > * 延迟
