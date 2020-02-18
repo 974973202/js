@@ -102,3 +102,6 @@ hook 。 mixin 中定义生命周期 > 组件自己的生命周期
 
 ### 7. 什么是虚拟 DOM？
 真实DOM的映射
+
+### 说一下VUEX的工作原理 
+[说一下VUEX的工作原理]https://juejin.im/post/5e410aade51d4526fc748cf6
