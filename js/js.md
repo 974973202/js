@@ -43,3 +43,6 @@ function isArray(obj){
 }
 ```
 3. Array.isArray()
+
+### 箭头函数原理
+> 没有自己的 执行期上下文。意味着this和arguments都是从它们的父函数继承

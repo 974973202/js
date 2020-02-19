@@ -48,6 +48,9 @@ Content），这样就方便了开发者自由的选择以便于充分利用带�
 是443
 - HTTPS可以有效的防止运营商劫持，解决了防劫持的一个大问题
 
+### HTTPS请求加密的过程
+### HTTPS的加密解密的过程
+
 ### HTTP2.0和SPDY的区别
 - HTTP2.0 支持明文 HTTP 传输，而 SPDY 强制使用 HTTPS
 - HTTP2.0 消息头的压缩算法采用 [HPACK]: http://http2.github.io/http2-spec/compression.html
