@@ -1,4 +1,6 @@
 [vue组件的生命周期]https://www.cnblogs.com/webbest/p/6722780.html
+[vue源码学习]https://jiongks.name/blog/vue-code-review/
+[vue面试大全]https://juejin.im/post/5e5485786fb9a07c9c6a54be
 
 ### vue父子组件的生命周期顺序
 ```
