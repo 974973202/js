@@ -45,6 +45,7 @@ let addEvent1 = (type, element, fun) => {
 - [深度解析原型中的各个难点]https://juejin.im/post/5aa78fe66fb9a028d2079ca4
 - [从prototype与__proto__窥探JS继承之源|掘金技术征文]https://juejin.im/post/58f9d0290ce46300611ada65
 - [原型链与继承]https://juejin.im/post/58f94c9bb123db411953691b
+- [一文完全吃透JavaScript继承]https://juejin.im/post/5e5339b46fb9a07cb83e20d4
 ```
   // 每个构造函数(Test)都有一个原型对象(prototype),原型对象都包含一个指向构造函数的指针,而实例(instance)都包含一个指向原型对象的内部指针.
 

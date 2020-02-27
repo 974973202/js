@@ -13,6 +13,6 @@ https://blog.csdn.net/weixin_34319374/article/details/92504668
 6. 小程序的分享函数 onShareAppMessage 不能加上async 指定分享出去的图片和标题会失效
 7. button上的默认边框效果去除 首先给button设置border：0是无效的。因为小程序中button的边框是用::after实现的，所以说想要去除button上的边框需要设置button::after{border：none}就可以
 8. setData 频繁setData对性能不友好
-9. 不同机型兼容性
-10. 小程序主包最多2M
-11. 调用wx.hideTabbar隐藏原生tabbar导航栏时导致页面闪动
+9. 调用wx.hideTabbar隐藏原生tabbar导航栏时导致页面闪动
+10. 组件里面传值使用 observer 会执行两次 就像vue的watch设置immediate
+

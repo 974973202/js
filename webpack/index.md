@@ -477,3 +477,245 @@ function () {
 - 公共资源分离 
 - 图片压缩 
 - 动态 Polyfill
+
+### webpack打包分析
+- 初级分析: webpack内置的stats(构建的统计信息)
+ - 可以在 package.json 中使用 stats，也可以在 Node API 中使用 stats
+```javascript
+  webpack --config webpack.prod.js --json > stats.json
+```
+
+- 速度分析：speed-measure-webpack-plugin（分析整个打包总耗时&每个插件和loader的耗时情况）
+```javascript
+  const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
+  const smp = new SpeedMeasurePlugin();
+
+  const webpackConfig = smp.wrap({
+    // ...
+    plugins: [
+      new MyPlugin(),
+      new MyOtherPlugin()
+    ]
+  })
+```
+
+- 体积分析: webpack-bundle-analyzer分析依赖的第三方模块文件和业务里面的组件代码大小
+```javascript
+  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+  module.exports = {
+    plugins: [
+      new BundleAnalyzerPlugin()
+    ]
+  }
+```
+
+### webpack 速度优化
+- 使用高版本的webpack
+ - webpack4 增加了一个叫mode的配置项
+ - production默认值会提供一系列有效的默认值以便部署应用
+ - optimization.splitChunks总是启用
+
+- 多进程构建
+ - happypack：每次 webapck 解析一个模块，HappyPack 会将它及它的依赖分配给 worker 线程中
+ ```javascript
+  exports.plugins = [
+    new HappyPack({
+      id: 'jsx',
+      threads: 4,
+      loaders: [ 'babel-loader' ]
+    }),
+    new HappyPack({
+      id: 'styles',
+      threads: 2,
+      loaders: [ 'style-loader', 'css-loader', 'less-loader' ]
+    })
+  ];
+
+  exports.module.rules = [
+    {
+      test: /\.js$/,
+      use: 'happypack/loader?id=jsx'
+    },
+    {
+      test: /\.less$/,
+      use: 'happypack/loader?id=styles'
+    }
+  ]
+ ```
+
+ - thread-loader：每次 webpack 解析一个模块，thread- loader 会将它及它的依赖分配给 worker 线程中
+ ```javascript
+ module.exports = {
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          include: path.resolve("src"),
+          use: [
+          {
+            loader: "thread-loader"
+            options: {
+              workers: 2  // worker的数量，默认是cpu核心数
+            }
+          }
+        }
+      ]
+    }
+  }
+ ```
+
+- 多进程并行压缩代码
+ - terser-webpack-plugin：开启parallel参数
+ ```javascript
+  const TerserPlugin = require('terser-webpack-plugin');
+  module.exports = {
+    optimization: {
+      minimize: true,
+      minimizer: [
+        new TerserPlugin({
+          parallel: true
+        })
+      ]
+    }
+  }
+ ```
+
+- 预编译资源模块
+ - 使用DLLPlugin 进行分包,DllReferencePlugin对manifest.json引用,将react,react-dom,redux,react-redux等基础包和业务基础包打包成一个文件
+ webpack.dll.config.js文件:
+ ```javascript
+  const path = require('path');
+  const webpack = require('webpack');
+  module.exports = {
+    context: process.cwd,
+    resolve: {
+      extensions: ['.js', '.jsx', '.json', '.styl', '.css'],
+      modules: [__dirname, 'node_modules']
+    },
+    entry: {
+      vendor: [
+        'react',
+        'react-dom',
+        'react-router-dom'
+      ]
+    },
+    output: {
+      path: path.resolve(__dirname, './dist/lib'),
+      filename: '[name].js',
+      library: '[name]'
+    },
+    plugins: [
+      new webpack.DllPlugin({
+        path: path.resolve(__dirname, '.', '[name]-manifest.json'),
+        name: '[name]'
+      })
+    ]
+  };
+ ```
+ - 运行 webpack --config webpack.dll.config.js --mode production
+ - 生成vendor-manifest.json文件
+ - webpack.config.js文件:
+ ```javascript
+  module.exports = {
+    plugins: [
+      new webpack.DllReferencePlugin({
+          manifest: require('./vendor-manifest.json')
+        })
+    ]
+  }
+ ```
+ - html: <script type="text/javascript" src="./lib/vendor.js"></script>
+
+- 基础库分离
+ - 通过html-webpack-externals-plugin，然后在html里面直接引入组件库的cdn链接
+ ```javascript
+  const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin')
+  moudles.export = {
+    plugins: [
+      new HtmlWebpackExternalsPlugin({
+        externals: [
+          {
+            module: 'react',
+            entry: '//11.url.cn/now/lib/16.2.0/react.min.js',
+            global: 'React'
+          }
+        ]
+      })
+    ]
+  }
+ ```
+ - html: <script type="text/javascript" src="https://11.url.cn/now/lib/16.2.0/react.min.js"></script>
+
+- 利用缓存：第一次构建花费正常的时间，第二次构建速度将显著加快
+ - babel-loader开启缓存
+ ```javascript
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: 'node_modules',
+        use: {
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true
+          }
+        }
+      }
+    ]
+  }
+ ```
+
+ - erser-webpack-plugin：开启缓存
+ ```javascript
+  module.exports = {
+    optimization: {
+      minimize: true,
+      minimizer: [
+        new TerserPlugin({
+          cache: true
+        })
+      ]
+    }
+  }
+ ```
+
+ - 使用 cache-loader 或者 hard-source-webpack-plugin
+ ```javascript
+  module.exports = {
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          use: [
+            'cache-loader',
+            'babel-loader'
+          ],
+          include: path.resolve('src')
+        }
+      ]
+    }
+  }
+ ```
+
+- 缩小构建目标
+ - babel-loader不解析node-modules   exclude: "node-modules"
+ - 减少文件搜索范围
+
+### 体积优化
+- Scope Hoisting
+ - 将所有模块的代码按照引⽤顺序放在⼀个函数作⽤域里，然后适当的重命名⼀些变量以防⽌变量名冲突
+ - webpack4  mode 为 production 默认开启
+ - plugins: [ new webpack.optimize.ModuleConcatenationPlugin() ]
+
+- 使用Tree shaking擦除无用的javaScript和css
+ - 概念：1个模块可能有多个方法，只要其中的某个方法使用到了，则整个文件都会被打到 bundle ⾥去，tree shaking 就是只把用到的方法打⼊ bundle ，没⽤到的方法会在 uglify 阶段被擦除掉
+ - 使⽤：webpack production mode的情况下默认开启
+ - 要求： 必须是 ES6 的语法，CJS的方式不支持
+
+- CSS：purgecss-webpack-plugin 和 mini-css-extract-plugin 配合使用
+
+- 图片压缩  配置image-webpack-loade
+ - loader: "image-webpack-loader"
+
+- 使用动态polyfill-service或者browserlist
+ - 根据浏览器的UA来判断当前浏览器缺失哪些特性，进而进行补强

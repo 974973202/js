@@ -223,23 +223,5 @@ animation-fill-mode: 静止模式
 - 精简页面的样式文件，去掉不用的样式
 - 利用CSS继承减少代码量
 - 避免！important，可以选择其他选择器
-
-### 各种获得宽高的方式
-```
-获取屏幕的高度和宽度（屏幕分辨率）：window.screen.height/width
-获取屏幕工作区域的高度和宽度（去掉状态栏）：window.screen.availHeight/availWidth
-网页全文的高度和宽度：document.body.scrollHeight/Width
-滚动条卷上去的高度和向右卷的宽度：document.body.scrollTop/scrollLeft
-网页可见区域的高度和宽度（不加边线）：document.body.clientHeight/clientWidth
-网页可见区域的高度和宽度（加边线）：document.body.offsetHeight/offsetWidth
-```
-
-### CSS加载会造成阻塞吗
-- css加载不会阻塞DOM树的解析
-- css加载会阻塞DOM树的渲染
-- css加载会阻塞**后面js**语句的执行
-> [CSS加载会造成阻塞吗]https://segmentfault.com/a/1190000018130499
-
-- 怎么判断页面是否加载完成
-> onLoad 事件触发代表页面中的 DOM，CSS，JS，图片已经全部加载完毕。
-> DOMContentLoaded 事件触发代表初始的 HTML 被完全加载和解析，不需要等待 CSS，JS，图片加载。
+- 使用transform开启gpu硬件加速
+- 动画使用transform属性代替margin,height,width...等
