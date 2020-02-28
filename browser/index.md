@@ -1,4 +1,5 @@
 [浏览器和http]https://blog.csdn.net/qiuchangjun/article/details/79761242
+[浏览器篇]https://juejin.im/post/5e5776f3f265da57127e48a9
 
 ### 浏览器分别有哪些进程
 - Browser进程：浏览器的主进程（负责协调、主控），只有一个

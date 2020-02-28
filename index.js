@@ -25,8 +25,14 @@
 // })
 // console.log('script end')
 
-const path = require('path');
-console.log(__dirname);
-console.log(__filename);
-console.log(process.cwd());
-console.log(path.resolve('./'));
+// const path = require('path');
+// console.log(__dirname);
+// console.log(__filename);
+// console.log(process.cwd());
+// console.log(path.resolve('./'));
+
+ function test1(Test) {
+    Test.prototype._init = function(ele) {
+     console.log(ele, this)
+   }
+ }
