@@ -2,6 +2,14 @@
 [get和post]https://juejin.im/post/59fc04ecf265da4317697f26
 [三次握手和四次挥手]https://juejin.im/post/5ccd0dfc6fb9a0324a08bb73
 
+### 为什么握手三次挥手四次
+
+http1.0-http3.0 做了什么优化
+然后https和http区别，加密解密
+然后常见的浏览器攻击
+
+输入网址到浏览器渲染出来发生了什么
+
 ### HTTP1.0、HTTP1.1 和 HTTP2.0 的区别
 - 影响一个 HTTP 网络请求的因素主要有两个：带宽和延迟。(主要是延迟)
 > * 延迟
