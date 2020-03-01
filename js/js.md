@@ -1,3 +1,8 @@
+### javascript概念
+闭包的原理是作用域链，执行上下文 4个 变量环境词法环境outer 和this绑定，执行的时候通过outer建立起作用域链，然后有堆和栈
+
+es5 scopechain  es6 outer
+
 ### AOP 切面编程
 - 装饰器
 
