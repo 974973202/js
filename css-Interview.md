@@ -223,5 +223,11 @@ animation-fill-mode: 静止模式
 - 精简页面的样式文件，去掉不用的样式
 - 利用CSS继承减少代码量
 - 避免！important，可以选择其他选择器
-- 使用transform开启gpu硬件加速
 - 动画使用transform属性代替margin,height,width...等
+- 开启gpu硬件加速
+```
+transform: translateZ(0)
+opacity
+filters
+Will-change
+```
