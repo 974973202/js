@@ -1,10 +1,3 @@
-[CSS速查总表]https://www.html.cn/book/css/properties/background/index.htm
-[CSS参考手册]https://css.doyoe.com/
-
-[你未必知道的CSS知识点]https://juejin.im/post/5d9ec8b0518825651b1dffa3#heading-32
-[css特效]https://juejin.im/post/5e070cd9f265da33f8653f00
-[巧用CSS实现酷炫的充电动画]https://juejin.im/post/5e00240ee51d45583c1cc9a7
-
 ### CSS选择器以及这些选择器的优先级
 * !important > 内联样式（style）> id选择器 > 类选择器(.)/属性选择器([])/伪类选择器(:) > 元素选择器(p)/关系选择器(+)/伪元素选择器(::) > 通配符选择器(*)
 > !important
@@ -49,6 +42,8 @@
 >  > <p>:before	p:before	在每个p 元素之前插入内容
 >  > <p>:after	p:after	在每个p 元素之后插入内容
 >  > <p>:lang(language)	p:lang(it)	为p 元素的lang属性选择一个开始值
+
+- 单冒号(:)用于CSS3伪类，双冒号(::)用于CSS3伪元素。
 
 ### BFC
 * 什么是BFC
@@ -191,16 +186,28 @@ animation-name: 动画名称，对应@keyframes
 animation-duration: 间隔
 animation-timing-function: 曲线
 animation-delay: 延迟
-animation-iteration-count: 次数
-  infinite: 循环动画
+animation-iteration-count: 次数 n / infinite: 循环动画
 animation-direction: 方向
-  alternate: 反向播放
+  normal: 默认值，按正常播放
+  reverse: 动画反向播放
+  alternate: 奇数次正向播放，偶数次反向播放
+  alternate-reverse: 偶数次正向播放，奇数次反向播放
 animation-fill-mode: 静止模式
   forwards: 停止时，保留最后一帧
   backwards: 停止时，回到第一帧
   both: 同时运用 forwards / backwards
 常用钩子: animationend
 ```
+
+- transition和animation
+- 主要的区别transition不能立即执行，animation不能用事件触发;
+1. 如果要灵活定制多个帧以及循环，用animation.
+2. 如果要简单的from to 效果，用 transition.
+3. 如果要使用js灵活设定动画属性，用transition.transition和animation
+主要的区别transition不能立即执行，animation不能用事件触发;
+1. 如果要灵活定制多个帧以及循环，用animation.
+2. 如果要简单的from to 效果，用 transition.
+3. 如果要使用js灵活设定动画属性，用transition.
 
 ### Css有哪些引入方式？ 通过link和@import引入有什么区别？
 - Css引入方式有4种 内联、内嵌、外链、导入
@@ -231,3 +238,30 @@ opacity
 filters
 Will-change
 ```
+
+### CSS3新特性
+新增各种CSS选择器
+圆角           （border-radius:8px）
+多列布局        （multi-column layout）
+阴影和反射        （Shadow\Reflect）
+文字特效      （text-shadow、）
+文字渲染      （Text-decoration）
+线性渐变      （gradient）
+旋转          （transform）
+增加了旋转,缩放,定位,倾斜,动画，多背景
+transform:\scale(0.85,0.90)\ translate(0px,-30px)\ skew(-9deg,0deg)\Animation:
+
+### 什么是CSS 预处理器 / 后处理器？
+- 预处理器例如：LESS、Sass、Stylus，用来预编译Sass或less，增强了css代码的复用性，
+  还有层级、mixin、变量、循环、函数等，具有很方便的UI组件模块化开发能力，极大的提高工作效率。
+
+- 后处理器例如：PostCSS，通常被视为在完成的样式表中根据CSS规范处理CSS，让其更有效；目前最常做的
+  是给CSS属性添加浏览器私有前缀，实现跨浏览器兼容性的问题。
+
+
+[CSS速查总表]https://www.html.cn/book/css/properties/background/index.htm
+[CSS参考手册]https://css.doyoe.com/
+
+[你未必知道的CSS知识点]https://juejin.im/post/5d9ec8b0518825651b1dffa3#heading-32
+[css特效]https://juejin.im/post/5e070cd9f265da33f8653f00
+[巧用CSS实现酷炫的充电动画]https://juejin.im/post/5e00240ee51d45583c1cc9a7

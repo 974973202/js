@@ -7,12 +7,15 @@
 
 ## 2. http请求头，建立TCP连接，浏览器进程切换
  - http是超文本传输协议，本质就是 tcp/ip请求
+ - 浏览器进程 -> 网络进程
 
 ## 3. 服务器处理请求
 
 ## 4. 四次挥手，http响应头
+ - 网络进程 -> 浏览器进程 -> GPU渲染进程
 
 ## 5. 渲染HTML页面，浏览器进程切换
+ - GPU渲染进程 -> 浏览器进程
 
 ### 浏览器渲染过程
 1. 处理 HTML 标记并构建 DOM 树。
@@ -175,6 +178,8 @@ DOMContentLoaded -> load。
 - HTTP和HTTPS使用的是完全不同的连接方式，用的端口也不一样，前者是80，后者
 是443
 - HTTPS可以有效的防止运营商劫持，解决了防劫持的一个大问题
+
+[https加密与解密]https://www.cnblogs.com/magic-sea/p/11348944.html
 
 ### HTTP1.0 和 HTTP1.1的一些区别
 1. 缓存处理
@@ -444,3 +449,7 @@ Set-cookie: 设置cookie，可以存在多个。
 
 ### 浏览器性能监控
 - 使用 performance.timing 这个api就可以获取到绝大部分性能相关的数据
+
+### 垃圾回收机制
+
+[http状态码]https://www.cnblogs.com/xflonga/p/9368993.html
