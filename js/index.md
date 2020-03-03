@@ -1,3 +1,9 @@
+- 基本数据类型（原始值）：Number  Boolean  String  undefined  null  栈内存（stack）
+- 引⽤类型（引用值）：array  Object  function  data  RegExp...   堆内存（heap）
+- 判断布尔值为false的6种情况： undefined  null  NaN  “”  0  false 
+- javascript有7种内置类型：null, undefined, boolean, number, string, object, symbol
+- typeof可判断的类型： 1.string  2.number  3.boolean  4.object  5.undefined  6.function  7. symbol
+
 ### 事件委托
 事件委托[https://www.jianshu.com/p/0c1d21a631a0]
 
