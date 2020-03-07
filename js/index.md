@@ -4,6 +4,13 @@
 - javascript有7种内置类型：null, undefined, boolean, number, string, object, symbol
 - typeof可判断的类型： 1.string  2.number  3.boolean  4.object  5.undefined  6.function  7. symbol
 
+### 预编译
+- 预编译发生在函数执行的前一刻
+1. 创建AO对象（执行期上下文）
+2. 把形参和变量声明提升
+3. 形参实参相统一
+4. 在函数体里面找函数声明 
+
 ### 数组中常用的方法有哪些
 - 改变原有数组的方法： （9个）
 > splice() 添加/删除数组元素
