@@ -258,6 +258,21 @@ transform:\scale(0.85,0.90)\ translate(0px,-30px)\ skew(-9deg,0deg)\Animation:
 - 后处理器例如：PostCSS，通常被视为在完成的样式表中根据CSS规范处理CSS，让其更有效；目前最常做的
   是给CSS属性添加浏览器私有前缀，实现跨浏览器兼容性的问题。
 
+### 使用动画（js实现动画，css3实现动画）时两者的区别？
+> css实现动画：animation transition transform
+> js实现动画: setInterval setTimeout requestAnimationFrame
+1. js实现的是帧动画
+2. css实现的是补间动画
+- 帧动画：使用定时器，每隔一段时间，更改当前的元素
+- 补间动画：过渡（加过渡只要状态发生改变产生动画）动画(多个节点来控制动画)性能会更好
+
+### CSS动画流畅的原因
+- 渲染线程分为main thread(主线程)和compositor thread(合成器线程)。
+- 如果CSS动画只是改变transform和opacity，这时整个CSS动画得以在compositor thread完成（而JS动画则会在main thread执行，然后触发compositor进行下一步操作）
+- 在JS执行一些昂贵的任务时，main thread繁忙，CSS动画由于使用了compositor thread可以保持流畅，
+
+* 在主线程中，维护了一棵Layer树（LayerTreeHost），管理了TiledLayer，在compositor thread，维护了同样一颗LayerTreeHostImpl，管理了LayerImpl，这两棵树的内容是拷贝关系。因此可以彼此不干扰，当Javascript在main thread操作LayerTreeHost的同时，compositor thread可以用LayerTreeHostImpl做渲染。当Javascript繁忙导致主线程卡住时，合成到屏幕的过程也是流畅的。
+为了实现防假死，鼠标键盘消息会被首先分发到compositor thread，然后再到main thread。这样，当main thread繁忙时，compositor thread还是能够响应一部分消息，例如，鼠标滚动时，加入main thread繁忙，compositor thread也会处理滚动消息，滚动已经被提交的页面部分（未被提交的部分将被刷白）。
 
 [CSS速查总表]https://www.html.cn/book/css/properties/background/index.htm
 [CSS参考手册]https://css.doyoe.com/

@@ -10,169 +10,54 @@
 <style>
   :root {
     width: 100%;
-    height: 100%;
-    position: relative;
-
+    height: 100vh;
   }
 
-  body {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-
-  .box {
-    height: 100px;
-    width: 250px;
-    display: flex;
-    border: 1px solid #ccc;
-    justify-items: center;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: space-around;
-  }
-
-  .box1 {
-    width: 100px;
-    height: 40px;
-    background-color: aqua;
-  }
-
-  .box2 {
-    width: 100px;
-    height: 40px;
-    background-color: bisque;
-  }
-
-  .box3 {
-    width: 100px;
-    height: 40px;
-    background-color: brown;
-  }
-
-  .box4 {
-    width: 100px;
-    height: 40px;
-    background-color: burlywood;
-  }
-
-  .box5 {
+  .content {
     width: 100%;
-    height: 100px;
-    display: flex;
-    border: 1px solid red;
+    height: 100vh;
+    /* display: flex; */
   }
 
-  .box6 {
-    flex-basis: 200px;
-    background-color: aqua;
+  .left {
+    width: 200px;
+    height: 100vh;
+    background-color: red;
+    float: left;
   }
 
-  .box7 {
-    flex: 1;
-    background-color: aquamarine;
+  .center {
+    margin-left: 210px;
+    margin-right: 110px;
+    height: 100vh;
+    background-color: rosybrown;
   }
 
-  .wp {
-    line-height: 300px;
-    text-align: center;
-    font-size: 0px;
-  }
-
-  .box0 {
-    font-size: 16px;
-    display: inline-block;
-    vertical-align: middle;
-    line-height: initial;
-    text-align: left;
-    /* 修正文字 */
-  }
-
-  .reflect-bottom-p {
-    padding-bottom: 300px;
-  }
-
-  .reflect-bottom {
-    width: 30px;
-    height: 30px;
-    -webkit-box-reflect: below;
+  .right {
+    width: 100px;
+    height: 100vh;
+    background-color: red;
+    float: right;
   }
 </style>
 
 <body>
-  <div class="box">
-    <div class="box1"></div>
-    <div class="box2"></div>
-    <div class="box3"></div>
-    <div class="box4"></div>
+  <div class="content">
+    <div class="left"></div>
+    <div class="right"></div>
+    <div class="center"></div>
   </div>
-  <input type="text" class="input">
-
-  <div id="box5" class="box5">
-    <div class="box6"></div>
-    <div class="box7"></div>
-  </div>
-
-  <ul id="list"></ul>
-
-  <div class="wp">
-    <div class="box0">123123</div>
-  </div>
-
-  <p class="reflect-bottom-p"><img
-      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K"
-      class="reflect-bottom"></p>
-
 </body>
-<!-- <script src="./js/debounce.js"></script>
-<script src="./js/throttle.js"></script>
-<script src="./myJsonp.js"></script> -->
-<script src="./index.js"></script>
 <script>
-  // function test() {
-  //   console.log('test')
-  // }
-
-  // var a = throttle(test, 500);
-  // var box5 = document.getElementById('box5');
-  // box5.onmousemove = function () {
-  //   a()
-  // }
-
-  function Test(options) {
-    this._init(options)
+  let obj = {
+    a: 1
   }
-
-  test1(Test)
-  new Test({
-    el: '#app',
-    data: {
-
-    }
-  })
-
-
-
-  // var list = document.getElementById('list');
-  // console.log(list)
-  // // if (!list) {
-  // //   return false;
-  // // }
-  // for (var i = 0; i < 3; i++) {
-  //   var li = document.createElement('li');
-  //   li.innerText = i;
-  //   li.addEventListener('click', function(e) {
-  //     // 事件委托
-  //     console.log(e.target.tagName == 'Li')
-  //   })
-  //   list.appendChild(li)
-  // }
-
-
-
+  function Test() {
+    // return function () {
+      console.log(this.a)
+    // }
+  }
+  Test.apply(obj)
 </script>
 
 </html>
