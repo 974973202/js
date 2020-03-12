@@ -196,6 +196,7 @@ animation-fill-mode: 静止模式
   forwards: 停止时，保留最后一帧
   backwards: 停止时，回到第一帧
   both: 同时运用 forwards / backwards
+animation-play-state: paused / running; 暂停动画 / 正在运行的动画
 常用钩子: animationend
 ```
 
@@ -204,10 +205,6 @@ animation-fill-mode: 静止模式
 1. 如果要灵活定制多个帧以及循环，用animation.
 2. 如果要简单的from to 效果，用 transition.
 3. 如果要使用js灵活设定动画属性，用transition.transition和animation
-主要的区别transition不能立即执行，animation不能用事件触发;
-1. 如果要灵活定制多个帧以及循环，用animation.
-2. 如果要简单的from to 效果，用 transition.
-3. 如果要使用js灵活设定动画属性，用transition.
 
 ### Css有哪些引入方式？ 通过link和@import引入有什么区别？
 - Css引入方式有4种 内联、内嵌、外链、导入

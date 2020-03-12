@@ -16,36 +16,40 @@
   .content {
     width: 100%;
     height: 100vh;
-    /* display: flex; */
+    position: relative;
   }
 
   .left {
-    width: 200px;
-    height: 100vh;
-    background-color: red;
-    float: left;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    background-color: aqua;
   }
 
   .center {
-    margin-left: 210px;
-    margin-right: 110px;
-    height: 100vh;
-    background-color: rosybrown;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    background-color: red;
   }
 
   .right {
     width: 100px;
     height: 100vh;
     background-color: red;
-    float: right;
+    /* float: right; */
   }
 </style>
 
 <body>
   <div class="content">
     <div class="left"></div>
-    <div class="right"></div>
     <div class="center"></div>
+    <!-- <div class="right"></div> -->
   </div>
 </body>
 <script>
@@ -60,15 +64,6 @@
   Test.apply(obj)
 
 
-  function factorial(n, total) {
-
-    if (n === 1) return total;
-
-    return factorial(n - 1, n * total);
-
-  }
-
-  console.log(factorial(5, 1));
 
 </script>
 

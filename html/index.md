@@ -14,7 +14,6 @@
  - sessionStorage和localStorage 虽然也有存储大小的限制，但比cookie大得多，可以达到5M或更大
 
 - 有效时间
- - sessionStorage和localStorage：虽然也有存储大小的限制，但比cookie大得多，可以达到5M或更大。
  - sessionStorage：数据在当前浏览器窗口关闭后自动删除。
  - cookie：设置的cookie过期时间之前一直有效，即使窗口或浏览器关闭
 
