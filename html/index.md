@@ -9,6 +9,29 @@
 - Blink：opera
 
 ### 请描述一下 cookies，sessionStorage 和 localStorage 的区别？
+- cookie的设置
+```javascript
+// document.cookie = `${name}=${value};max-age=${time}`;
+const manageCookie = {
+   setCookie(name, value, time) {
+      document.cookie = `${name}=${value};max-age=${time}`;
+      return this;
+   },
+   deleteCookie(name) {
+      return this.setCookie(name, '', -1);
+   },
+   getCookie(name, callback) {
+      const allCookieArr = document.cookie.split(';');
+      for (let i = 0; i < allCookieArr.lenght; i ++) {
+         const itemCookieArr = allCookieArr[i].split('=');
+         if (itemCookieArr[0] == name) {
+            callback(itemCookieArr[1])
+            return this
+         }
+      }
+   }
+}
+```
 - 存储大小
  - cookie数据大小不能超过4k。
  - sessionStorage和localStorage 虽然也有存储大小的限制，但比cookie大得多，可以达到5M或更大

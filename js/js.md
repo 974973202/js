@@ -47,6 +47,14 @@ html:
 <input type="text" id="input">
 ```
 - defineProperty实现
+ - Object.defineProperty(obj, prop, descriptor)
+ - obj 要在其上定义属性的对象。
+ - prop 要定义或修改的属性的名称。
+ - descriptor 将被定义或修改的属性描述符
+  * configurable特性表示对象的属性是否可以被删除
+  * enumerable定义了对象的属性是否可以在 for...in 循环和 Object.keys() 中被枚举
+  * writable属性设置为false时，该属性被称为“不可写”。它不能被重新分配
+  * 如果一个描述符同时有(value或writable)和(get或set)关键字，将会产生一个异常
 js:
 ```javascript
 // 数据

@@ -92,13 +92,203 @@
 - box-sizing: content-box（W3C盒子模型）：**元素的宽高大小**表现为**内容的大小**。
 - box-sizing: border-box（IE盒子模型）：**元素的宽高**表现为**内容 + 内边距 + 边框的大小**
 
+### 水平垂直居中
+```css
+text-align:center;设置文本或img标签等一些内联对象（或与之类似的元素）的居中。
+margin:0 auto;设置块元素（或与之类似的元素）的居中。
+```
+
+### 三列布局
+- 定位元素
+```html
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  .left, .right {
+    width: 200px;
+    height: 200px;
+    background: palevioletred;
+    position: absolute;
+    top: 0;
+  }
+  .middle {
+    width: 100%;
+    background: paleturquoise;
+    height: 200px;
+    margin: 0 200px;
+  }
+  .left {
+    left: 0;
+  }
+  .right {
+    right: 0;
+  }
+</style>
+<body>
+  <div class="container">
+    <div class="left">111</div>
+    <div class="middle">
+      kajsfhkjashfkafhasjhskd
+    </div>
+    <div class="right"></div>
+  </div>
+</body>
+```
+
+- 浮动元素
+```html
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  .left, .right {
+    width: 200px;
+    height: 200px;
+    background: palevioletred;
+  }
+  .middle {
+    width: 100%;
+    background: paleturquoise;
+    height: 200px;
+    margin: 0 200px;
+  }
+
+  .left {
+    float: left;
+  }
+
+  .right {
+    float: right;
+  }
+</style>
+
+<body>
+  <div class="container">
+    <div class="left">111</div>
+    <div class="right"></div>
+    <div class="middle">
+      kajsfhkjashfkafhasjhskd
+    </div>
+  </div>
+</body>
+```
+
+- 圣杯布局
+```html
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  .wrap{
+  min-width: 600px;
+}
+#content{ 
+  overflow: hidden;
+  padding: 0px 200px;
+}
+#left,#right{
+  width: 200px;
+  height: 200px;
+  background-color:pink;
+}
+#middle{
+  background-color: green;
+  width: 100%;
+}
+#middle,#left,#right{
+  float: left;
+  padding-bottom: 10000px;
+  margin-bottom: -10000px;
+}
+#left{
+  margin-left: -100%;
+  position: relative;
+  left: -200px;
+}
+#right{
+  margin-left: -200px;
+  position: relative;
+  left: 200px;
+}
+
+</style>
+
+<body>
+    <div class="wrap">
+      <div id="content">
+        <div id="middle">
+          <p>middle</p>
+          <p>middle</p>
+          <p>middle</p>
+        </div>
+        <div id="left">left</div>
+        <div id="right">right</div>
+      </div>
+    </div>
+</body>
+```
+
+- 双飞翼布局
+```html
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  .wrap {
+    min-width: 600px;
+  }
+  #left,
+  #right {
+    width: 200px;
+    height: 200px;
+    background-color: pink;
+  }
+  #middle {
+    background-color: green;
+    width: 100%;
+    float: left;
+  }
+  #content {
+    overflow: hidden;
+  }
+  #left {
+    float: left;
+    margin-left: -100%;
+  }
+  #right {
+    float: left;
+    margin-left: -200px;
+  }
+  .middle-inner {
+    margin: 0 200px;
+  }
+</style>
+
+<body>
+  <div class="wrap">
+    <div id="content">
+      <div id="middle">
+        <div class="middle-inner">
+          middle
+        </div>
+      </div>
+      <div id="left">left</div>
+      <div id="right">right</div>
+    </div>
+  </div>
+</body>
+```
+
 ### 如何实现左侧宽度固定，右侧宽度自适应的布局(两列布局)
 > float + margin实现
 > 利用calc计算宽度
 > float + overflow实现
 > flex实现
-
-### 三列布局
 
 ### 伪元素和伪类的区别
 - 伪类的操作对象是文档树中已有的元素，而伪元素则创建了一个文档树外的元素。
