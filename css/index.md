@@ -396,6 +396,23 @@ animation-play-state: paused / running; 暂停动画 / 正在运行的动画
 2. 如果要简单的from to 效果，用 transition.
 3. 如果要使用js灵活设定动画属性，用transition.transition和animation
 
+### CSS3D动画
+```
+transform-style: flat / preserve-3d;
+flat: 默认值，子元素将不保留其3d位置
+preserve-3d： 子元素将保留其3d位置
+设置了preserve-3d就不能防止子元素溢出设置overflow: hidden; 否则preserve-3d失效
+
+perspective: 600px;
+物体距人眼的距离
+
+perspective-origin: 50% 50%;
+设置观看方向
+
+backface-visibility: visible / hidden;
+元素运动过程是否展示元素背面
+```
+
 ### Css有哪些引入方式？ 通过link和@import引入有什么区别？
 - Css引入方式有4种 内联、内嵌、外链、导入
 

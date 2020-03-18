@@ -70,8 +70,14 @@ function loadScript(url, callback){
 ### HTML5新特性
 1. canvas
 2. SVG
-3. requestAnimationFrame
+ - canvas适合小面积大数量的应用 svg适合大面积小数量的应用场景，canvas绘制的是位图，放大会失真
+3. requestAnimationFrame / cancelAnimFrame
 4. 客户端存储
+ - localStorage / sessionStorage
+ - setItem(name, val); 设置属性 
+ - getItem(name); 获得属性值
+ - removeItem(name); 移除属性值
+ - clear(); 清除属性
 5. history
 ```javascript
 history.go(n) // 路由跳转，比如n为 2 是往前移动2个页面，n为 -2 是向后移动2个页面，n为0是刷新页面

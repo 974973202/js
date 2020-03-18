@@ -2,9 +2,23 @@
 1、全局守卫： router.beforeEach
 2、全局解析守卫： router.beforeResolve
 3、全局后置钩子： router.afterEach
+```javascript
+{
+  path: '/',
+  name: 'home',
+  component: '<div>Home</div>',
+  meta: { title: 'A' },
+}
+
+router.beforeEach((to, from, next) => {
+  console.log(to, from);
+  console.log(to.meta.title); // 路由元信息
+  next()
+})
+```
 
 ### 路由独享钩子
-```
+```javascript
 {
   path: '/',
   name: 'home',
@@ -22,14 +36,14 @@
     next()
   }
 },
-这三个参数 to 、from 、next 分别的作用：
-1、to: Route，代表要进入的目标，它是一个路由对象；
-2、from: Route，代表当前正要离开的路由，同样也是一个路由对象；
-3、next: Function，这是一个必须需要调用的方法，而具体的执行效果则依赖 next 方法调用的参数
+// 这三个参数 to 、from 、next 分别的作用：
+// 1、to: Route，代表要进入的目标，它是一个路由对象；
+// 2、from: Route，代表当前正要离开的路由，同样也是一个路由对象；
+// 3、next: Function，这是一个必须需要调用的方法，而具体的执行效果则依赖 next 方法调用的参数
 ```
 
 ### 组件内导航钩子
-```
+```javascript
   beforeRouteEnter(to, from, next) {
     // do someting
     // 在渲染该组件的对应路由被 confirm 前调用
@@ -42,6 +56,17 @@
     // do someting
     // 导航离开该组件的对应路由时被调用
   }
+```
+
+### 路由动态添加（可做权限）
+```javascript
+this.$router.addRoutes([
+  {
+    path: '/home',
+    component: '<div>Home</div>',
+    meta: { title: 'A' },
+  }
+])
 ```
 
 ### 路由导航完整解析流程

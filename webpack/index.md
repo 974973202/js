@@ -6,6 +6,8 @@ CSS 前缀补全/预处理器
 压缩混淆
 图⽚压缩
 
+### webpack调试代码问题用 source-map  平时构建用eval
+
 ### 配置文件名称
 - webpack 默认配置⽂件：webpack.config.js
 - 可以通过webpack --config指定配置⽂件
