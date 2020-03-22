@@ -4,6 +4,11 @@
 - javascript有7种内置类型：null, undefined, boolean, number, string, object, symbol
 - typeof可判断的类型： 1.string  2.number  3.boolean  4.object  5.undefined  6.function  7. symbol
 
+### 操作数组常用的方法：
+- es5：concat 、join 、push、pop、shift、unshift、slice、splice、substring和substr 、sort、 reverse、indexOf和lastIndexOf 、every、some、filter、map、forEach、reduce
+
+- es6：find、findIndex、fill、copyWithin、Array.from、Array.of、entries、values、key、includes
+
 ### 预编译
 - 预编译发生在函数执行的前一刻
 1. 创建AO对象（执行期上下文）

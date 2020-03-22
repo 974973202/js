@@ -31,8 +31,19 @@
 // console.log(process.cwd());
 // console.log(path.resolve('./'));
 
- function test1(Test) {
-    Test.prototype._init = function(ele) {
-     console.log(ele, this)
-   }
- }
+
+//  function test1(Test) {
+//     Test.prototype._init = function(ele) {
+//      console.log(ele, this)
+//    }
+//  }
+
+
+
+const fun = (val, cb) => {
+  cb(null, 456)
+}
+
+fun('123', function (err, data){
+  console.log(data)
+})

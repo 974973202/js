@@ -187,7 +187,7 @@ margin:0 auto;设置块元素（或与之类似的元素）的居中。
   min-width: 600px;
 }
 #content{ 
-  overflow: hidden;
+  overflow: hidden;  
   padding: 0px 200px;
 }
 #left,#right{
@@ -201,7 +201,7 @@ margin:0 auto;设置块元素（或与之类似的元素）的居中。
 }
 #middle,#left,#right{
   float: left;
-  padding-bottom: 10000px;
+  padding-bottom: 10000px; 
   margin-bottom: -10000px;
 }
 #left{
@@ -233,6 +233,7 @@ margin:0 auto;设置块元素（或与之类似的元素）的居中。
 ```
 
 - 双飞翼布局
+- 相较于圣杯布局，少了定位多加了个盒子和外边距
 ```html
 <style>
   * {

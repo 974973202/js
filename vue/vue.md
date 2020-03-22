@@ -167,3 +167,67 @@ export function set(target: Array<any> | Object, key: any, val: any): 
   return val;
 }
 ```
+
+### 页面中定义了一个定时器，在哪个阶段清除
+1. 在beforeDestroy中销毁定时器
+2. 可以通过$once这个时间监听清除
+```javascript
+moundted() {
+  const timer = setInterval(() => {
+    console.log(1)
+  }, 1000)
+  this.$once('hook:beforeDestory', () => {
+    clearInterval(timer)
+  })
+}
+```
+
+### 父组件如何获取子组件的数据
+1. $children
+```javascript
+moundted() {
+  console.log(this.$children)
+}
+```
+2. $refs
+
+### 子组件如何获取父组件的数据，父子组件如何传值
+1. props
+2. $parent
+ - this.$parent.属性
+ - this.$parent.方法
+3. provide / inject
+
+### 自定义指令如何定义，它的生命周期是什么
+- Vue.directive()定义全局指令
+- 有几个可用的钩子（生命周期）, 每个钩子可以选择一些参数. 钩子如下:
+  - 1. bind: 一旦指令附加到元素时触发
+  - 2. inserted: 一旦元素被添加到父元素时触发
+  - 3. update: 每当元素本身更新(但是子元素还未更新)时触发
+  - 4. componentUpdate: 每当组件和子组件被更新时触发
+  - 5. unbind: 一旦指令被移除时触发。
+
+### 、watch 和 computed的区别？
+- computed：
+  1. 有缓存机制；
+  2. 不能接受参数；
+  3. 可以依赖其他computed，甚至是其他组件的data；
+  4. 不能与data中的属性重复
+
+- watch：
+ 1. 可接受两个参数；
+ 2. 监听时可触发一个回调，并做一些事情；
+ 3. 监听的属性必须是存在的；
+ 4. 允许异步
+ - watch配置：handler、deep（是否深度）、immeditate （是否立即执行）
+
+- 总结：
+ - 当有一些数据需要随着另外一些数据变化时，建议使用computed
+ - 当有一个通用的响应数据变化的时候，要执行一些业务逻辑或异步操作的时候建议使用watch
+
+### vue能监听到数组变化的方法有哪些？为什么这些方法能监听到呢？
+Vue.js观察数组变化主要通过以下7个方法（push、pop、shift、unshift、splice、sort、reverse）
+
+大家知道，通过Object.defineProperty()劫持数组为其设置getter和setter后，调用的数组的push、splice、pop等方法改变数组元素时并不会触发数组的setter，继而数组的数据变化并不是响应式的，但是vue实际开发中却是实时响应的，是因为vue重写了数组的push、splice、pop等方法
+
+从源码中可以看出，ob.dep.notify()将当前数组的变更通知给其订阅者，这样当使用重写后方法改变数组后，数组订阅者会将这边变化更新到页面中
