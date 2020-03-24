@@ -231,3 +231,16 @@ Vue.js观察数组变化主要通过以下7个方法（push、pop、shift、unsh
 大家知道，通过Object.defineProperty()劫持数组为其设置getter和setter后，调用的数组的push、splice、pop等方法改变数组元素时并不会触发数组的setter，继而数组的数据变化并不是响应式的，但是vue实际开发中却是实时响应的，是因为vue重写了数组的push、splice、pop等方法
 
 从源码中可以看出，ob.dep.notify()将当前数组的变更通知给其订阅者，这样当使用重写后方法改变数组后，数组订阅者会将这边变化更新到页面中
+
+### vue 如何去优化首页的加载速度？首页白屏是什么问题引起的？如何解决？
+- webpack分包 - 代码切割
+ - SplitChunksPlugin
+ - Tree-shaking
+ - scope hosting
+ - 路由懒加载
+ - 骨架屏优化
+ - ui组件按需加载
+ - 图片压缩-雪碧图
+ - 要兼容低版本浏览器可以动态 Polyfill
+
+- 预渲染 prefetch...

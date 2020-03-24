@@ -1,12 +1,49 @@
 // 最佳实践是：默认使用 const，只有当确实需要改变变量的值的时候才使用 let
 
 // Let和const
-// 1.不存在变量提升
+// 1.不存在变量提升 其实是存在变量提升的，是先放入暂时性死区中，等执行到的时候才从暂时性死区中移除
 // 2.暂时性死区
 // 3.不允许重复声明
 // 4.块作用域
 
 // const 变量指向的那个内存地址所保存的数据不变
+
+const test = '吉'
+
+console.log('字符串长度：'， text.length);
+console.log('使用正则测试：'， /^.$/.test(text));
+console.log('得到第一个码元：'， text.charCodeAt(0));
+console.log('得到第二个码元：'， text.charCodeAt(1));
+
+// 吉： \ud842\udfb7
+console.log('得到第一个码元：'， text.charCodeAt(0).toString(16));
+console.log('得到第二个码元：'， text.charCodeAt(1).toString(16));
+console.log('得到第一个码点：'， text.codePointAt(0));
+console.log('得到第二个码点：'， text.codePointAt(1));
+
+/**
+ * 判断字符串char 是32位还是16位
+ * @param {*} char
+ */
+function is32bit(char， i = 0) {
+  // 如果码点大于16位最大值则是32位
+  return char.codePointAt(i) > 0xffff;
+}
+/**
+ * 得到一个字符串码点的真实长度
+ * @param {*} str
+ */
+function getLengthOfCodePoint(str) {
+  let len = 0;
+  for (let i = 0; i < str.length; i++) {
+    // i 索引码元
+    if (is32bit(str, i)) {
+      i ++
+    };
+    len ++;
+  }
+  return len;
+}
 
 Object.freeze对象冻结
 

@@ -28,6 +28,7 @@ function myinstanceof (left, right) {
 }
 
 // instanceof 
+// ES6  new.target是instanceof的改进
 // 1.判断一个实例是否属于某种类型 
 // 2.在继承关系中用来判断一个实例是否属于它的父类型
 function myinstanceof1(left, right) { // left 实例  right 构造函数

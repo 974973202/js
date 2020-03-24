@@ -150,8 +150,14 @@ function flatten(arr) {
 // es6
 // const flatten = array => array.reduce((acc, cur) => (Array.isArray(cur) ? [...acc, ...flatten(cur)] : [...acc, cur]), [])
 
-// 斐波那契数列
+// 斐波那契数列  1、1、2、3、5、8、13、21、
 // 这个数列从第3项开始，每一项都等于前两项之和
+function fb(n) {
+  if (n == 1 || n == 2) {
+    return 1;
+  }
+  return fb(n-1) + fb(n-2)
+}
 function fb1(n) {
   if (n <= 1) {
     return 1

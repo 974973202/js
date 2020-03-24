@@ -45,6 +45,8 @@ export default function request(url = '', data = {}, method = 'GET') {
       let baseUrl = 'http://localhost:8080'
       url = baseUrl + url;
     }
+    // const req = new Request(url, options)
+    // fetch(req)
     fetch(url, options)
       .then((response) => {
         if(response.ok) {

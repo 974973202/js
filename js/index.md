@@ -39,9 +39,11 @@
 ### 判断一个object是否是数组
 1. 使用 Object.prototype.toString.call 来判断是否是数组
 2. 使用 原型链 来完成判断
-```
+```js
 function isArray(obj){
  return obj.__proto__ === Array.prototype;
+ // 相当于
+ // Object.setPrototypeOf(obj, Array.prototype)
 }
 ```
 3. Array.isArray()

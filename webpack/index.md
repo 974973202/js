@@ -502,7 +502,7 @@ function () {
   })
 ```
 
-- 体积分析: webpack-bundle-analyzer分析依赖的第三方模块文件和业务里面的组件代码大小
+- 体积分析: webpack-bundle-analyzer分析依赖的第三方模块文件和业务里面的组件代码大小（可视化）
 ```javascript
   const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
   module.exports = {
