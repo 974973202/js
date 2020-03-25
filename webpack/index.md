@@ -1,5 +1,25 @@
 ## webpack
 https://juejin.im/post/5e6f4b4e6fb9a07cd443d4a5
+
+### 常见webpack工具名称
+- 抽离css：mini-css-extract-plugin
+- 公共脚本分离：SplitChunksPlugin代替CommonsChunkPlugin webpack4内置
+- uglify阶段删除⽆用代码：tree shaking
+- 代码分割：scope hosting
+- 多进程/多实例构建优化：HappyPack  thread-loader
+- 并行压缩
+  - 使用 parallel-uglify-plugin 插件
+  - uglifyjs-webpack-plugin 开启 parallel 参数
+  - terser-webpack-plugin 开启 parallel 参数
+- 速度分析：speed-measure-webpack-plugin
+- 体积分析: webpack-bundle-analyzer
+- 预编译资源模块：使用DLLPlugin
+- 基础库分离：html-webpack-externals-plugin
+- 利用缓存：
+ - babel-loader开启缓存
+ - erser-webpack-plugin：开启缓存
+ - 使用 cache-loader 或者 hard-source-webpack-plugin
+
 ### 为什么需要构建工具？
 转换 ES6 语法
 转换 JSX
@@ -44,22 +64,13 @@ module.exports = {
 件类型并且把它们转化成有效的模块，并且可以添加到依赖图中。
   - 本身是一个函数，接受源文件作为参数，返回转换的结果。
 4. Plugins 插件⽤于 bundle ⽂件的优化，资源管理和环境变量注⼊。作⽤于整个构建过程
-```javascript
-CommonsChunkPlugin // 将chunks相同的模块代码提取成公共js
-CleanWebpackPlugin // 清理构建目录
-ExtracTextWebpackPlugin // 将CSS文件从bunlde文件里提取成一个独立的CSS文件
-CopyWebpackPlugin // 将文件或者文件夹拷贝到构建的输出目录
-HtmlWebpackPlugin // 创建html文件去承载输出的bunlde
-UglifyjsWebpackPlugin // 压缩js
-ZipWebpackPlugin // 将打包出的资源生成一个zip包
-```
 5. Mode ⽤来指定当前的构建环境是：production、development 还是 none
  - 设置 mode 可以使⽤ webpack 内置的函数，默认值为 production
 6. Mode 的内置函数功能
  - development 开启NamedChunksPlugin和NamedModulesPlugin（这两个插件在模块热更新阶段很实用，会在控制台打印出是哪个模块发生了热更新，模块路径）
  - production FlagDependencyUsagePlugin，FlagIncludeChunksPlugin，ModuleConcatnationPlugin，NoEmitOnErrorsPlugin，OccurrenceOrderPlugin，SideEffectsFlagPlugin和TerserPlugin（这些插件会在生产阶段会默认做一些代码的压缩）
 7. webpack 中的⽂件监听 是在发现资源代码发生改变时，自动重新构建出新的文件
- - 开启文件监听模式的2种方式：(浏览器不会自动刷新，需手动刷新页面)
+ - 开启文件监听模式的2种方式：(**浏览器不会自动刷新，需手动刷新页面**)
  - 1. webpack --watch
  - 2. 在配置webpack.config.js 文件中添加watch: true
  ```javascript
@@ -93,7 +104,13 @@ ZipWebpackPlugin // 将打包出的资源生成一个zip包
     devServer: {
       contentBase: './dist',     //  服务的基本目录
       hot: true,     // 是否热更新
-      open: true    // 是否在每次构建完成后自动开启浏览器窗口（如果命令里不带--open）
+      open: true,   // 是否在每次构建完成后自动开启浏览器窗口（如果命令里不带--open）
+      hotOnly: true, // true为模块刷新，不刷新浏览器
+      proxy: {
+        "/api": {
+          target: 'xxx'
+        }
+      },
     }
   }
  ```
