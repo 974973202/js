@@ -84,6 +84,15 @@ history.go(n) // 路由跳转，比如n为 2 是往前移动2个页面，n为 -2
 history.back() // 路由后退，相当于 history.go(-1)
 history.forward() // 路由前进，相当于 history.go(1)
 history.pushState() // 添加一条路由历史记录，如果设置跨域网址则报错
+// 说明
+// 浏览器不会向服务端请求数据，直接改变url地址，可以类似的理解为变相版的hash；但不像hash一样，浏览器会记录pushState的历史记录，可以使用浏览器的前进、后退功能作用
+// 使用方法
+// pushState(state, title, url)
+// 参数说明
+// state: 可以通过history.state读取
+// title: 可选参数，暂时没有用，建议传个短标题
+// url: 改变过后的url地址
+
 history.replaceState() // 替换当前页在路由历史记录的信息
 // popstate 事件：当活动的历史记录发生变化，就会触发 popstate 事件，在点击浏览器的前进后退按钮或者调用上面前三个方法的时候也会触发
 ```

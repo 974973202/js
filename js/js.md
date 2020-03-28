@@ -1,3 +1,5 @@
+### 为什么js 0.1 + 0.2 != 0.3
+https://blog.csdn.net/a8725585/article/details/83024787
 
 es5 scopechain  es6 outer
 

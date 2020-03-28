@@ -127,3 +127,47 @@ Proxy 在 ES2015 规范中被正式加入，它有以下几个特点：
 除了上述两点之外，Proxy 还拥有以下优势：
 - Proxy 的第二个参数可以有 13 种拦截方法，这比起 Object.defineProperty() 要更加丰富
 - Proxy 作为新标准受到浏览器厂商的重点关注和性能优化，相比之下 Object.defineProperty() 是一个已有的老方法
+
+### 关于路由，route / router 有什么区别
+- route 表示路由信息对象，包括path,params,hash,query,fullPath,matched,name等路由信息参数
+- router 表示路由实例对象，包括了路由的跳转方法，钩子函数等
+
+### vue-router 传参方式有哪些
+ - 通过params
+  - 只能用name，不能用path
+  - 参数不会显示在url上
+  - 浏览器强制刷新会清空参数
+ - 通过query
+  - 只能用path，不能用name
+  - name可以使用path路径
+  - 参数会显示在url上
+  - 浏览器刷新不清空参数
+
+### 滚动行为
+scrollBehavior(to, from, savedPosition) {
+  // return 期望滚动的位置
+  // return {
+  //  x: 0,
+  //  y: 0
+  // }
+}
+
+### vue-router原理
+- hash路由
+  - 监听hashchange事件
+```js
+window.addEventListener('hashchange', () => {
+  console.log(location.hash)
+})
+```
+
+- history路由
+ - history.pushState()
+
+- 监听回退
+ - popstate
+```js
+window.addEventListener('popstate', () => {
+  console.log(location.pathname)
+})
+```

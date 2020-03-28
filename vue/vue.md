@@ -129,21 +129,6 @@ if (typeof Promise !== 'undefined') {
 - computed是基于它们响应式依赖进行缓存，只有在依赖值发生变化，才会进行计算求值
 - methods每次使用都会执行相应的方法
 
-### 关于路由，route / router 有什么区别
-- route 表示路由信息对象，包括path,params,hash,query,fullPath,matched,name等路由信息参数
-- router 表示路由实例对象，包括了路由的跳转方法，钩子函数等
-
-### vue-router 传参方式有哪些
- - 通过params
-  - 只能用name，不能用path
-  - 参数不会显示在url上
-  - 浏览器强制刷新会清空参数
- - 通过query
-  - 只能用path，不能用name
-  - name可以使用path路径
-  - 参数会显示在url上
-  - 浏览器刷新不清空参数
-
 ### vue 响应式
 1. 数组
   > 通过索引的方式更改数组
