@@ -269,3 +269,12 @@ Vue.js观察数组变化主要通过以下7个方法（push、pop、shift、unsh
  - 要兼容低版本浏览器可以动态 Polyfill
 
 - 预渲染 prefetch...
+
+### 为什么mutations不能提交异步代码
+- 因为调试（devtools）的时候难以追踪状态的变化
+
+### action和mutations的区别
+- action提交的是mutation,而不是直接变更状态
+- action可以包含任意异步操作
+- dispatch -> action
+- commit -> mutations

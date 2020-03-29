@@ -25,10 +25,13 @@ export default {
   methods: {
     validator() {
       //有两个input!  一个用户名 一个密码
+      // 1.获取校验规则
       const rules = this.kForm.rules[this.prop];
+      // 2.获取数据
       const value = this.kForm.model[this.prop];
 
       // 描述对象
+      // 3.执行校验
       const descriptor = { [this.prop]: rules };
       const schema = new Schema(descriptor);
       schema.validate({ [this.prop]: value }, errors => {

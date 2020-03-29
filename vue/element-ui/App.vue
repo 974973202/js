@@ -2,12 +2,15 @@
   <div id="app">
     <template>
       {{value}}
-      <l-form :model="model" :rules="rules">
+      <l-form :model="model" :rules="rules" ref="loginForm">
         <l-form-item label="用户名" prop="username">
           <l-input v-model="model.username"></l-input>
         </l-form-item>
         <l-form-item label="密码" prop="password">
           <l-input v-model="model.password" type="password"></l-input>
+        </l-form-item>
+        <l-form-item>
+          <button @click="onLogin">登录</button>
         </l-form-item>
       </l-form>
     </template>
@@ -47,6 +50,15 @@ export default {
           alert("校验失败！");
         }
       });
+    },
+    onLogin () {
+      this.$refs.loginForm.validate((isValid) => {
+              if (isValid) {
+                  alert('登录！！！')
+              } else {
+                  alert('有错！！')
+              }
+          })
     }
   }
 };
