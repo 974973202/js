@@ -21,6 +21,10 @@
 import LInput from "./l-form/input";
 import LFormItem from "./l-form/form-item";
 import LForm from "./l-form/form"; // l-form
+
+import Notice from "./Notice";
+import create from "./utils/create";
+
 export default {
   name: "app",
   components: {
@@ -42,23 +46,28 @@ export default {
     };
   },
   methods: {
-    submitForm(form) {
-      this.$refs[form].validate(valid => {
-        if (valid) {
-          alert("请求登录!");
-        } else {
-          alert("校验失败！");
-        }
+    // submitForm(form) {
+    //   this.$refs[form].validate(valid => {
+    //     if (valid) {
+    //       alert("请求登录!");
+    //     } else {
+    //       alert("校验失败！");
+    //     }
+    //   });
+    // },
+    onLogin() {
+      // 创建弹窗实例
+      let notice;
+
+      this.$refs.loginForm.validate(isValid => {
+        notice = create(Notice, {
+          title: "xxx",
+          message: isValid ? "登录！！！" : "有错！！！",
+          duration: 10000
+        });
+
+        notice.show();
       });
-    },
-    onLogin () {
-      this.$refs.loginForm.validate((isValid) => {
-              if (isValid) {
-                  alert('登录！！！')
-              } else {
-                  alert('有错！！')
-              }
-          })
     }
   }
 };

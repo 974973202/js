@@ -215,6 +215,23 @@ Vue.prototype.$bus = new Vue();
 // this.$bus.$on()
 ```
 
+### vue组件通讯
+- 父子
+ - props
+ - $refs
+ - $children
+- 子父
+ - $emit
+ - @xx
+- 兄弟
+ - $parent
+ - $root
+- 祖代后代
+ - provide / inject
+- 没关系
+ - $bus
+ - vuex
+
 ### 自定义指令如何定义，它的生命周期是什么
 - Vue.directive()定义全局指令
 - 有几个可用的钩子（生命周期）, 每个钩子可以选择一些参数. 钩子如下:

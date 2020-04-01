@@ -97,21 +97,44 @@
   //   options.a()
   // }
 
-  const vm = new Vue({
-    el: '#root',
-    data() {
-      return {
-        msg: '8888899'
-      }
-    },
-  })
+  // const vm = new Vue({
+  //   el: '#root',
+  //   data() {
+  //     return {
+  //       msg: '8888899'
+  //     }
+  //   },
+  // })
 
-  const unwatch = vm.$watch('msg', function() {
-   console.log('????') 
-   unwatch()
-  }, {
-    deep: true
-  })
+  // const unwatch = vm.$watch('msg', function() {
+  //  console.log('????') 
+  //  unwatch()
+  // }, {
+  //   deep: true
+  // })
+  var arr = [9,7,4,9,7,3,2,0,2]
+
+  function q(arr) {
+    if(arr && arr.length <= 1) {
+      return arr;
+    }
+
+    var centerArr = Math.floor(arr.length/2);
+    var centerNum = arr.splice(centerArr, 1)[0];
+    var left = [];
+    var right = [];
+    for(let i = 0; i < arr.length; i++) {
+      if(arr[i] > centerNum) {
+        right.push(arr[i])
+      } else {
+        left.push(arr[i])
+      }
+    }
+
+    return q(left).concat([centerNum], q(right))
+  }
+
+  console.log(q(arr))
   
 
 
