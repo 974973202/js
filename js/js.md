@@ -7,7 +7,7 @@ https://blog.csdn.net/a8725585/article/details/83024787
 
 es5 scopechain  es6 outer
 
-### AOP 切面编程
+### AOP 切面编程 OOP 面对对象 
 - 装饰器
 
 ### for-in 中一定要有 hasOwnProperty 的判断（即禁止直接读取原型对象的属性）
