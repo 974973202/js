@@ -73,32 +73,36 @@ vue生命周期共分为四个阶段
 
 ### watch
 
-### Vue渲染过程
-1. 把template模板编译为render函数
-2. 实例进行挂载, 根据根节点render函数的调用，递归的生成虚拟dom
-3. 对比虚拟dom，渲染到真实dom
-4. 组件内部data发生变化，组件和子组件引用data作为props重新调用render函数，生成虚拟dom, 返回到步骤3
+### 1. 对于MVVM的理解
+**MVVM** 是 Model-View-ViewModel 的缩写
+**Model**: 代表数据模型，也可以在Model中定义数据修改和操作的业务逻辑。我们可以把Model称为数据层，因为它仅仅关注数据本身，不关心任何行为
+**View**: 用户操作界面。当ViewModel对Model进行更新的时候，会通过数据绑定更新到View
+**ViewModel**： 业务逻辑层，View需要什么数据，ViewModel要提供这个数据；View有某些操作，ViewModel就要响应这些操作，所以可以说它是Model for View.
+总结： MVVM模式简化了界面与业务的依赖，解决了数据频繁更新。MVVM 在使用当中，利用双向绑定技术，使得 Model 变化时，ViewModel 会自动更新，而 ViewModel 变化时，View 也会自动变化。
 
-### MVVM和MVC的区别
-1. MVC中的Control在MVVM中演变成viewModel
-2. MVVM通过数据来显示视图，而不是通过节点操作
-3. MVVM主要解决了MVC中大量的DOM操作，使页面渲染性能降低，加载速度慢，影响用户体验的问题
+### 2. Vue的双向数据绑定原理是什么
+vue.js 是采用数据劫持结合发布者-订阅者模式的方式，通过Object.defineProperty()来劫持各个属性的setter，getter，在数据变动时发布消息给订阅者，触发相应的监听回调。
+具体实现步骤，感兴趣的可以看看:
+1. 当把一个普通 Javascript 对象传给 Vue 实例来作为它的 data 选项时，Vue 将遍历它的属性，用 Object.defineProperty 都加上 setter和getter 这样的话，给这个对象的某个值赋值，就会触发setter，那么就能监听到了数据变化
+2. compile解析模板指令，将模板中的变量替换成数据，然后初始化渲染页面视图，并将每个指令对应的节点绑定更新函数，添加监听数据的订阅者，一旦数据有变动，收到通知，更新视图
+3. Watcher订阅者是Observer和Compile之间通信的桥梁，主要做的事情是: 
+1、在自身实例化时往属性订阅器(dep)里面添加自己 
+2、自身必须有一个update()方法 
+3、待属性变动dep.notice()通知时，能调用自身的update()方法，并触发Compile中绑定的回调，则功成身退。
+4. MVVM作为数据绑定的入口，整合Observer、Compile和Watcher三者，通过Observer来监听自己的model数据变化，通过Compile来解析编译模板指令，最终利用Watcher搭起Observer和Compile之间的通信桥梁，达到数据变化 -> 视图更新；视图交互变化(input) -> 数据model变更的双向绑定效果
 
-### Vue响应式数据的原理
-Vue通过数据劫持配合发布者-订阅者的设计模式，内部通过调用object.defineProperty()来劫持各个属性的getter和setter，在数据变化的时候通知订阅者，并触发相应的回调
-
-### Vue是如何实现数据双向绑定的
-- 实现一个监听器「Observer」：对数据对象进行遍历，包括子属性对象的属性，利用Object.defineProperty()在属性上都加上getter和setter，这样后，给对象的某个值赋值，就会触发setter，那么就能监听到数据变化
-- 实现一个解析器「Compile」：解析Vue模板指令，将模板中的变量都替换成数据，然后初始化渲染页面视图，并将每个指令对应的节点绑定更新函数，添加监听数据的订阅者，一旦数据有变动，收到通知，调用更新函数进行数据更新
-- 实现一个订阅者「Watcher」：Watcher订阅者是Observer和Compile之间通信的桥梁，主要任务是订阅Observer中的属性值变化的消息，当收到属性值变化的消息时，触发解析器Compile中对应的更新函数
-- 实现一个订阅器「Dep」：订阅器采用发布-订阅设计模式，用来收集订阅者Watcher，对监听器Observer和订阅者Watcher进行统一管理
-
+### 3. Vue中是如何检测数组变化
 ### Vue是如何检测数组的变化
 - 核心思想：使用了函数劫持的方式，重写了数组的方法（push,pop,unshift,shift···）
 - Vue将data中的数组，进行了原型链的重写，指向了自己所定义的数组原型方法，当调用数组的API时，可以通知依赖更新，如果数组中包含着引用类型，会对数组中的引用类型再次进行监控
+### vue能监听到数组变化的方法有哪些？为什么这些方法能监听到呢？
+Vue.js观察数组变化主要通过以下7个方法（push、pop、shift、unshift、splice、sort、reverse）
+大家知道，通过Object.defineProperty()劫持数组为其设置getter和setter后，调用的数组的push、splice、pop等方法改变数组元素时并不会触发数组的setter，继而数组的数据变化并不是响应式的，但是vue实际开发中却是实时响应的，是因为vue重写了数组的push、splice、pop等方法
+从源码中可以看出，ob.dep.notify()将当前数组的变更通知给其订阅者，这样当使用重写后方法改变数组后，数组订阅者会将这边变化更新到页面中
 
-### Vue如何通过vm.$set()来解决对象新增/删除属性不能响应的问题
+### 4. 为何Vue采用异步渲染
 
+### 5. nextTick实现原理
 ### nextTick实现原理是什么？ 在Vue中有什么作用
 ```js
 if (typeof Promise !== 'undefined') {
@@ -114,11 +118,187 @@ if (typeof Promise !== 'undefined') {
 - 原理：EventLoop事件循环
 - 作用：在下次dom更新循环结束后执行延迟回调，当我们修改数据之后立即使用nextTick()来获取最新更新的Dom
 
+### 6. Vue组件的生命周期
+
+### 7. ajax请求放在哪个生命周期中
+首先，一个组件的 created 比 mounted 也早调用不了几微秒，性能没啥提高；
+而且，等到异步渲染开启的时候，created 就可能被中途打断，中断之后渲染又要重做一遍，想一想，在 created 中做ajax调用，代码里看到只有调用一次，但是实际上可能调用 N 多次，这明显不合适。
+相反，若把发ajax 放在 mounted，因为 mounted 在第二阶段，所以绝对不会多次重复调用，这才是ajax合适的位置
+
+### 8. 父子组件生命周期调用顺序
+
+### 9. Watch中的deep: true是如何实现的
 ### watch中的deep:true是如何实现的
 当用户指定了watch中的deep:true时，如果当前监控的值是数组类型（对象类型），会对对象中的每一项进行求值，此时会将当前watcher存入到对应属性的依赖中，这样数组中的对象发生变化也会通知数据进行更新
 
+### 10. Vue中事件绑定原理
+1.用来劫持并监听所有属性，如果有变动的，就通知订阅者。
+2.可以收到属性的变化通知并执行相应的函数，从而更新视图。
+3.可以扫描和解析每个节点的相关指令，并根据初始化模板数据以及初始化相应的订阅器
+
+### 11. 为什么v-for 和 v-if 不能连用
 ### 为什么v-if与v-for不建议连在一起使用
 - v-for优先级高于v-if，如果连在一起使用的话会把v-if给每一个元素都添加上，重复运行于每一个v-for循环中，会造成性能浪费
+
+### 12. v-modal中的实现原理及如何自定义v-modal
+
+### 13. Vue组件如何通讯
+
+### 14. 什么是作用域插槽？
+把父组件的数据扔到子组件里面展示，复用组件
+
+### 15. 用vnode来描述一个DOM结构
+```JS
+// 这是一个最基础的VNode节点，作为其他派生VNode类的基类，里面定义了下面这些数据。
+// tag: 当前节点的标签名
+// data: 当前节点对应的对象，包含了具体的一些数据信息，是一个VNodeData类型，可以参考VNodeData类型中的数据信息
+// children: 当前节点的子节点，是一个数组
+// text: 当前节点的文本
+// elm: 当前虚拟节点对应的真实dom节点
+// ns: 当前节点的名字空间
+// context: 当前节点的编译作用域
+// functionalContext: 函数化组件作用域
+// key: 节点的key属性，被当作节点的标志，用以优化
+// componentOptions: 组件的option选项
+// componentInstance: 当前节点对应的组件的实例
+// parent: 当前节点的父节点
+// raw: 简而言之就是是否为原生HTML或只是普通文本，innerHTML的时候为true，textContent的时候为false
+// isStatic: 是否为静态节点
+// isRootInsert: 是否作为跟节点插入
+// isComment: 是否为注释节点
+// isCloned: 是否为克隆节点
+// isOnce: 是否有v-once指令
+export default class VNode {
+  tag: string | void;
+  data: VNodeData | void;
+  children: ?Array<VNode>;
+  text: string | void;
+  elm: Node | void;
+  ns: string | void;
+  context: Component | void; // rendered in this component's scope
+  functionalContext: Component | void; // only for functional component root nodes
+  key: string | number | void;
+  componentOptions: VNodeComponentOptions | void;
+  componentInstance: Component | void; // component instance
+  parent: VNode | void; // component placeholder node
+  raw: boolean; // contains raw HTML? (server only)
+  isStatic: boolean; // hoisted static node
+  isRootInsert: boolean; // necessary for enter transition check
+  isComment: boolean; // empty comment placeholder?
+  isCloned: boolean; // is a cloned node?
+  isOnce: boolean; // is a v-once node?
+
+  constructor (
+    tag?: string,
+    data?: VNodeData,
+    children?: ?Array<VNode>,
+    text?: string,
+    elm?: Node,
+    context?: Component,
+    componentOptions?: VNodeComponentOptions
+  ) {
+    /*当前节点的标签名*/
+    this.tag = tag
+    /*当前节点对应的对象，包含了具体的一些数据信息，是一个VNodeData类型，可以参考VNodeData类型中的数据信息*/
+    this.data = data
+    /*当前节点的子节点，是一个数组*/
+    this.children = children
+    /*当前节点的文本*/
+    this.text = text
+    /*当前虚拟节点对应的真实dom节点*/
+    this.elm = elm
+    /*当前节点的名字空间*/
+    this.ns = undefined
+    /*编译作用域*/
+    this.context = context
+    /*函数化组件作用域*/
+    this.functionalContext = undefined
+    /*节点的key属性，被当作节点的标志，用以优化*/
+    this.key = data && data.key
+    /*组件的option选项*/
+    this.componentOptions = componentOptions
+    /*当前节点对应的组件的实例*/
+    this.componentInstance = undefined
+    /*当前节点的父节点*/
+    this.parent = undefined
+    /*简而言之就是是否为原生HTML或只是普通文本，innerHTML的时候为true，textContent的时候为false*/
+    this.raw = false
+    /*静态节点标志*/
+    this.isStatic = false
+    /*是否作为跟节点插入*/
+    this.isRootInsert = true
+    /*是否为注释节点*/
+    this.isComment = false
+    /*是否为克隆节点*/
+    this.isCloned = false
+    /*是否有v-once指令*/
+    this.isOnce = false
+  }
+
+  // DEPRECATED: alias for componentInstance for backwards compat.
+  /* istanbul ignore next https://github.com/answershuto/learnVue*/
+  get child (): Component | void {
+    return this.componentInstance
+  }
+}
+```
+
+### 16. 简述Vue中diff算法原理
+
+### 17. 描述组件渲染和更新过程
+
+### 18. Vue中模板编译原理
+第一步将模版字符串转换成element ASTs(解析器)
+第二步是对AST进行静态节点标记，主要用来做虚拟DOM的渲染优化(优化器)
+第三步是使用element ASTs生成render函数代码字符串(代码生成器)
+
+解析器（parser），优化器（optimizer）和代码生成器（code generator）。
+解析器（parser）的作用是将 模板字符串 转换成 element ASTs。
+优化器（optimizer）的作用是找出那些静态节点和静态根节点并打上标记。
+代码生成器（code generator）的作用是使用 element ASTs 生成 render函数代码（generate render function code from element ASTs）。
+
+
+### Vue渲染过程
+1. 把template模板编译为render函数
+2. 实例进行挂载, 根据根节点render函数的调用，递归的生成虚拟dom
+3. 对比虚拟dom，渲染到真实dom
+4. 组件内部data发生变化，组件和子组件引用data作为props重新调用render函数，生成虚拟dom, 返回到步骤3
+
+### 19. Vue中常见的性能优化
+
+
+### Proxy相比于defineProperty的优势 
+Object.defineProperty() 的问题主要有三个：
+- 不能监听数组的变化
+- 必须遍历对象的每个属性
+- 必须深层遍历嵌套的对象
+
+Proxy 在 ES2015 规范中被正式加入，它有以下几个特点：
+- 针对对象：针对整个对象，而不是对象的某个属性，所以也就不需要对 keys 进行遍历。这解决了上述 Object.defineProperty() 第二个问题
+- 支持数组：Proxy 不需要对数组的方法进行重载，省去了众多 hack，减少代码量等于减少了维护成本，而且标准的就是最好的。
+- 
+除了上述两点之外，Proxy 还拥有以下优势：
+- Proxy 的第二个参数可以有 13 种拦截方法，这比起 Object.defineProperty() 要更加丰富
+- Proxy 作为新标准受到浏览器厂商的重点关注和性能优化，相比之下 Object.defineProperty() 是一个已有的老方法
+
+
+
+### MVVM和MVC的区别
+1. MVC中的Control在MVVM中演变成viewModel
+2. MVVM通过数据来显示视图，而不是通过节点操作
+3. MVVM主要解决了MVC中大量的DOM操作，使页面渲染性能降低，加载速度慢，影响用户体验的问题
+
+### Vue响应式数据的原理
+Vue通过数据劫持配合发布者-订阅者的设计模式，内部通过调用object.defineProperty()来劫持各个属性的getter和setter，在数据变化的时候通知订阅者，并触发相应的回调
+
+### Vue是如何实现数据双向绑定的
+- 实现一个监听器「Observer」：对数据对象进行遍历，包括子属性对象的属性，利用Object.defineProperty()在属性上都加上getter和setter，这样后，给对象的某个值赋值，就会触发setter，那么就能监听到数据变化
+- 实现一个解析器「Compile」：解析Vue模板指令，将模板中的变量都替换成数据，然后初始化渲染页面视图，并将每个指令对应的节点绑定更新函数，添加监听数据的订阅者，一旦数据有变动，收到通知，调用更新函数进行数据更新
+- 实现一个订阅者「Watcher」：Watcher订阅者是Observer和Compile之间通信的桥梁，主要任务是订阅Observer中的属性值变化的消息，当收到属性值变化的消息时，触发解析器Compile中对应的更新函数
+- 实现一个订阅器「Dep」：订阅器采用发布-订阅设计模式，用来收集订阅者Watcher，对监听器Observer和订阅者Watcher进行统一管理
+
+### Vue如何通过vm.$set()来解决对象新增/删除属性不能响应的问题
+
 
 ### computed / watch 的区别是什么
 - computed是依赖于其他属性的一个计算值，并且具备缓存，只有当依赖的值发生变化才会更新（自动监听依赖值的变化，从而动态返回内容）
@@ -267,12 +447,6 @@ obj: {
  - 当有一些数据需要随着另外一些数据变化时，建议使用computed
  - 当有一个通用的响应数据变化的时候，要执行一些业务逻辑或异步操作的时候建议使用watch
 
-### vue能监听到数组变化的方法有哪些？为什么这些方法能监听到呢？
-Vue.js观察数组变化主要通过以下7个方法（push、pop、shift、unshift、splice、sort、reverse）
-
-大家知道，通过Object.defineProperty()劫持数组为其设置getter和setter后，调用的数组的push、splice、pop等方法改变数组元素时并不会触发数组的setter，继而数组的数据变化并不是响应式的，但是vue实际开发中却是实时响应的，是因为vue重写了数组的push、splice、pop等方法
-
-从源码中可以看出，ob.dep.notify()将当前数组的变更通知给其订阅者，这样当使用重写后方法改变数组后，数组订阅者会将这边变化更新到页面中
 
 ### vue 如何去优化首页的加载速度？首页白屏是什么问题引起的？如何解决？
 - webpack分包 - 代码切割

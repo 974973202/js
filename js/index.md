@@ -132,7 +132,7 @@ function isArray(obj){
 > for...of 是ES6新引入的特性，修复了ES5引入的for...in的不足
 > for...in 循环出的是key，for...of循环出的是value
 > for...of不能循环普通的对象，需要通过和Object.keys()搭配使用
-> 推荐在循环对象属性的时候，使用for...in,在遍历数组的时候的时候使用for...of
+> 推荐在循环对象属性的时候，使用for...in,在遍历数组的时候使用for...of
 
 ### null和undefined有什么区别
 - null是一个表示"无"的对象，转为数值时为0

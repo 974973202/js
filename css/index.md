@@ -47,7 +47,9 @@
 
 ### BFC
 * 什么是BFC
-> 是块级格式化上下文，决定元素如何对其内容进行定位 以及 与其他元素的关系和相互作用
+- 块级格式化上下文，
+- 决定元素如何对其内容进行定位
+- 与其他元素的关系和相互作用
 * 触发BFC的条件
 > <p>根元素或其它包含它的元素
 > <p>浮动元素 (元素的 float 不是 none)
@@ -395,7 +397,7 @@ animation-play-state: paused / running; 暂停动画 / 正在运行的动画
 - 主要的区别transition不能立即执行，animation不能用事件触发;
 1. 如果要灵活定制多个帧以及循环，用animation.
 2. 如果要简单的from to 效果，用 transition.
-3. 如果要使用js灵活设定动画属性，用transition.transition和animation
+3. 如果要使用js灵活设定动画属性，用transition.
 
 ### CSS3D动画
 ```
