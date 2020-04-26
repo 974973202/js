@@ -492,9 +492,9 @@ function () {
 - 使用 cache-loader 或者 hard-source-webpack-plugin
 
 ### 体积优化策略总结 
-- Scope Hoisting 
-- Tree-shaking 
-- 公共资源分离 
+- Scope Hoisting 代码分割
+- Tree-shaking 摇树，擦除无用代码
+- 公共资源分离 SplitChunksPlugin
 - 图片压缩 
 - 动态 Polyfill
 

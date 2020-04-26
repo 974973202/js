@@ -42,7 +42,7 @@ export default function request(url = '', data = {}, method = 'GET') {
       })
     }
     if(process.env.NODE_ENV === 'production') {
-      let baseUrl = 'http://localhost:8080'
+      let baseUrl = 'http://localhost:3000'
       url = baseUrl + url;
     }
     // const req = new Request(url, options)

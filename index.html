@@ -91,19 +91,17 @@
   // }, {
   //   deep: true
   // })
-  var b = 'lzx'
-  function test() {
-    var a = 'lzxx';
-    return function t() {
-      console.log(this.a)
-      console.log(b)
+  function fb(n) {
+    if(n == 1 || n == 2) {
+      return 1
     }
+    return fb(n-1) + fb(n-2)
   }
-  var test1 = test();
-  console.log(test1())
+  console.log(fb(8))
+  
 
-  let rootDom = document.getElementById('root')
-  console.log(rootDom.childNodes[0].nodeValue= 123)
+  // let rootDom = document.getElementById('root')
+  // console.log(rootDom.childNodes[0].nodeValue= 123)
   
 
 
