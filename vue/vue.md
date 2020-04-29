@@ -272,7 +272,6 @@ export default class VNode {
 
 ### Proxy相比于defineProperty的优势 
 Object.defineProperty() 的问题主要有三个：
-- 不能监听数组的变化
 - 必须遍历对象的每个属性
 - 必须深层遍历嵌套的对象
 

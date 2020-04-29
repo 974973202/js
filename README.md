@@ -47,7 +47,3 @@ vue
 
 react
 node
-
-- react面试整理
-- 掘金面试文章
-- js和浏览器部分
