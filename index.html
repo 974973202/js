@@ -12,9 +12,12 @@
     margin: 0;
     padding: 0;
   }
+  .wrap {
+    min-width: 500px;
+  }
 
   .content {
-    width: 100vw;
+    width: 100%;
     height: 500px;
     border: 1px solid black;
     overflow: hidden;
@@ -30,18 +33,38 @@
     background-color: rosybrown;
   }
 
+  .bfc {
+    width: 100px;
+    height: 100px;
+    background-color: aqua;
+    margin-bottom: 30px;
+  }
+  .bfc1 {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    margin-top: 20px;
+  }
+
 
 </style>
 
 <body>
-  <div class="content">
-    <div class="left">left</div>
-      <div class="middle">middle
-      </div>
-    <div class="right">right</div>
+  <div class="wrap">
+    <div class="content">
+      <div class="left">left</div>
+        <div class="middle">middle
+        </div>
+      <div class="right">right</div>
+    </div>
   </div>
   <div id="root">
     {{ msg }}
+  </div>
+
+  <div class="bfc"></div>
+  <div style="overflow: hidden;">
+    <div class="bfc1"></div>
   </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
@@ -78,9 +101,10 @@ var obj = {
 }
 
 function test () {
-  console.log(aa)
+  console.log(this.aa)
 }
-test.mybind(obj)
+test()
+test.mybind(obj)()
 // test()
   // el.onmousemove = function () {
   //   // console.log('sss')
@@ -88,25 +112,52 @@ test.mybind(obj)
   // }
 
   
-  // var flag = document.createDocumentFragment()
-  // let child;
-  // while(child = el.firstChild) {
-  //   flag.appendChild(child)
-  // }
-  // Array.from(flag.childNodes).forEach(node => {
-  //   // console.log(node)
-  //   if(node.nodeType == 1) {
-  //     const nodeAttrs = node.attributes;
-  //     console.log(nodeAttrs)
-  //     Array.from(nodeAttrs).forEach(attr => {
-
-  //       console.log(attr, attr.name, attr.value)
-  //     })
-  //   } else if(node.nodeType === 3) {
-  //     console.log(3, node, node.textContent)
+  // function ttrot(func, wait) {
+  //   var timeDate = 0;
+  //   var timer = null;
+  //   return function () {
+  //     var context = this;
+  //     var args = arguments;
+  //     // var now = Date.now();
+  //     // if(now - timeDate > wait) {
+  //     //   func.apply(context, args)
+  //     //   timeDate = now
+  //     // }
+  //     timer = setTimeout(() => {
+  //       timer = null;
+  //       func.apply(context, args)
+  //     }, wait)
   //   }
-  // })
+  // }
 
+  function debounce(func, wait) {
+    var timer = null;
+    return function () {
+      var context = this;
+      var args = arguments;
+      if(timer) clearTimeout(timer);
+      // timer = setTimeout(() => {
+      //   func.apply(context, args)
+      // }, wait)
+      var callnow = !timer;
+      timer = setTimeout(() => {
+        timer = null
+      }, wait)
+      if(callnow) func.apply(context, args)
+    }
+  }
+
+  Function.prototype.mycall = function (context) {
+    var context = context || window;
+    context.fn = this;
+    var args = []
+    for(var i = 0; i < arguments.length; i ++) {
+      args.push('arguments[' + i + ']' )
+    }
+    var result = eval('context.fn(' + args + ')')
+    delete context.fn
+    return result
+  }
 
 
   // function Test(options) {

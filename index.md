@@ -10,7 +10,7 @@ cookies, seess..., local..
 html5的新特性，canvas,svg，
 
 css 选择器优先级
-important style id class = [] = :   p = ::  *
+important > style > id > class = [] = : > p = :: > *
 
 bfc
 1. 决定元素内容如何定位
@@ -48,6 +48,8 @@ animation 不能用事件触发
 
 灵活的用animation
 from to 效果的用transition
+
+css3D  transform-style: preserve-3d;
 
 js动画和css动画的区别
 js实现的是帧动画
@@ -264,10 +266,10 @@ function debounce(func, wait, type) {
       timer = setTimeout(() => {
         timer = null;
       }, wait)
-      if(callNow) func.apply(func, wait)
+      if(callNow) func.apply(context, args)
     } else {
       timer = setTimeout(() => {
-        func.apply(func, wait)
+        func.apply(context, args)
       }) 
     }
   }
@@ -281,7 +283,7 @@ Function.prototype.call = function(context) {
   context.fn = this;
   var args = [];
   for(var i = 0; i < arguments.length; i ++) {
-    args.push(`arguments${i}`)
+    args.push(`arguments[${i}]`)
   }
   var result = eval(`context.fn(${args})`);
   delete context.fn
@@ -401,6 +403,8 @@ type和interface的区别
 ### 全局路由钩子  beforeEach  beforeResolve  afterEach
 ### 路由独享钩子 beforeEnter  afterEnter  beforeLeave
 ### 组件内导航钩子 beforeRouteEnter  beforeRouteUpdate beforeRouteLeave
+
+# 网络安全
 
 
 

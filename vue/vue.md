@@ -451,10 +451,9 @@ obj: {
 
 
 ### vue 如何去优化首页的加载速度？首页白屏是什么问题引起的？如何解决？
-- webpack分包 - 代码切割
- - SplitChunksPlugin
+ - SplitChunksPlugin 公共脚本分离
  - Tree-shaking
- - scope hosting
+ - scope hosting - 代码分割
  - 路由懒加载
  - 骨架屏优化
  - ui组件按需加载
