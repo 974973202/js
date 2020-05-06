@@ -281,7 +281,7 @@ Function.prototype.call = function(context) {
   context.fn = this;
   var args = [];
   for(var i = 0; i < arguments.length; i ++) {
-    args.push(`arguments${i}`)
+    args.push(`arguments[${i}]`)
   }
   var result = eval(`context.fn(${args})`);
   delete context.fn

@@ -4,39 +4,46 @@ const Context = React.createContext();
 
 
 export class Provider extends Component {
-  render () {
+  render() {
     return (
       <Context.Provider value={this.props.store}>
-        { this.props.children }
+        {this.props.children}
       </Context.Provider>
     )
   }
+}
 
+export function Provider1({ store, children }) {
+  return (
+    <Context.Provider value={store}>
+      {children}
+    </Context.Provider>
+  )
 }
 
 export const connect = (mapStateToProps, mapDispatchToProps) => Component => {
   return () => {
     class Connect extends Component {
-      componentDidMount () {
+      componentDidMount() {
         const { store } = this.props;
-        this.unsub = store.subscribe(()=>{
+        this.unsub = store.subscribe(() => {
           this.setState(store.getState());
         })
       }
 
-      componentWillUnmount () {
+      componentWillUnmount() {
         this.unsub();
       }
-    
-      render () {
+
+      render() {
         const { store } = this.props;
         const state = mapStateToProps(store.getState());
         let dispatchMethods = {};
-        if(typeof mapDispatchToProps === 'function') {
+        if (typeof mapDispatchToProps === 'function') {
           dispatchMethods = mapDispatchToProps(store.dispatch);
-        }else if(typeof mapDispatchToProps === 'object') {
+        } else if (typeof mapDispatchToProps === 'object') {
           dispatchMethods = bindActionCreators(mapDispatchToProps, store.dispatch);
-        }else {
+        } else {
           throw new Error('mapDispatchToProps的只能为function或object');
         }
 
@@ -45,7 +52,7 @@ export const connect = (mapStateToProps, mapDispatchToProps) => Component => {
           <Component {...state} {...dispatchMethods}></Component>
         )
       }
-    
+
     }
 
 
@@ -60,7 +67,7 @@ export const connect = (mapStateToProps, mapDispatchToProps) => Component => {
           }
         }
       </Context.Consumer>
-      
+
     )
   }
 }
