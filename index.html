@@ -147,51 +147,49 @@ test.mybind(obj)()
     }
   }
 
-  Function.prototype.mycall = function (context) {
-    var context = context || window;
-    context.fn = this;
-    var args = []
-    for(var i = 0; i < arguments.length; i ++) {
-      args.push('arguments[' + i + ']' )
+  function isObject(obj) {
+    return typeof obj == 'object' && obj !== null;
+  }
+
+  function deepClone(obj) {
+    if(!isObject(obj)) return obj;
+
+    const target = Array.isArray(obj) ? [] : {}
+
+    for( let prop in obj ) {
+      if(obj.hasOwnProperty(prop)) {
+        if(isObject(obj[prop])) {
+          target[prop] = deepClone(obj[prop])
+        } else {
+          target[prop] = obj[prop]
+        }
+      }
     }
-    var result = eval('context.fn(' + args + ')')
-    delete context.fn
-    return result
+
+    return target
   }
 
 
-  // function Test(options) {
-  //   this.options = options;
-  //   // options.a.call(this)
-  //   options.a()
-  // }
+  export const createStore = (reducer) => {
+    let initState = null;
+    let currentReducer = reducer;
+    let listeners = []
+    const getState = () => initState;
+    const dispatch = (action) => {
+      initState = currentReducer(initState, action);
+      listeners.forEach(fn => fn())
+    }
+    const subscribe = fn => {
+      listeners.push(fn)
+    }
 
-  // const vm = new Vue({
-  //   el: '#root',
-  //   data() {
-  //     return {
-  //       msg: '8888899'
-  //     }
-  //   },
-  // })
-
-  // const unwatch = vm.$watch('msg', function() {
-  //  console.log('????') 
-  //  unwatch()
-  // }, {
-  //   deep: true
-  // })
-  // function fb(n) {
-  //   if(n == 1 || n == 2) {
-  //     return 1
-  //   }
-  //   return fb(n-1) + fb(n-2)
-  // }
-  // console.log(fb(8))
-  
-
-  // let rootDom = document.getElementById('root')
-  // console.log(rootDom.childNodes[0].nodeValue= 123)
+    dispatch({type: '@@@redux/init'})
+    return {
+      getState,
+      dispatch,
+      subscribe
+    }
+  }
   
 
 

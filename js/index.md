@@ -1,5 +1,5 @@
-- 基本数据类型（原始值）：Number  Boolean  String  undefined  null  栈内存（stack）
-- 引⽤类型（引用值）：array  Object  function  data  RegExp...   堆内存（heap）
+- 基本数据类型（原始值）：Number  Boolean  String  undefined  null  **栈内存（stack）**
+- 引⽤类型（引用值）：array  Object  function  data  RegExp...   **堆内存（heap）**
 - 判断布尔值为false的6种情况： undefined  null  NaN  “”  0  false 
 - javascript有7种内置类型：null, undefined, boolean, number, string, object, symbol
 - typeof可判断的类型： 1.string  2.number  3.boolean  4.object  5.undefined  6.function  7. symbol
@@ -61,6 +61,29 @@ function isArray(obj){
  - 在《JavaScript深入之变量对象》中讲到，当查找变量的时候，会先从当前上下文的变量对象中查找，如果没有找到，就会从父级(词法层面上的父级)执行上下文的变量对象中查找，一直找到全局上下文的变量对象，也就是全局对象。这样由多个执行上下文的变量对象构成的链表就叫做作用域链
 
 - 原型与继承
+
+- 原型链继承 prototype 
+- 缺点： 1. 父类实例改变会影响子类 2. 无法向父类传参
+- 构造函数继承 call apply 
+- 缺点： 继承不到父类**原型**上的属性和方法
+- 组合式继承（原型链继承 + 构造函数继承）
+```js
+function Parent(name) {
+    this.name = [name]
+}
+Parent.prototype.getName = function() {
+    return this.name
+}
+function Child() {
+    // 构造函数继承
+    Parent.call(this, 'zhangsan') 
+}
+//原型链继承
+Child.prototype = new Parent()
+Child.prototype.constructor = Child
+```
+- 缺点: 每次创建子类实例都执行了两次构造函数(Parent.call()和new Parent())。子类创建时，原型中会存在两份相同的属性和方法。
+
 - [深度解析原型中的各个难点]https://juejin.im/post/5aa78fe66fb9a028d2079ca4
 - [从prototype与__proto__窥探JS继承之源|掘金技术征文]https://juejin.im/post/58f9d0290ce46300611ada65
 - [原型链与继承]https://juejin.im/post/58f94c9bb123db411953691b

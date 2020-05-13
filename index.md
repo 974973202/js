@@ -1,3 +1,5 @@
+首屏： 1. 服务端渲染， 2.路由懒加载 CDN加速 ui库按需加载 service worker  预渲染prefetch
+
 html是超文本标记语言
 
 常见的浏览器内核，webkit,blink,gecko,trident
@@ -90,7 +92,7 @@ http缓存
 
 强缓存
 http1.0 Expires
-http1.1 max-age
+http1.1 Cache-contro
 
 Cache-control指定指令来实现缓存机制
 - private 客户端可以缓存
