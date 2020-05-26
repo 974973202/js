@@ -92,7 +92,7 @@ http缓存
 
 强缓存
 http1.0 Expires
-http1.1 Cache-contro
+http1.1 Cache-control
 
 Cache-control指定指令来实现缓存机制
 - private 客户端可以缓存

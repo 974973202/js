@@ -283,6 +283,8 @@ Proxy 在 ES2015 规范中被正式加入，它有以下几个特点：
 - Proxy 的第二个参数可以有 13 种拦截方法，这比起 Object.defineProperty() 要更加丰富
 - Proxy 作为新标准受到浏览器厂商的重点关注和性能优化，相比之下 Object.defineProperty() 是一个已有的老方法
 
+Proxy 不能监听嵌套数据 
+
 
 
 ### MVVM和MVC的区别

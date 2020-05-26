@@ -80,31 +80,31 @@
 //       args.concat(Array.prototype.slice.call(arguments)));
 //   }
 // }
-Function.prototype.mybind = function(context) {
-  var self = this;
-  var fNOP = function () { };
-  var aArgs = Array.prototype.slice.call(arguments, 1)
-  console.log(...arguments)
-  var fbound = function () {
-    self.apply(this instanceof self 
-      ? this : context,
-      aArgs.concat(Array.prototype.slice.call(arguments)));
-  }
+// Function.prototype.mybind = function(context) {
+//   var self = this;
+//   var fNOP = function () { };
+//   var aArgs = Array.prototype.slice.call(arguments, 1)
+//   console.log(...arguments)
+//   var fbound = function () {
+//     self.apply(this instanceof self 
+//       ? this : context,
+//       aArgs.concat(Array.prototype.slice.call(arguments)));
+//   }
 
-  fNOP.prototype = this.prototype;
-  fbound.prototype = new fNOP();
-  return fbound;
-}
-var aa = 23;
-var obj = {
-  aa: 123
-}
+//   fNOP.prototype = this.prototype;
+//   fbound.prototype = new fNOP();
+//   return fbound;
+// }
+// var aa = 23;
+// var obj = {
+//   aa: 123
+// }
 
-function test () {
-  console.log(this.aa)
-}
-test()
-test.mybind(obj)()
+// function test () {
+//   console.log(this.aa)
+// }
+// test()
+// test.mybind(obj)()
 // test()
   // el.onmousemove = function () {
   //   // console.log('sss')
@@ -130,66 +130,66 @@ test.mybind(obj)()
   //   }
   // }
 
-  function debounce(func, wait) {
-    var timer = null;
-    return function () {
-      var context = this;
-      var args = arguments;
-      if(timer) clearTimeout(timer);
-      // timer = setTimeout(() => {
-      //   func.apply(context, args)
-      // }, wait)
-      var callnow = !timer;
-      timer = setTimeout(() => {
-        timer = null
+  async function fn1(next){
+    console.log('fn1');
+    await next(true)
+    console.log('fn11')
+  }
+  async function fn2(next) {
+    console.log('fn2');
+    await delay(3000)
+    await next(false)
+    console.log('fn22')
+  }
+  async function fn3(next) {
+    console.log('fn3')
+  }
+
+  function delay(wait) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
       }, wait)
-      if(callnow) func.apply(context, args)
-    }
+    })
   }
 
-  function isObject(obj) {
-    return typeof obj == 'object' && obj !== null;
-  }
+  /**
+   * 递归加函数组合compose
+  */
+  function compose(middlewares) {
+    return function (...args) {
+      // 执行第一个next
+      return dispatch(0)
 
-  function deepClone(obj) {
-    if(!isObject(obj)) return obj;
-
-    const target = Array.isArray(obj) ? [] : {}
-
-    for( let prop in obj ) {
-      if(obj.hasOwnProperty(prop)) {
-        if(isObject(obj[prop])) {
-          target[prop] = deepClone(obj[prop])
-        } else {
-          target[prop] = obj[prop]
+      function dispatch(i) {
+        let fn = middlewares[i];
+        if(!fn) {
+          return Promise.resolve()
         }
+        return Promise.resolve(
+          fn(function next(bool) {
+            // console.log(bool)
+            return dispatch(i+1)
+
+            // if(bool) {
+            //   return dispatch(i+1)
+            // } else {
+            //   setTimeout(() => {
+            //     return dispatch(i+1)
+            //   })
+            // }
+          })
+        )
       }
     }
-
-    return target
   }
 
+  const middlewares = [fn1, fn2, fn3];
+  const finalFn = compose(middlewares);
+  finalFn()
 
-  export const createStore = (reducer) => {
-    let initState = null;
-    let currentReducer = reducer;
-    let listeners = []
-    const getState = () => initState;
-    const dispatch = (action) => {
-      initState = currentReducer(initState, action);
-      listeners.forEach(fn => fn())
-    }
-    const subscribe = fn => {
-      listeners.push(fn)
-    }
 
-    dispatch({type: '@@@redux/init'})
-    return {
-      getState,
-      dispatch,
-      subscribe
-    }
-  }
+
   
 
 
