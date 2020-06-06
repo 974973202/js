@@ -37,8 +37,8 @@ overflow: hidden;
 }
 
 伪元素和伪类的区别：
-伪元素创建一个文档树外的元素 :
-伪类是操作文档树已有的元素 ::
+伪元素创建一个文档树外的元素 :: after before
+伪类是操作文档树已有的元素 :
 
 flex:
 flex是flex-grow 最大比例 flex-shrink 最小比例 flex-basis 多余空间
