@@ -474,6 +474,7 @@ transform:\scale(0.85,0.90)\ translate(0px,-30px)\ skew(-9deg,0deg)\Animation:
 - 补间动画：过渡（加过渡只要状态发生改变产生动画）动画(多个节点来控制动画)性能会更好
 
 ### CSS动画流畅的原因
+- [js动画和css动画的区别]https://blog.csdn.net/weixin_34032779/article/details/93403585
 - 渲染线程分为main thread(主线程)和compositor thread(合成器线程)。
 - 如果CSS动画只是改变transform和opacity，这时整个CSS动画得以在compositor thread完成（而JS动画则会在main thread执行，然后触发compositor进行下一步操作）
 - 在JS执行一些昂贵的任务时，main thread繁忙，CSS动画由于使用了compositor thread可以保持流畅，
