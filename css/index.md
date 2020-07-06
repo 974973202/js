@@ -470,8 +470,8 @@ transform:\scale(0.85,0.90)\ translate(0px,-30px)\ skew(-9deg,0deg)\Animation:
 > js实现动画: setInterval setTimeout requestAnimationFrame
 1. js实现的是帧动画
 2. css实现的是补间动画
-- 帧动画：使用定时器，每隔一段时间，更改当前的元素
-- 补间动画：过渡（加过渡只要状态发生改变产生动画）动画(多个节点来控制动画)性能会更好
+- 帧动画：使用定时器，每隔一段时间，更改当前的元素   浏览器不确定渲染
+- 补间动画：过渡（加过渡只要状态发生改变产生动画）动画(多个节点来控制动画)性能会更好   浏览器确定渲染
 
 ### CSS动画流畅的原因
 - [js动画和css动画的区别]https://blog.csdn.net/weixin_34032779/article/details/93403585

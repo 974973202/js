@@ -185,3 +185,39 @@ Child.prototype.constructor = Child
 3. CommonJs 是单个值导出，ES6 Module可以导出多个
 4. CommonJs 是动态语法可以写在判断里，ES6 Module 静态语法只能写在顶层
 5. CommonJs 的 this 是当前模块，ES6 Module的 this 是 undefined
+
+### JSON.stringify()
+```js
+const user = {
+  name: 'lzx',
+  age: 18
+}
+```
+1. 第二个参数如果是个数组（[]string）, JSON.stringify(user, ['name']); // 筛选出key为name的值
+2. 第二个参数如果是个函数(function), JSON.stringify(user, (key, value) => {
+  if (typeof value === 'string') {
+    return undefined
+  }
+  return value
+})
+3. 第三个参数如果是数字
+```js
+// 注意：为了达到理解的目的，使用 '--' 替代了空格
+
+JSON.stringify(user, null, 2);
+//{
+//--"name": "Prateek Singh",
+//--"age": 26,
+//--"country": "India"
+//}
+```
+4. 第三个参数为字符串
+```js
+JSON.stringify(user, null,'**');
+//{
+//**"name": "Prateek Singh",
+//**"age": 26,
+//**"country": "India"
+//}
+// 这里 * 取代了空格字符
+```
