@@ -24,3 +24,30 @@
 
 ### Hooks
 - 它可以让你在class以外使用state和其他React特性
+
+### getDerivedStateFromProps配合componentDidUpdate使用
+```js 
+static getDerivedStateFromProps(nextProps, prevState) {
+  const {
+    params: {
+      id = null
+    },
+  } = nextProps;
+  if(id !== prevState.ids) {
+    return {
+      ids: id,
+    }
+  }
+}
+// ...
+componentDidUpdate(nextProps) {
+  const {
+    params: {
+      id = null
+    },
+  } = this.props;
+  if(id !== nextProps.params.id) {
+    // ajax请求
+  }
+}
+```

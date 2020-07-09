@@ -40,10 +40,23 @@
 
 
 
-const fun = (val, cb) => {
-  cb(null, 456)
-}
+// const fun = (val, cb) => {
+//   cb(null, 456)
+// }
 
-fun('123', function (err, data){
-  console.log(data)
-})
+// fun('123', function (err, data){
+//   console.log(data)
+// })
+
+let a = [{ id: 1, name: 'zhang' }, { id: 2, name: 'li' }, { id: 3, name: 'chun' }];
+
+let b = [{ id: 1, age: 10 }, { id: 2, a: 99 }, { id: 4, age: 20, name: 'xx' }, { id: 5, age: 30 }];
+let arr = []
+b.forEach(x => a.forEach(y => {
+  if (y.id === x.id) {
+    arr.push({ ...x, ...y })
+  }
+}));
+let arr1 = b.filter(x => a.every(y => y.id !== x.id));
+let arr2 = a.filter(x => b.every(y => y.id !== x.id));
+console.log([...arr, ...arr1, ...arr2])

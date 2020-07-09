@@ -438,7 +438,10 @@ backface-visibility: visible / hidden;
 - 利用CSS继承减少代码量
 - 避免！important，可以选择其他选择器
 - 动画使用transform属性代替margin,height,width...等
-- 开启gpu硬件加速
+- 开启gpu硬件加速 （合成线程去处理这些变换，而不牵扯到主线程，大大提高渲染效率）
+
+将元素的will-change 设置为 opacity、transform、top、left、bottom、right 。这样子渲染引擎会为其单独实现一个图层，当这些变换发生时，仅仅只是利用合成线程去处理这些变换，而不牵扯到主线程，大大提高渲染效率。
+对于不支持will-change 属性的浏览器，使用一个3D transform属性来强制提升为合成 transform: translateZ(0)
 ```
 transform: translateZ(0)
 opacity
@@ -464,6 +467,8 @@ transform:\scale(0.85,0.90)\ translate(0px,-30px)\ skew(-9deg,0deg)\Animation:
 
 - 后处理器例如：PostCSS，通常被视为在完成的样式表中根据CSS规范处理CSS，让其更有效；目前最常做的
   是给CSS属性添加浏览器私有前缀，实现跨浏览器兼容性的问题。
+
+- CSS 选择符从右往左匹配查找，避免 DOM 深度过深
 
 ### 使用动画（js实现动画，css3实现动画）时两者的区别？
 > css实现动画：animation transition transform
