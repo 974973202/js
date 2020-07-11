@@ -214,6 +214,305 @@ function f1(hou, zhong) {
 f1(hou,zhong)
 ```
 
+深度优先搜索：适合探索未知
+```js
+function Node(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+}
+var a = new Node('a')
+var b = new Node('b')
+var c = new Node('c')
+var d = new Node('d')
+var e = new Node('e')
+var f = new Node('f')
+var g = new Node('g')
+
+a.left = c;
+a.right = b;
+c.left = f;
+c.right = g;
+b.left = d;
+b.right = e;
+
+function deepSearch(root, target) {
+    if (root == null) return false;
+    if (root.value == target) return true;
+    var left = deepSearch(root.left, target);
+    var right = deepSearch(root.right, target);
+    return left || right;
+}
+deepSearch(a, 'f')
+deepSearch(a, 'n')
+// 对于二叉树来说，深度优先搜索和前序遍历的顺序是一样的
+```
+
+广度优先搜索：适合探索局域
+```js
+function Node(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+}
+var a = new Node('a')
+var b = new Node('b')
+var c = new Node('c')
+var d = new Node('d')
+var e = new Node('e')
+var f = new Node('f')
+var g = new Node('g')
+
+a.left = c;
+a.right = b;
+c.left = f;
+c.right = g;
+b.left = d;
+b.right = e;
+
+function scopeSearch(rootList, target) {
+    if (rootList == null || rootList.length == 0) return false;
+    var childList = []; // 当前层所有子节点的节点
+    for (var i = 0; i < rootList.length; i++) {
+        if (rootList[i] != null && rootList[i].value == target) {
+            return true
+        } else {
+            childList.push(rootList[i].left)
+            childList.push(rootList[i].right)
+        }
+    }
+    return scopeSearch(childList, target)
+}
+scopeSearch([a], 'f')
+scopeSearch([a], 'n')
+// 对于二叉树来说，深度优先搜索和前序遍历的顺序是一样的
+```
+
+二叉树的比较
+```js
+function Node(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+}
+var a = new Node('a')
+var b = new Node('b')
+var c = new Node('c')
+var d = new Node('d')
+var e = new Node('e')
+var f = new Node('f')
+var g = new Node('g')
+
+a.left = c;
+a.right = b;
+c.left = f;
+c.right = g;
+b.left = d;
+b.right = e;
+
+function Node1(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+}
+var a1 = new Node('a')
+var b1 = new Node('b')
+var c1 = new Node('c')
+var d1 = new Node('d')
+var e1 = new Node('e')
+var f1 = new Node('f')
+var g1 = new Node('g')
+
+a1.left = c1;
+a1.right = b1;
+c1.left = f1;
+c1.right = g1;
+b1.left = d1;
+b1.right = e1;
+
+function compareTree(root1, root2) {
+    if(root1 == root2) return true;
+    if(
+        root1 == null
+        && root2 != null
+        || root2 == null
+        && root1 != null
+    ) return false
+    if (root1.value != root2.value) return false;
+    var leftBool = compareTree(root1.left, root2.left); //判断左子树是否相等
+    var rightBool = compareTree(root1.right, root2.right) // 判断右子树是否相等
+    return leftBool && rightBool;
+}
+compareTree(a, a1)
+```
+
+二叉树的diff算法
+```js
+// 新增，修改，删除
+// {type: '新增', origin: null, now: c2}
+// {type: '修改', origin: c1, now: c2}
+// {type: '删除', origin: c2, now: null}
+var diffList = [];
+function diffTree(root1, root2, diffList) { // root1修改前，root2修改后
+    if(root1 == root2) return diffList;
+    if(root1 == null && root2 != null) { // 新增了节点
+      diffList.push({type: '新增'， origin: null, now: root2})
+    } else if (root1 != null && root2 == null) { // 删除了节点
+      diffList.push({type: '删除', origin: root1, now: null})
+    } else if (root1.value != root2.value) {
+      diffList.push({type: '修改', origin: root1, now: root2})
+      // 当前节点修改了不代表所有子节点都修改了
+      diffTree(root1.left, root2.left, diffList)
+      diffTree(root1.right, root2.right, diffList)
+    } else {
+        diffTree(root1.left, root2.left, diffList)
+        diffTree(root1.right, root2.right, diffList)
+    }
+    
+}
+diffTree(a1, a2, diffList)
+console.log(diffList)
+```
+
+最小生成树 - 有向无环图 - 普里姆算法(加点法) - 克鲁斯卡尔算法(加边法)
+```js
+// 普里姆算法(加点法)
+var max = 10000
+function Node(value) {
+  this.value = value;
+  this.neighbor = [];
+}
+var pointSet = [new Node('A'), new Node('B'), new Node('C'), new Node('D'), new Node('E')]
+var distance = [
+  [0, 4, 7, max, max],
+  [4, 0, 8, 6, max],
+  [7, 8, 0, 5, max],
+  [max, 6, 5, 0, 7],
+  [max, max, max, 7, 0],
+]
+function getIndex(str) {
+  for (var i = 0; i < pointSet.length; i++) {
+    if (str == pointSet[i].value) return i;
+  }
+  return -1
+}
+// 需要传入点的集合，边的集合，当前已经连接进入的集合
+// 根据已有的点来判断，获取距离最短的点
+function getMinDisNode(pointSet, distance, nowPointSet) {
+  var fromNode = null; //线段起点
+  var minDisNode = null; //线段终点
+  var minDis = max;
+  // 根据当前已有的这些点为起点，以此判断连接其他的点的距离是多少
+  for (var i = 0; i < nowPointSet.length; i++) {
+    var nowPointIndex = getIndex(nowPointSet[i].value)//获取当前节点的序号
+    for (var j = 0; j < distance[nowPointIndex].length; j++) {
+      var thisNode = pointSet[j]; //thisNode是distance的点但不是对象
+      if (nowPointSet.indexOf(thisNode) < 0
+        && distance[nowPointIndex][j] < minDis) { // 这个点不能是接入的点 && 点之间的距离是目前最短的
+        fromNode = nowPointSet[i];
+        minDisNode = thisNode;
+        minDis = distance[nowPointIndex][j];
+      }
+    }
+  }
+  fromNode.neighbor.push(minDisNode)
+  minDisNode.neighbor.push(fromNode)
+  return minDisNode
+}
+function prim(pointSet, distance, start) {
+  var nowPointSet = []
+  nowPointSet.push(start)
+  // 获取最小代价的边
+  while (true) {
+    var minDisNode = getMinDisNode(pointSet, distance, nowPointSet)
+    nowPointSet.push(minDisNode);
+    if (nowPointSet.length == pointSet.length) {
+      break;
+    }
+  }
+}
+prim(pointSet, distance, pointSet[2])
+console.log(pointSet)
+```
+```js
+// 克鲁斯卡尔算法(加边法)
+var max = 10000
+function Node(value) {
+  this.value = value;
+  this.neighbor = [];
+}
+var pointSet = [new Node('A'), new Node('B'), new Node('C'), new Node('D'), new Node('E')]
+var distance = [
+  [0, 4, 7, max, max],
+  [4, 0, 8, 6, max],
+  [7, 8, 0, 5, max],
+  [max, 6, 5, 0, 7],
+  [max, max, max, 7, 0],
+]
+function canLink(resultList, tempBegin, tempEnd) {
+    var beginIn = null;
+    var endIn = null;
+    for (var i = 0; i < resultList.length; i++) {
+        if (resultList[i].indexOf(tempBegin) > -1) {
+            beginIn = resultList[i]
+        }
+        if (resultList[i].indexOf(tempEnd) > -1) {
+            endIn = resultList[i]
+        }
+    }
+    // 两个点都是新的点--可以连接，产生新的部落
+    // 。。
+    if (beginIn != null && endIn != null && beginIn == endIn) {
+        return false
+    }
+    return true
+}
+function link(resultList, tempBegin, tempEnd) {
+// var beginIn = null;
+//     var endIn = null;
+//     for (var i = 0; i < resultList.length; i++) {
+//         if (resultList[i].indexOf(tempBegin) > -1) {
+//             beginIn = resultList[i]
+//         }
+//         if (resultList[i].indexOf(tempEnd) > -1) {
+//             endIn = resultList[i]
+//         }
+//     }
+//     if (beginIn != null && endIn != null) {
+//         var newArr = [];
+//         newArr.push(tempBegin)
+//         newArr.push(tempEnd) 
+//     }
+}
+function kruskal(pointSet, distance) {
+    var resultList = [];
+    while(true) {
+        var minDis = max;
+        var begin = null;
+        var end = null;
+        for(var i = 0; i < distance.length; i++) {
+            for(var j = 0; j < distance.length; j++) {
+              var tempBegin = pointSet[i];
+              var tempEnd = pointSet[j];
+              if(i!=j  // 去掉自己到自己的距离
+              && distance[i][j] < minDis && canLink(resultList, tempBegin, tempEnd)) {
+                  minDis = distance[i][j];
+                  begin = tempBegin
+                  end = tempEnd
+              }
+            }
+        }
+        link(resultList, begin, end)
+        if (resultList.length == 1
+        && resultList.get(0).length == pointSet.length) {
+            break;
+        }
+    }
+}
+```
+
+二叉搜索树
+
 ```js
 // 青蛙跳台 一个青蛙一次只能跳一级台阶或者两级台阶
 // 问青蛙跳上n级台阶有多少种情况
