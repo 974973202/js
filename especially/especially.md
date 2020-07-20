@@ -33,6 +33,7 @@ var b = new Node('b');
 var c = new Node('c');
 var d = new Node('d');
 var e = new Node('e');
+var f = new Node('f');
 
 a.neighbor.push(b)
 a.neighbor.push(c)
@@ -512,8 +513,202 @@ function kruskal(pointSet, distance) {
 ```
 
 二叉搜索树
+```js
+var arr = [];
+for(var i = 0; i < 10000; i ++) {
+    arr[i] = Math.floor(Math.random()*10000)
+}
+function Node(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+}
+function addNode(root, num) {
+    if (root == null) return;
+    if (root.value == num) return;
+    if(root.value < num) { // 目标值比当前节点大
+      if(root.right == null) {
+          root.right = new Node(num); // 如果右侧为空，则创建节点
+      } else {
+          addNode(root.right, num) // 如果右侧不为空则向右递归
+      }
+    } else {
+        if(root.left == null) {
+          root.left = new Node(num); 
+      } else {
+          addNode(root.left, num) 
+      }
+    }
+}
+function buildSearchTree(arr) {
+    if(arr == null || arr.length == 0) return null;
+    var root = new Node(arr[0]);
+    for (var i = 0; i< arr.length; i ++) {
+        addNode(root, arr[i])
+    }
+    return root
+}
+function searchByTree(root, target) {
+    if (root == null) return false;
+    if(root.value == target) return true;
+    if(root.value > target) {
+        return searchByTree(root.left, target)
+    } else {
+        return searchByTree(root.right, target)
+    }
+}
+console.log(searchByTree(buildSearchTree(arr)， 1000))
+```
+
+二叉平衡搜索树
+- 根节点的左子树与右子树的高度差不能超过1
+- 这颗二叉树的每个子树都符合第一条
+```js
+function getDeep(root) {
+    if(root == null) return 0;
+    var leftDeep = getDeep(root.left);
+    var rightDeep = getDeep(root.right);
+    return Math.max(leftDeep, rightDeep) + 1;
+}
+function isBalance(root) {
+    if (root == null) return true;
+    var leftDeep = getDeep(root.left)
+    var rightDeep = getDeep(root.right);
+    if(Math.abs(leftDeep - rightDeep) > 1) { // 不平衡
+      return false
+    } else {
+        return isBalance(root.left) && isBalance(root.right)
+    }
+}
+```
+
+二叉树的单旋（左单旋，右单旋）
+某一节点不平衡
+如果左边浅，右边深，进行左单旋
+
+左单旋时：
+旋转节点：当前不平衡的节点
+新根：右子树的根节点
+变化分支：旋转节点的右子树的左子树
+不变分支：旋转节点的右子树的右子树
+
+右单旋时：
+旋转节点：当前不平衡的节点
+新根：左子树的根节点
+变化分支：旋转节点的左子树的右子树
+不变分支：旋转节点的右子树的左子树
+
+二叉树的双旋（左右双旋。右左双旋）
+
+左左双旋 右右双旋
+
+234树（多叉，度为4）
+
+红黑树
+1. 节点是红色或黑色
+2. 根节点是黑色
+3. 每个红色节点的两个子节点都是黑色
+4. 从任一节点到其每个叶子的所有路径都包含相同数目的黑色节点
+
+树的深度优先搜索
+```js
+function Node(value) {
+  this.value = value;
+  this.childs = [];
+}
+var a = new Node('a');
+var b = new Node('b');
+var c = new Node('c');
+var d = new Node('d');
+var e = new Node('e');
+var f = new Node('f');
+
+a.childs.push(c)
+a.childs.push(f)
+a.childs.push(b)
+b.childs.push(d)
+b.childs.push(e)
+
+// 树的深度优先搜索
+function deepSearch(root, target) {
+    if(root == null) return false;
+    if(root.value == target) return true;
+    var result = false;
+    for(var i = 0; i < root.childs.length; i ++) {
+       result |= deepSearch(root.childs[i], target);
+    }
+    return result
+}
+deepSearch(a, 'c')
+
+// 树的广度优先搜索
+function bfs(roots, target) {
+  if(roots == null || roots.lenght == 0) return;
+  var childs = []
+  for(var i = 0; i < roots.length; i++) {
+      if (roots[i].value == target) {
+          return true
+      } else {
+          childs = childs.concat(roots[i].childs)
+      } 
+  }
+  return bfs(childs, target)
+}
+bfs([a], "c")
+bfs([a], "n")
+```
+
+动态规划-斐波那契数列
+```js
+// 斐波那契数列  0、1、1、2、3、5、8、13、21...
+function fibo(n) {
+    if(n <= 0) return -1;
+    if(n == 1) return 0;
+    if(n == 2) return 1;
+    var a = 0;
+    var b = 1;
+    var c = null;
+    for(var i = 3; i <= n; i ++) {
+        c = a+b;
+        a = b;
+        b = c
+    }
+    return c
+}
+console.log(fibo(3))
+
+// f(n) = f(n-1) + f(n-2)
+function fibo2(n){
+    if(n <= 0) return -1;
+    if(n == 1) return 0;
+    if(n == 2) return 1;
+    return fibo2(n-1) + fibo2(n-2);
+}
+console.log(fibo(7))
+
+```
 
 ```js
 // 青蛙跳台 一个青蛙一次只能跳一级台阶或者两级台阶
-// 问青蛙跳上n级台阶有多少种情况
+// 问青蛙跳上n级台阶有多少种情况 
+function fibo2(n){
+    if(n <= 0) return -1;
+    if(n == 1) return 1;
+    if(n == 2) return 2;
+    return fibo2(n-1) + fibo2(n-2);
+}
+
+// 变态青蛙跳台阶
+// 这只青蛙可以一次跳1级，2级，n级
+function jump(n) {
+    if(n <= 0) return -1;
+    if(n == 1) return 1;
+    if(n == 2) return 2;
+    var result = 0;
+    for(var i = 1; i < n; i ++) {
+        result +=jump(n - i);
+    }
+    return result + 1; // +1是从0级直接跳上去的情况
+}
+
 ```

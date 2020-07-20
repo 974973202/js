@@ -25,3 +25,18 @@
 4. 单线程
 
 # koa 
+
+### node API
+- process
+```js
+ const a = process.argv;
+ console.log(a);
+//  [ 'C:\\Program Files\\nodejs\\node.exe',
+//   'C:\\Users\\lzxv8\\Desktop\\js\\index',
+//   'aa' ]
+// 第三个参数是用户向程序传递数据的基础
+
+//  node index aa
+```
+
+- #!/usr/bin/env node

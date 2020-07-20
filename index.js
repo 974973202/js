@@ -61,60 +61,7 @@
 // let arr2 = a.filter(x => b.every(y => y.id !== x.id));
 // console.log([...arr, ...arr1, ...arr2])
 
-// 普里姆算法(加点法)
-var max = 10000
-function Node(value) {
-  this.value = value;
-  this.neighbor = [];
-}
-var pointSet = [new Node('A'), new Node('B'), new Node('C'), new Node('D'), new Node('E')]
-var distance = [
-  [0, 4, 7, max, max],
-  [4, 0, 8, 6, max],
-  [7, 8, 0, 5, max],
-  [max, 6, 5, 0, 7],
-  [max, max, max, 7, 0],
-]
-function getIndex(str) {
-  for (var i = 0; i < pointSet.length; i++) {
-    if (str == pointSet[i].value) return i;
-  }
-  return -1
-}
-// 需要传入点的集合，边的集合，当前已经连接进入的集合
-// 根据已有的点来判断，获取距离最短的点
-function getMinDisNode(pointSet, distance, nowPointSet) {
-  var fromNode = null; //线段起点
-  var minDisNode = null; //线段终点
-  var minDis = max;
-  // 根据当前已有的这些点为起点，以此判断连接其他的点的距离是多少
-  for (var i = 0; i < nowPointSet.length; i++) {
-    var nowPointIndex = getIndex(nowPointSet[i].value)//获取当前节点的序号
-    for (var j = 0; j < distance[nowPointIndex].length; j++) {
-      var thisNode = pointSet[j]; //thisNode是distance的点但不是对象
-      if (nowPointSet.indexOf(thisNode) < 0
-        && distance[nowPointIndex][j] < minDis) { // 这个点不能是接入的点 && 点之间的距离是目前最短的
-        fromNode = nowPointSet[i];
-        minDisNode = thisNode;
-        minDis = distance[nowPointIndex][j];
-      }
-    }
-  }
-  fromNode.neighbor.push(minDisNode)
-  minDisNode.neighbor.push(fromNode)
-  return minDisNode
-}
-function prim(pointSet, distance, start) {
-  var nowPointSet = []
-  nowPointSet.push(start)
-  // 获取最小代价的边
-  while (true) {
-    var minDisNode = getMinDisNode(pointSet, distance, nowPointSet)
-    nowPointSet.push(minDisNode);
-    if (nowPointSet.length == pointSet.length) {
-      break;
-    }
-  }
-}
-prim(pointSet, distance, pointSet[2])
-console.log(pointSet)
+
+
+const a = process.argv;
+console.log(a)
