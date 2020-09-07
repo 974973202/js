@@ -40,3 +40,10 @@
 ```
 
 - #!/usr/bin/env node
+
+### 
+app.js index.js 一设置程序的代码；
+model/ 数据库模型；
+views/ 用来渲染页面的模板；
+controllers/ routes/   HTTP 请求处理器
+middleware/ 中间件组件
