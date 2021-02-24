@@ -1,6 +1,12 @@
 ### 为什么js 0.1 + 0.2 != 0.3
 https://blog.csdn.net/a8725585/article/details/83024787
 
+### ?.
+```js
+let res = obj?.data?.list
+<=等价=> let res = obj && obj.data && obj.data.list
+```
+
 ### js语言特性
 - js是弱类型动态语言，静态作用域
 - 弱类型：变量类型可以随时更换

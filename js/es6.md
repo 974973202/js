@@ -264,7 +264,7 @@ const obj = {
   a: 1,
   b: 2
 }
-Reflect.set(obj, "a", 10); // 设置对象的值 相当于 obj.a = 10
+Reflect.set(obj, "a", 10, receiver); // 设置对象的值 相当于 obj.a = 10
 Reflect.get(obj, "a"); // 获取对象是属性值 相当于 obj.a
 Reflect.has(obj, "a"); // 判断有无a属性
 Reflect.deleteProperty(obj, "b"); // 删除一个对象的属性 相当于 delete obj.b
@@ -277,6 +277,9 @@ Reflect.apply(Test, null, [1, 2]); //调用一个指定函数并绑定this和阐
 Reflect.construct(Test, [3, 4]); // 调用一个构造函数相当于 new Test(3, 4)
 
 Reflect.defineProperty 与 Object.defineProperty 类似，前者配置出错不会报错会返回 false
+
+// Reflect.set会触发Proxy.defineProperty拦截。
+// Proxy.set拦截里面使用了Reflect.set，而且传入了receiver，导致触发Proxy.defineProperty拦截
 ```
 
 - 代理 Proxy
