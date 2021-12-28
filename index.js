@@ -65,3 +65,22 @@
 
 const a = process.argv;
 console.log(a)
+
+const arr = [7,4,2,9,5,4,1,8]
+
+function Sort(Arr) {
+  for(let j = 0; j < Arr.length; j ++) {
+  for(let i = 0; i < Arr.length-j-1; i++) {
+
+        if(Arr[i]>Arr[i+1]) {
+          const temp = Arr[i+1];
+          Arr[i+1] = Arr[i];
+          Arr[i] = temp;
+        }
+      }
+    }
+  return Arr;
+}
+
+console.log(Sort(arr))
+

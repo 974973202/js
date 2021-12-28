@@ -1,5 +1,11 @@
 c < log2N < n < n * Log2N < n^2 < n^3 < 2^n < 3^n < n!
 
+```cpp
+// 基本概念总结
+// 数据的逻辑结构：集合、线性结构、树形结构、图状结构或网状结构
+// 数据的存储结构：顺序结构、链式结构、索引结构、散列存储
+// 算法5个特性：有穷性、确定性、可行性、输入、输出
+```
 ## C基础
 4种基本类型
 char 字符型 1字节
@@ -113,6 +119,22 @@ int main() {
   point.y = 11;
   return 0;
 }
+
+## 数据的逻辑结构
+- 线性结构
+  - 一般线性表
+  - 受限线性表(栈、队列、串)
+  - 线性表推广(数组、广义表)
+- 非线性结构
+  - 集合
+  - 树形结构
+  - 网状结构
+
+## 数据的存储结构
+- 顺序存储
+- 链式存储
+- 索引存储
+- 散列存储
 
 ## 线性表
 - 线性表是具有相同数据类型的n个数据元素的有限序列
@@ -415,7 +437,8 @@ typedef struct {
 
 // 初始化
 void InitStack(SqStack &S) {
-  S.top = -1;
+  S.top = -1; // 栈空判断
+  // S.top = MaxSize - 1; 栈满判断
 }
 // 新元素入栈
 bool Push(SqStack &S, ElemType x) {
@@ -433,6 +456,9 @@ bool Pop(SqStack &S, ElemType &x) {
   x = S.data[S.top--];
   return true
 }
+
+// 共享栈
+  // 栈满判断(top1-top0 == 1)
 ```
 
 ### 链栈
@@ -475,12 +501,14 @@ bool DeQueue(SqQueue &Q, ElemType &x) {
 // 队列判空：if(Q.rear == Q.front)
 // 入队
 // Q.data[Q.rear] = x;
-// Q.rear=(Q.rear + 1)%MaxSize; // 队尾指针加一取模
+// Q.rear=(Q.rear + 1)%MaxSize; // 增-队尾指针加一取模
 // 出队
 // x=Q.data[Q.front];
-// Q.front = (Q.front+1)%MaxSize;
+// Q.front = (Q.front+1)%MaxSize; // 删-队头指针加一取模
 // 牺牲一个单元
-// 队满条件： (Q.rear+1)%MaxSize == Q.front
+// 队满条件： (Q.rear+1)%MaxSize == Q.front  尾加1%MAX 等于 头
+// 队列长度
+// (Q.rear + MaxSize - Q.front) % MaxSize  (队尾加MAX 减 队头) % MAX
 
 // 如果不想牺牲一个单元的话，得加一个标记 size来记录入队出队++--
 ```
@@ -537,6 +565,7 @@ bool DeQueue(LinkQueue &Q, ElemType &x) {
 2. 表达式求值应用。由三部分组成：操作数，运算符，界限符。
   - 后缀表达式
   - 前缀表达式
+3. 递归
 
 ## 队列的应用
 1. 对树的层次遍历
@@ -601,8 +630,105 @@ int findAndDelete(LNode *C, int x) {
 }
 ```
 
+### 二叉树遍历
+```cpp
+typedef struct BitNode {
+  int data;
+  struct BitNode *lchild, *rchild;
+}BitNode, *BiTree;
+// 先序遍历
+void PreOrder(BiTree T) {
+  if (T != NULL) {
+    visit(T); // 根
+    PreOrder(T->lchild); // 左
+    PreOrder(T->rchild); // 右
+  }
+}
+// 中序遍历  递归转变非递归形式需要借助：栈
+void InOrder(BiTree T) {
+  if (T != NULL) {
+    InOrder(T->lchild); // 左
+    visit(T); // 根
+    InOrder(T->rchild); // 右
+  }
+}
+// 后序遍历
+void PostOrder(BiTree T) {
+  if (T != NULL) {
+    PostOrder(T->lchild); // 左
+    PostOrder(T->rchild); // 右
+    visit(T); // 根
+  }
+}
+// 层次遍历  需要辅助队列
+void LevelOrder(BiTree T) {
+  InitQueue(Q); // 初始化辅助队列
+  BiTree p;
+  EnQueue(Q, T); // 根结点入队
+  while(!IsEmpty(Q)) { // 判断队列是否为空
+    DeQueue(Q, p); // 不空 队头出队
+    visit(p); // 打印
+    if(p->lchild != NULL) // 左子树不空，入队
+      EnQueue(Q, p->lchild)
+    if(p->rchild != NULL) // 右子树不空，入队
+      EnQueue(Q, p->rchild)
+  }
+}
+
+// 确立一个二叉树
+// 1. 先序遍历和中序遍历
+// 1. 后序遍历和中序遍历
+// 1. 层序遍历和中序遍历
+```
+
+### 中序线索二叉树
+```cpp
+typedef struct ThreadNode {
+  int data;
+  struct ThreadNode *lchild, *rchild;
+  int ltag, rtag; // 线索标记，1表示线索，0表示结点
+}ThreadNode, *ThreadTree;
+
+// 建立中序线索二叉树
+void GreateInThread(ThreadTree T) {
+  ThreadTree pre = NULL;
+  if(T != NULL) {
+    InThread(T, pre); // 线索化二叉树
+    pre->rchild = NULL; // 处理最后一个节点 指向NULL
+    pre->rtag = 1
+  }
+}
+
+// 中序线索二叉树的递归算法
+void InThread(ThreadTree &p, ThreadTree &pre) {
+  if(p != NULL) {
+    InThread(p->lchild, pre); // 线索化左子树
+    if(p->lchild == NULL) { // 无左子树，建立前驱线索
+      p->lchild = pre;
+      p->ltag = 1;
+    }
+    if (p->rchild == NULL) { // 无右子树，建立后继线索
+      p->rchild = p;
+      p->rtag = 1;
+    }
+    pre = p;
+    InThread(p->rchild, pre); // 线索化右子树
+  }
+}
+
+// 通过线索找中序遍历的第一个结点
+ThreadNode *Firstnode(ThreadNode *p) {
+  while(p->ltag == 0) {
+    p=p->lchild;
+  }
+  return p;
+}
+```
+
 ### 二叉排序树
 ```cpp
+// 平衡二叉树查找效率：O(㏒₂n)
+// 非平衡二叉排序树：O(n)
 // 二叉排序树非递归查找
 BSTNode *BST_Search(BiTree T, ElemType key) {
   while (T != NULL && key != T->data) {
@@ -642,3 +768,236 @@ void Creat_BST(BiTree &T, KeyType str[], int n) {
   }
 }
 ```
+
+### 并查集
+```cpp
+// 查
+int Find(int S[], int x) {
+  int root = x;
+  while(S[root] > 0) root=S[root];
+  while(x != root) {
+    int t=S[x];
+    S[x] = root;
+    x=t;
+  }
+  return root;
+}
+// 并
+void Union(int S[], int Root1, int Root2) {
+  if(Root1 == Root2) return;
+  if(S[Root2]> S[Root1]) 
+    S[Root1] += S[Root2];
+    S[Root2] = Root1;
+  else
+    S[Root2] += S[Root1];
+    S[Root1] = Root2;
+}
+// 图的连通分量数
+int ComponentCount(int g[5][5]) {
+  // g[5][5]是二维数组表示的邻接矩阵
+  int S[5];
+  for(int i=0; i<5; i++) S[i]=-1; // 初始化
+  for(int i=0; i < 5; i++) {
+    for(int j=i+1;j<5; j++) {
+      if(g[i][j]>0) {
+        int iRoot = Find(S, i); // 查
+        int jRoot = Find(S, j);
+        if (iRoot != jRoot) {
+          Union(S, iRoot, jRoot); // 并
+        }
+      }
+    }
+  }
+  int count = 0;
+  for (int i = 0; i<5; i++) {
+    if(S[i<0]) count++;
+  }
+  return count; //等于1是联通的
+}
+
+// 判断图是否有环
+int hasAcyclic(int g[5][5]) {
+  int S[5];
+  for(int i=0; i<5; i++) S[i]=-1;
+  for(int i=0; i < 5; i++) {
+    for(int j=i+1;j<5; j++) {
+      if(g[i][j]>0) {
+        int iRoot = Find(S, i);
+        int jRoot = Find(S, j);
+        if (iRoot != jRoot) {
+          Union(S, iRoot, jRoot);
+        } else {
+          return 1; // 有环
+        }
+      }
+    }
+  }
+  return 0; // 无环
+}
+```
+
+## 图的存储及基本操作
+- 邻接矩阵
+```cpp
+// 邻接矩阵的结构定义
+#define MaxVertexMun 100
+typedef char VertexType;
+typedef int EdgeType; // 带权图边的权值
+typedef struct {
+  VertexType Vex[MaxVertexMun]; // 顶点
+  EdgeType Edge[MaxVertexMun][MaxVertexMun]; // 边
+  int vexnum, arcnum; // 图的顶点数和弧数
+}
+```
+- 邻接链表
+```cpp
+// 邻接链表的结构定义
+#define MaxVertexMun 100
+typedef struct ArcNode{ // 边表结点
+  int adjvex; // 
+  struct ArcNode *next;
+}ArcNode;
+typedef struct VNode{ // 顶点表结点
+  VertexType data;
+  ArcNode *first;
+}VNode, AdjList[MaxVertexMun]; 
+typedef struct {
+  AdjList vertices; // 邻接表
+  int vexnum, arcnum; // 图的顶点数和弧数
+}
+```
+- 十字链表(有向图)
+- 邻接多重表(无向图)
+
+### 广度优先搜索 (队列)
+```cpp
+bool visited[MAX_VERTEX_NUM]; // 访问的数组进行标记
+void BFSTraverse(Graph G) {  // 进行广度优先遍历
+  for(i = 0; i < G.vexnum; ++i) // 初始化图
+    visited[i] = false
+  InitQueue(Q); // 初始化辅助队列
+  for(i = 0; i < G.vexnum; ++i) // 从0号顶点开始遍历
+    if(!visited[i]); // 对未访问过的进行BFS
+      BFS[G, i];
+}
+void BFS(Graph G, int i) { // 从顶点i出发，广度优先遍历图
+  visit(i);
+  visited[i] = true; // 对i已访问的标记为true
+  EnQueue(Q, i); // 入队
+  while(!isEmpty(Q)) { // 队列不空
+    DeQueue(Q, i); // 出队
+    for(
+      w=FirstNeighbor(G,i); // 返回顶点i的第一个邻接点
+      w>=0; 
+      w=NextNeighbor(G,i,w);
+    ) // 检测i所有邻接点
+      if(!visited[w]) { // w 为 i尚未访问的邻接点
+        visit(w);
+        visited[w] = true;
+        EnQueue(Q, w);
+      }
+  }
+}
+
+// BFS求单源最短路径问题
+void BFS_MIN_Distance(Graph G,int u) {
+  // d[i]表示从u到i结点的最短路径
+  for(i = 0; i<G.vexnum; ++i) { d[i] = ∞ };
+  visited[u] = true; d[u] = 0;
+  // ... 
+  // d[w] = d[u] + 1
+}
+```
+时间复杂度：邻接表O(|V| + |E|)  邻接矩阵O(|V|²)
+
+### 深度优先搜索 (递归-栈)
+```cpp
+bool visited[MAX_VERTEX_NUM];
+void DFSTraverse(Graph G) {
+  for(i = 0; i<G.vexnum; ++i)
+    visited[i] = false;
+  for(i = 0; i<G.vexnum; ++i)
+    if(!visited[i]) 
+      DFS(G, i)
+}
+void DFS(Graph G, int i) {
+  visit(i);
+  visited[i] = true;
+  for(
+      w=FirstNeighbor(G,i); // 返回顶点i的第一个邻接点
+      w>=0; 
+      w=NextNeighbor(G,i,w);
+    ) // 检测i所有邻接点
+      if(!visited[w]) {
+        DFS(G, w);
+      }
+}
+```
+时间复杂度：邻接表O(|V| + |E|)  邻接矩阵O(|V|²)
+函数调用DFS或BFS的次数等于图的连通分量数
+
+### 最小生成树
+- Prim (选近的边相连)
+- Kruskal (选最小的边相连)
+### 最短路径
+- Dijkstra
+- Floyd
+### 拓扑排序(AOV)
+### 关键路径(AOE)
+
+## 查找
+- 静态查找：顺序查找、折半查找(二分查找)、散列查找、分块查找
+- 动态查找：二叉排序树查找(二叉平衡、B树、B+)、散列查找
+```cpp
+// 折半查找
+int Binary(BList L, int key) {
+  int begin = 0, end=length - 1, mid;
+  while(begin < end) {
+    mid = (begin+end)/2;
+    if(L.data[mid] == key) {
+      return mid // 返回元素下标
+    } else if (L.data[mid] > key) {
+      end = mid - 1; // 在前边
+    } else {
+      begin = mid + 1;
+    }
+  }
+  return -1
+}
+```
+
+### 插入排序
+- 直接插入排序
+- 折半插入排序
+- 希尔排序
+### 交换排序
+- 冒泡排序
+- 快速排序
+```cpp
+int Partition(int A[], int low, int high) {
+  int pivot=A[low];
+  while(low<high) {
+    while(low<high && A[high] >= pivot) --high;
+    A[low] = A[high];
+    while(low<high && A[low] <= pivot) ++low;
+    A[high] = A[low];
+  }
+  A[low] = pivot;
+  return low;
+}
+void QuickSort(int A[], int low, int high) {
+  if(low<high) {
+    int pivotpos = Partition(A, low, high);
+    QuickSort(A, low, pivotpos-1);
+    QuickSort(A, pivotpos+1, high);
+  }
+}
+```
+### 选择排序
+- 简单选择排序
+- 堆排序
+### 归并排序
+```cpp
+
+```
+### 基数排序

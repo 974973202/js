@@ -377,6 +377,10 @@ export default function App() {
 }
 ```
 
+### useRef
+使用useRef修改数据不会出发render
+
+
 ### useLayoutEffect
 - useEffect：浏览器渲染完成后，用户看到新的渲染结果之后
 - useLayoutEffectHook：完成了DOM改动，但还没有呈现给用户

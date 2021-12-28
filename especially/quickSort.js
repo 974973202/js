@@ -38,11 +38,11 @@ const quickSort = (array) => {
       while (i < j && arr[i] <= baseVal) { // 找到一个比基准值大的数交换 arr[i] 比 baseVal 小就能进去，进不去的时候。arr[i]就大于baseVal
         i++
       }
-      arr[j] = arr[i] // 将较大的值放在右边如果没有比基准值大的数就是将自己赋值给自己（i 等于 j）
+      arr[j] = arr[i] // 将较大的值放在右边如果没有比基准值大的数就是将自己赋值给自己（i 等于 j）  此时i空
       while (j > i && arr[j] >= baseVal) { //找到一个比基准值小的数交换
         j--
       }
-      arr[i] = arr[j] // 将较小的值放在左边如果没有找到比基准值小的数就是将自己赋值给自己（i 等于 j）
+      arr[i] = arr[j] // 将较小的值放在左边如果没有找到比基准值小的数就是将自己赋值给自己（i 等于 j）  此时j空
     }
     arr[j] = baseVal // 将基准值放至中央位置完成一次循环（这时候 j 等于 i ）
     sort(arr, left, j - 1) // 将左边的无序数组重复上面的操作

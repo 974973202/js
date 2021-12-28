@@ -12,10 +12,13 @@
 
 <body>
 111
+<div id="yes"></div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <!-- <script type="text/javascript" src="./index.js"></script> -->
 <script>
+  const getId = document.getElementById('yes');
+  console.log(getId)
   function* myGenerator() {
     yield Promise.resolve(1);
     yield Promise.resolve(2);
