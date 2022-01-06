@@ -1,6 +1,10 @@
 ## webpack
 https://juejin.im/post/5e6f4b4e6fb9a07cd443d4a5
 
+### Webpack 的构建流程主要有哪些环节
+### Webpack 打包的整个过程
+### Loader 和 Plugin 有哪些不同
+
 ### 常见webpack工具名称
 - 抽离css：mini-css-extract-plugin
 - 公共脚本分离：SplitChunksPlugin代替CommonsChunkPlugin webpack4内置
