@@ -472,3 +472,24 @@ obj: {
 - action可以包含任意异步操作
 - dispatch -> action
 - commit -> mutations
+
+### Vuex
+```js
+const store = new Vuex.Store({
+  state: {
+    count: 0
+  },
+  mutations: {
+    increment (state, n) {
+      state.count++
+    }
+  }
+})
+
+this.$store.commit('increment', 10) // 更改  commit -> mutations 
+this.$store.commit({
+  type: 'increment',
+  number: 10,
+})
+console.log(this.$store.state.count) // 触发
+```
