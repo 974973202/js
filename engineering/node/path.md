@@ -10,10 +10,9 @@ node中的路径大致分5类，`dirname`,`filename`,`process.cwd()`,`./`,`../`,
 文件目录结构如下：
 
 ```
-代码pra/
-  - node核心API/
-      - fs.js
-      - path.js
+engineering/
+  - node/
+      - node.js
 ```
 path.js中的代码
 
@@ -24,21 +23,21 @@ console.log(__filename);
 console.log(process.cwd());
 console.log(path.resolve('./'));
 ```
-在代码pra目录下运行命令 `node node核心API/path.js`，我们可以看到结果如下：
+在代码engineering目录下运行命令 `node node/node.js`，我们可以看到结果如下：
 
 ```javascript
-/koala/Desktop/程序员成长指北/代码pra/node核心API
-/koala/Desktop/程序员成长指北/代码pra/node核心API/path.js
-/koala/Desktop/程序员成长指北/代码pra
-/koala/Desktop/程序员成长指北/代码pra
+C:\Users\lzxv8\Desktop\js\engineering\node
+C:\Users\lzxv8\Desktop\js\engineering\node\node.js
+C:\Users\lzxv8\Desktop\js\engineering
+C:\Users\lzxv8\Desktop\js\engineering
 ```
-然后我们有可以在`node核心API目录下`运行这个文件，`node  path.js`,运行结果如下：
+然后我们有可以在`node目录下`运行这个文件，`node  node.js`,运行结果如下：
 
 ```javascript
-/koala/Desktop/程序员成长指北/代码pra/node核心API
-/koala/Desktop/程序员成长指北/代码pra/node核心API/path.js
-/koala/Desktop/程序员成长指北/代码pra/node核心API
-/koala/Desktop/程序员成长指北/代码pra/node核心API
+C:\Users\lzxv8\Desktop\js\engineering\node
+C:\Users\lzxv8\Desktop\js\engineering\node\node.js
+C:\Users\lzxv8\Desktop\js\engineering\node
+C:\Users\lzxv8\Desktop\js\engineering\node
 ```
 
 对比输出结果，暂时得到的结论是

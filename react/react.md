@@ -94,3 +94,15 @@ PropTypes.exact({...})：//对象必须精确匹配传递的数据
    //...
 }
 ```
+
+
+```js
+// 引入 src/components/Button/index.js
+import Button from './button'
+export default Button 
+
+// src/index
+export { default as Button } from './components/Button'
+export { default as Button } from './components/Button'
+export { default as Button } from './components/Button'
+```

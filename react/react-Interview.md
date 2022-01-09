@@ -104,3 +104,31 @@
 
 ### 6. React是怎样控制异步和同步的呢？
 在 React 的 setState 函数实现中，会根据一个变量 isBatchingUpdates 判断是直接更新 this.state 还是放到队列中延时更新，而 isBatchingUpdates 默认是 false，表示 setState 会同步更新 this.state；但是，有一个函数 batchedUpdates，该函数会把 isBatchingUpdates 修改为 true，而当 React 在调用事件处理函数之前就会先调用这个 batchedUpdates将isBatchingUpdates修改为true，这样由 React 控制的事件处理过程 setState 不会同步更新 this.state
+
+
+### 7.父子组件传值
+1 props
+2 createContext()  privider
+3 ref
+
+按需加载
+lazy Suspense
+
+ReactDOM.createPortal 创建根节点外的弹窗
+
+### Fiber架构
+两个阶段 调度阶段，提交阶段
+
+调度阶段：调度帧
+```js
+// 调度阶段
+componentWillMount
+componentWillReceiveProps
+shouldComponentUpdata
+componentWillUpdate
+// 提交阶段
+componentDidMount
+componentDidUpdate
+componentWillUnmount
+```
+提交阶段：

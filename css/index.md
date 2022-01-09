@@ -43,6 +43,9 @@
 >  > <p>:after	p:after	在每个p 元素之后插入内容
 >  > <p>:lang(language)	p:lang(it)	为p 元素的lang属性选择一个开始值
 
+子选择器：p>int
+兄弟选择器：h2 + p h2后的第一个p
+
 - 单冒号(:)用于CSS3伪类，双冒号(::)用于CSS3伪元素。
 
 ### BFC
@@ -454,11 +457,13 @@ Will-change
 圆角           （border-radius:8px）
 多列布局        （multi-column layout）
 阴影和反射        （Shadow\Reflect）
-文字特效      （text-shadow、）
+文字特效      （text-shadow、box-shadow）
 文字渲染      （Text-decoration）
 线性渐变      （gradient）
+过渡          （transition）
 旋转          （transform）
-增加了旋转,缩放,定位,倾斜,动画，多背景
+旋转基准点    （transform-origin） 
+增加了旋转rotate,缩放scale,定位,倾斜skew,动画，多背景
 transform:\scale(0.85,0.90)\ translate(0px,-30px)\ skew(-9deg,0deg)\Animation:
 
 ### 什么是CSS 预处理器 / 后处理器？

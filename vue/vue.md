@@ -301,7 +301,7 @@ Vue通过数据劫持配合发布者-订阅者的设计模式，内部通过调�
 - 实现一个订阅者「Watcher」：Watcher订阅者是Observer和Compile之间通信的桥梁，主要任务是订阅Observer中的属性值变化的消息，当收到属性值变化的消息时，触发解析器Compile中对应的更新函数
 - 实现一个订阅器「Dep」：订阅器采用发布-订阅设计模式，用来收集订阅者Watcher，对监听器Observer和订阅者Watcher进行统一管理
 
-### Vue如何通过vm.$set()来解决对象新增/删除属性不能响应的问题
+### Vue如何通过vm.$set()来解决对象/数组新增/删除属性不能响应的问题
 
 
 ### computed / watch 的区别是什么
@@ -493,3 +493,8 @@ this.$store.commit({
 })
 console.log(this.$store.state.count) // 触发
 ```
+组件注册：
+Vue.component('my-component', {
+  template: '<p>全局注册的组件</p>'
+})
+两种命名规则：my-component  MyComponent

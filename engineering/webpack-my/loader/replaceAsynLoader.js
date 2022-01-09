@@ -1,4 +1,5 @@
 const loaderUtils = require("loader-utils");
+// 不能使用剪头函数
 module.exports = function (source) {
   // console.log(this.query)
   const options = loaderUtils.getOptions(this);

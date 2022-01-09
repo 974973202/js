@@ -8,22 +8,17 @@
 ### 2. Vue.js 中的声明式渲染是什么？
 > 不需要关注内部实现，只要声明变量赋值，在视图上就能得到我们想要的信息
 
-### 3. 你用哪个指令遍历对象的属性？
-> v-for
-
-### 4. 给出模板，描述 Vue 程序的输出。
-```
-{{title}}
-new Vue({
-  el: '#app',
-  data: {
-    title: 'Vue.js'
+### 3. 自定义全局指令
+Vue.directive('指令名', {
+  inserted(el, binding) { 
+    console.log(el, binding)  
   }
 })
-```
 
-### 5. 如何在输入框和数据属性之间实现双向数据绑定？
-> v-modal
+局部无Vue
+
+过滤器 |  Vue.filter('xx',() => {})
+<div>{{ A | filterB | filterC(a, b) }}<div>
 
 ### 6. 你如何捕获元素上的点击事件？
 > v-on:click  @click
@@ -37,6 +32,16 @@ new Vue({
 特殊的响应功能。指令允许模板中的元素使用数据属性、方法、计算或监视的属性
 和内联表达式根据定义的逻辑对更改做出反应。
 > Vue 还允许定义自己的自定义指令. **v-drag**
+v-once 表达式只生效一次
+v-text 纯指令文本显示
+v-html 解析指令文本标签
+v-bind <=> : 绑定元素
+v-for  v-for="(item, index) in arr"  v-for="(item, key, index) in arr"
+v-show
+v-if
+
+v-on 元素事件绑定  @
+v-model  .trim过滤首尾空格  .lazy失去焦点更新 .number
 
 ### 9.  v-show 指令的用途是什么？
 > v-show 指令允许有条件地显示元素.使用 v-show 指令时，可使用 CSS 的 
@@ -103,3 +108,25 @@ hook 。 mixin 中定义生命周期 > 组件自己的生命周期
 
 ### 说一下VUEX的工作原理 
 [说一下VUEX的工作原理]https://juejin.im/post/5e410aade51d4526fc748cf6
+
+
+1.库与框架的区别是什么？
+2.Vue.js 的核心特性有哪些？
+3.什么是数据驱动视图？
+4.MVVM 模型各部分含义是什么，在 Vue.js 中分别对应哪些功能？
+5.el 选项的作用是什么，可以设置哪几种值？
+6.设置在 data 中的数据有什么特点？
+7.Vue.set() 可以解决什么问题？
+8.插值表达式内有哪些书写要求？
+9.methods 的作用是什么？
+10.谈谈你对指令的理解。
+11.常用的内容处理指令有哪些？
+12.常用的属性绑定操作有哪些？
+13.v-for 指令的注意点？
+14.v-if 与 v-show 的区别？
+15.如何绑定事件？
+16.谈谈你对双向数据绑定的理解？
+17.如何设置自定义指令？
+18.过滤器通常用来做什么？
+19.methods 与 computed 有哪些区别？
+20.如何设置侦听器？
