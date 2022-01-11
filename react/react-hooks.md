@@ -61,6 +61,20 @@ useState
 
 Effect Hook：用于在函数组件中处理副作用
 
+```js
+// 挂载与更新执行
+useEffect(()=>{})
+
+// 卸载与更新执行
+useEffect(() => {
+  //...
+  return () => {}
+})
+
+// 挂载特定更新执行
+useEffect(() => {}, [])
+```
+
 副作用：
 
 1. ajax 请求
@@ -269,7 +283,7 @@ export default function App() {
 }
 ```
 
-### useCallback
+### useCallback  返回缓存的函数 (不是固定的)
 
 用于得到一个固定引用值的函数，通常用它进行性能优化
 useCallback:
@@ -322,9 +336,9 @@ function Parent() {
 }
 ```
 
-### useMemo
+### useMemo  返回缓存的变量  (不是固定的)
 
-- 和 useCallBack 类似，但是用途更广，且必须有返回值
+- 和 useCallBack 类似，但是用途更广，且**必须有返回**值
 - 用于保持一些比较稳定的数据，通常用于性能优化
 **如果React元素本身的引用没有发生变化，一定不会重新渲染**
 ```js
@@ -339,6 +353,8 @@ const list = useMemo(() => {
 ```
 
 ### ImperativeHandle Hook
+让父组件拿到子组件返回的值
+例： APP拿到Test组件返回的method方法
 
 - 函数：useImperativeHandleHook
 ```js
@@ -379,6 +395,9 @@ export default function App() {
 
 ### useRef
 使用useRef修改数据不会出发render
+useRef可以保存状态  const ref = useRef(100)
+
+createRef
 
 
 ### useLayoutEffect
@@ -386,6 +405,8 @@ export default function App() {
 - useLayoutEffectHook：完成了DOM改动，但还没有呈现给用户
 
 - 应该尽量使用useEffect，因为它不会导致渲染阻塞，如果出现了问题，再考虑使用useLayoutEffectHook
+
+- useLayoutEffectHook的挂载更新快于useEffect
 
 
 ### React Hooks

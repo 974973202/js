@@ -183,8 +183,52 @@ var A = {
 
 ### 迭代器模式
 
-### 发布-订阅模式
+### 观察者模式
+```js
+// 被观察者（观察目标）
+// 1.添加观察者
+// 2. 通知所有观察者
+class Subject() {
+  constructor() {
+    // 存储所有观察者
+    this.observers = [];
+  }
+  // 添加观察者功能
+  addObserver(observer) {
+    // 检测传入参数是否为观察者实例
+    if(observer && observer.update) {
+      this.observer.push(observer)
+    }
+  }
+  // 通知所有观察者
+  notify() {
+    // 调用观察者列表中每个观察者的更新方法
+    this.observers.forEach(observer => {
+      observer.update()
+    })
+  }
+}
+
+// 观察者
+// 1. 当观察目标发生状态变化时进行更新
+class Observer{
+  update() {
+    console.log('xxx')
+  }
+}
+
+const subject = new Subject();
+const obj1 = new Observer()
+const obj2 = new Observer()
+
+subject.addObserver(obj1)
+subject.addObserver(obj2)
+
+subject.notify()
 ```
+
+### 发布-订阅模式
+```js
   var salesOffices = {} //定义售楼处
   salesOffices.clientList = [] //缓存列表，存放订阅者的回调函数
   salesOffices.listen = function (fn) {
@@ -209,7 +253,7 @@ var A = {
   })
   salesOffices.trigger(20000000, 88)
 ```
-```
+```js
   var dep = {
     event: [],
     listen: function (fn) {

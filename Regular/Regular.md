@@ -237,9 +237,13 @@ console.log( titleize('my name is epeli') );
 ```
 
 - 匹配成对标签
-```
+```js
 要求匹配：
 <title>regular expression</title>
 <p>laoyao bye bye</p>
 var regex = /<([^>]+)>[\d\D]*<\/\1>/;
+```
+
+```js
+"17201234567".replace(/(\d{3})\d{4}(\d{4})/, '$1****$2'); // 172****4567
 ```

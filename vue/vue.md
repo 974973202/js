@@ -478,3 +478,13 @@ Vue.component('my-component', {
   template: '<p>全局注册的组件</p>'
 })
 两种命名规则：my-component  MyComponent
+
+1. 描述 Vue 响应式原理。
+
+2. 描述 Vue 响应式原理中的 Vue 类、Observer 类、Dep 类、Watcher 类、Compiler 类。
+
+3. 什么是 Virtural DOM。
+
+4. Snabbdom 的使用流程
+
+5. Snabbdom 的核心介绍
