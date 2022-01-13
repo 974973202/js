@@ -6,6 +6,11 @@
 ## 面试题
 面试题如下，大家可以先试着写一下输出结果，然后再看我下面的详细讲解，看看会不会有什么出入，如果把整个顺序弄清楚node.js的执行顺序应该就没问题了。
 
+微任务与宏任务
+- 宏： setInterval setTimeout setImmediate I/O
+- 微： Promise.then Promise.catch Promise.finally process.nextTick
+宏任务没有优先级 微任务nextTick高于其他微任务
+
 ```javascript
 async function async1(){
     console.log('async1 start')

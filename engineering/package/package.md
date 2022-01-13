@@ -22,5 +22,16 @@
 - files 属性用于描述你 npm publish 后推送到 npm 服务器的文件列表，如果指定文件夹，则文件夹内的所有内容都会包含进来。
 * 你还可以通过配置一个 .npmignore 文件来排除一些文件, 防止大量的垃圾文件推送到 npm, 规则上和你用的 .gitignore 是一样的。.gitignore 文件也可以充当.npmignore 文件
 
+### 发包
+npm login
+npm public
+
+npm version major
+npm version minor
+npm version patch
+
+npm unpublic
+
+查看全局安装的软件包：npm list -g --depth
 
 [前端工程化-剖析npm的包管理机制]https://juejin.im/post/5df789066fb9a0161f30580c
