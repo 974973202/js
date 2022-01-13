@@ -391,3 +391,25 @@ const UserProxy = ConstructorProxy(User, 'a', 'b', 'c')
 const obj = new UserProxy('1', '2', '3')
 console.log(obj)
 ```
+
+
+let和const的区别
+let声明的是变量，const声明的是常量，只读，修改值会报错，const保存的是内存地址,可以给对象或数组添加属性或元素，但是不能重新复写，一般情况下优先使用const，const里面有内部优化
+
+repeat方法返回一个新字符串，表示将原字符串重复n次  例：'x'.repeat(3)  // "xxx"
+
+ES2017 引入了字符串补全长度的功能。如果某个字符串不够指定长度，会在头部或尾部补全。padStart()用于头部补全，padEnd()用于尾部补全。如果省略第二个参数，默认使用空格补全长度。例：'x'.padStart(5, 'ab')  // "ababx"  
+ 'x'.padEnd(5, 'ab')  // "xabab"
+
+该模板使用<%...%>放置 JavaScript 代码，使用<%= ... %>输出 JavaScript 表达式
+
+Number.isFinite()用来检查一个数值是否为有限的（finite），即不是Infinity,注意，如果参数类型不是数值，Number.isFinite一律返回false
+
+Number.isNaN()用来检查一个值是否为NaN。如果参数类型不是NaN，Number.isNaN一律返回false
+
+它们与传统的全局方法isFinite()和isNaN()的区别在于，传统方法先调用Number()将非数值的值转为数值，再进行判断，而这两个新方法只对数值有效，Number.isFinite()对于非数值一律返回false, Number.isNaN()只有对于NaN才返回true，非NaN一律返回false。
+
+ES6 将全局方法parseInt()和parseFloat()，移植到Number对象上面，行为完全保持不变
+例：Number.parseInt('12.34')// 12    Number.parseFloat('12.34#')// 12.34
+
+Number.isInteger()用来判断一个数值是否为整数。对数据精度要求较高的不建议使用，因为太大和大小，小数太长的数会误判

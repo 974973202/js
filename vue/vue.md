@@ -473,6 +473,26 @@ obj: {
 - dispatch -> action
 - commit -> mutations
 
+### Vuex
+```js
+const store = new Vuex.Store({
+  state: {
+    count: 0
+  },
+  mutations: {
+    increment (state, n) {
+      state.count++
+    }
+  }
+})
+
+this.$store.commit('increment', 10) // 更改  commit -> mutations 
+this.$store.commit({
+  type: 'increment',
+  number: 10,
+})
+console.log(this.$store.state.count) // 触发
+```
 组件注册：
 Vue.component('my-component', {
   template: '<p>全局注册的组件</p>'

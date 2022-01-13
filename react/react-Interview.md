@@ -109,3 +109,30 @@
 01 constructor
 02 render
 03 componentDidMount
+
+### 7.父子组件传值
+1 props
+2 createContext()  privider
+3 ref
+
+按需加载
+lazy Suspense
+
+ReactDOM.createPortal 创建根节点外的弹窗
+
+### Fiber架构
+两个阶段 调度阶段，提交阶段
+
+调度阶段：调度帧
+```js
+// 调度阶段
+componentWillMount
+componentWillReceiveProps
+shouldComponentUpdata
+componentWillUpdate
+// 提交阶段
+componentDidMount
+componentDidUpdate
+componentWillUnmount
+```
+提交阶段：

@@ -1,3 +1,15 @@
+const store = createStore(reducer, {}, applyMiddleware(logger, thunk,sage))
+// function logger(store) {
+//   return (next) => {
+//     return (action) => {
+//       next(action)
+//     }
+//   }
+// }
+
+
+
+
 /**
  * @param {any} obj 判断参数是否为普通对象
  * @returns {boolean} True if the argument appears to be a plain object.
@@ -27,6 +39,9 @@ const _ActionTypes = {
 }
 
 export const createStore = (reducer, preloadedState, enhancer) => {
+  if (typeof reducer !== 'function') {
+    throw new Error('Expected the reducer to be a function(函数).')
+  }
   console.log(reducer, reducer.length, 'lzxlzx')
 
   if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
@@ -42,13 +57,9 @@ export const createStore = (reducer, preloadedState, enhancer) => {
     return enhancer(createStore)(reducer, preloadedState)
   }
 
-  if (typeof reducer !== 'function') {
-    throw new Error('Expected the reducer to be a function(函数).')
-  }
-
   let currentReducer = reducer;
-  let currentState = preloadedState;
-  let CurrentListeners = [];
+  let currentState = preloadedState; // 当前store存储状态
+  let CurrentListeners = []; // 存放订阅者函数
 
   var isDispactching = false;
 
@@ -77,6 +88,7 @@ export const createStore = (reducer, preloadedState, enhancer) => {
       isDispactching = false;
     }
 
+    // 调用订阅者
     CurrentListeners.forEach(fn => fn())
 
   }
@@ -216,3 +228,34 @@ export const bindActionCreators = (actionCreators, dispatch) => {
 
 //   return boundAction;
 // }
+
+export const applyMiddleware = function(...args) {
+  return (createStore) => {
+    return (reducer, preloadedState) => {
+      // 创建store
+      const store = createStore(reducer, preloadedState);
+      // 阉割版的store
+      const middlewareAPI = {
+        getState: store.getState,
+        dispatch: store.dispatch,
+      }
+      // 调用第一层函数，传递阉割版的store
+      const chain = args.map(middleware => middleware(middlewareAPI));
+      const dispatch = compose(...chain)(store.dispatch)
+      return {
+        ...store,
+        dispatch
+      }
+    }
+  }
+}
+
+function compose() {
+  const func = [...arguments]
+  return (dispatch) => {
+    for (let i = func.length-1; i >= 0; i--) {
+      const dispatch = func[i](dispatch);
+    }
+    return dispatch
+  }
+}
