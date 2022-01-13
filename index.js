@@ -61,9 +61,11 @@
 // let arr2 = a.filter(x => b.every(y => y.id !== x.id));
 // console.log([...arr, ...arr1, ...arr2])
 
-for(let i = 0; i < 9; i++) {
-  if(i == 3){
-    continue;
-  }
-  console.log(i)
-}
+// for(let i = 0; i < 9; i++) {
+//   if(i == 3){
+//     continue;
+//   }
+//   console.log(i)
+// }
+
+console.log(global.global)
