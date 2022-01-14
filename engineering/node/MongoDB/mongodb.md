@@ -99,3 +99,270 @@ $and	将查询子句与逻辑连接，并返回与这两个子句条件匹配的
 $not	反转查询表达式的效果，并返回与查询表达式不匹配的文档。
 $nor	用逻辑NOR连接查询子句，返回所有不能匹配这两个子句的文档。
 $or	用逻辑连接查询子句，或返回与任一子句条件匹配的所有文档。
+
+```js
+// 匹配嵌套文档
+// 查询嵌套字段
+// 查询数组中的元素
+```
+
+### 更新操作
+● db.collection.updateOne(<filter>, <update>, <options>)
+● db.collection.updateMany(<filter>, <update>, <options>)
+● db.collection.replaceOne(<filter>, <update>, <options>)
+```js
+// 更新单个数据
+db.inventory.updateOne(
+   { item: "paper" },
+   {
+     $set: { "size.uom": "cm", status: "P" },
+     $currentDate: { lastModified: true }
+   }
+)
+// ● 使用 $set 运算符将 size.uom 字段的值更新为 cm，将状态字段的值更新为 P
+// ● 使用 $currentDate 运算符将 lastModified 字段的值更新为当前日期。如果 lastModified 字段不存在，则 $currentDate 将创建该字段。
+
+// 更新多个数据
+db.inventory.updateMany(
+   { "qty": { $lt: 50 } },
+   {
+     $set: { "size.uom": "in", status: "P" },
+     $currentDate: { lastModified: true }
+   }
+)
+// ● 使用 $set 运算符将 size.uom 字段的值更新为 "in"，将状态字段的值更新为 "p"
+// ● 使用 $currentDate 运算符将 lastModified 字段的值更新为当前日期。如果 lastModified 字段不存在，则 $currentDate 将创建该字段。
+
+// 替换数据   替换 _id 字段以外的文档的全部内容
+db.inventory.replaceOne(
+   { item: "paper" },
+   { item: "paper", instock: [ { warehouse: "A", qty: 60 } ] }
+)
+```
+
+### 删除操作
+● db.collection.deleteMany()
+● db.collection.deleteOne()
+```js
+db.inventory.deleteMany() // 删除所有
+db.inventory.deleteMany({ status : "A" }) // 删除特定
+db.inventory.deleteOne( { status: "D" } ) // 删除一个
+```
+
+### node 连接 MongoDB
+```js
+const { MongoClient, ObjectID } = require('mongodb')
+
+const client = new MongoClient('mongodb://127.0.0.1:27017', {
+  useUnifiedTopology: true
+})
+
+async function run () {
+  try {
+    // 开始连接
+    await client.connect()
+    const testDb = client.db('test')
+    const inventoryCollection = testDb.collection('inventory')
+
+    // 创建文档
+    const ret = await inventoryCollection.insertOne({
+      a: 1,
+      b: '2',
+      c: true,
+      d: [1, 2, 3]
+    })
+
+    console.log(ret)
+
+
+    // 查询文档
+    const ret = await inventoryCollection.findOne({
+      item: 'notebook'
+    })
+
+    // find()  ret.toArray()
+    // findOne() ret
+    // console.log(ret)
+    console.log(await ret.toArray())
+
+    // 删除文档
+    // const ret = await inventoryCollection({
+    //   _id: ObjectID('5fa5164f95060000060078b1')
+    // })
+    // console.log(ret)
+
+    // 更新文档
+    const ret = await inventoryCollection.updateOne({
+      _id: ObjectID('5fa5164f95060000060078af')
+    }, {
+      $set: {
+        qty: 100
+      }
+    })
+    console.log(ret)
+
+
+  } catch (err) {
+    // 连接失败
+    console.log('连接失败', err)
+  } finally {
+    // 关闭连接
+    await client.close()
+  }
+}
+run()
+
+```
+
+### MongoDB 连接 WEB
+```js
+// 接口设计
+GET /collection：返回资源对象的列表（数组）
+GET /collection/resource：返回单个资源对象
+POST /collection：返回新生成的资源对象
+PUT /collection/resource：返回完整的资源对象
+PATCH /collection/resource：返回完整的资源对象
+DELETE /collection/resource：返回一个空文档
+
+
+
+
+// 使用 Express 快速创建 Web 服务
+const express = require('express')
+const { MongoClient, ObjectID } = require('mongodb')
+
+const connectUri = 'mongodb://localhost:27017'
+
+const dbClient = new MongoClient(connectUri)
+
+const app = express()
+
+// 配置解析请求体数据 application/json
+// 它会把解析到的请求体数据放到 req.body 中
+// 注意：一定要在使用之前就挂载这个中间件
+app.use(express.json())
+
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+app.post('/articles', async (req, res, next) => {
+  try {
+    // 1. 获取客户端表单数据
+    const { article } = req.body
+
+    // 2. 数据验证
+    if (!article || !article.title || !article.description || !article.body) {
+      return res.status(422).json({
+        error: '请求参数不符合规则要求'
+      })
+    }
+
+    // 3. 把验证通过的数据插入数据库中
+    //    成功 -> 发送成功响应
+    //    失败 -> 发送失败响应
+    await dbClient.connect()
+
+    const collection = dbClient.db('test').collection('articles')
+
+    article.createdAt = new Date()
+    article.updatedAt = new Date()
+    const ret = await collection.insertOne(article)
+
+    article._id = ret.insertedId
+    
+    res.status(201).json({
+      article
+    })
+  } catch (err) {
+    // 由错误处理中间件统一处理
+    next(err)
+    // res.status(500).json({
+    //   error: err.message
+    // })
+  }
+})
+
+app.get('/articles', async (req, res, next) => {
+  try {
+    let { _page = 1, _size = 10 } = req.query
+    _page = Number.parseInt(_page)
+    _size = Number.parseInt(_size)
+    await dbClient.connect()
+    const collection = dbClient.db('test').collection('articles')
+    const ret = await collection
+      .find() // 查询数据
+      .skip((_page - 1) * _size) // 跳过多少条 10 1 0 2 10 3 20 n
+      .limit(_size) // 拿多少条
+    const articles = await ret.toArray()
+    const articlesCount = await collection.countDocuments() // 获取数据条数
+    res.status(200).json({
+      articles,
+      articlesCount
+    })
+  } catch (err) {
+    next(err)
+  }
+})
+
+app.get('/articles/:id', async (req, res, next) => {
+  try {
+    await dbClient.connect()
+    const collection = dbClient.db('test').collection('articles')
+
+    const article = await collection.findOne({
+      _id: ObjectID(req.params.id)
+    })
+
+    res.status(200).json({ article })
+  } catch (err) {
+    next(err)
+  }
+})
+
+app.patch('/articles/:id', async (req, res, next) => {
+  try {
+    await dbClient.connect()
+    const collection = dbClient.db('test').collection('articles')
+
+    await collection.updateOne({
+      _id: ObjectID(req.params.id)
+    }, {
+      $set: req.body.article
+    })
+
+    const article = await await collection.findOne({
+      _id: ObjectID(req.params.id)
+    })
+
+    res.status(201).json({ article })
+  } catch (err) {
+    next(err)
+  }
+})
+
+app.delete('/articles/:id', async (req, res, next) => {
+  try {
+    await dbClient.connect()
+    const collection = dbClient.db('test').collection('articles')
+    await collection.deleteOne({
+      _id: ObjectID(req.params.id)
+    })
+    res.status(204).json({})
+  } catch (err) {
+    next(err)
+  }
+})
+
+// 它之前的所有路由中调用 next(err) 就会进入这里
+// 注意：4个参数，缺一不可
+app.use((err, req, res, next) => {
+  res.status(500).json({
+    error: err.message
+  })
+})
+
+app.listen(3000, () => {
+  console.log('app listenning at port 3000.')
+})
+```
