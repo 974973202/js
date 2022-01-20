@@ -1,5 +1,8 @@
 # koa 洋葱模型
 
+中间件类似于面向切面编程AOP
+加入减少一个功能，不影响原来的功能 
+
 ```js
 async function fn1(next) {
   console.log("fn1");

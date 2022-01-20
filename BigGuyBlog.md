@@ -2,7 +2,6 @@
 [【程序员成长指北】全栈开发blog]https://github.com/koala-coding/goodBlog
 
 阿里巴巴
-1、vue 双向数据绑定原理，依赖收集是在什么时候收集的？
 2、react hooks 原理是什么？
 https://blog.csdn.net/LuckyWinty/article/details/103740283
 3、useState 中的状态是怎么存储的？
