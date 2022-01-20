@@ -103,7 +103,8 @@ Vue.js观察数组变化主要通过以下7个方法（push、pop、shift、unsh
 Vue2.x中并没有实现将已存在的数组元素做监听，而是去监听造成数组变化的方法，触发这个方法的同时去调用挂载好的响应页面方法，达到页面响应式的效果
 作者尤雨溪的考虑是因为性能原因，给每一个数组元素绑定上监听，实际消耗很大，而受益并不大
 
-### 4. 为何Vue采用异步渲染
+### 4. 为何Vue采用异步渲染 nextTick
+在Vue中异步渲染实际在数据每次变化时，将其所要引起页面变化的部分都放到一个异步API的回调函数里，直到同步代码执行完之后，异步回调开始执行，最终将同步代码里所有的需要渲染变化的部分合并起来，最终执行一次渲染操作
 
 
 ### 5. nextTick实现原理
@@ -261,6 +262,11 @@ vdom - 用js模拟DOM结构，计算出最小的变更，再操作DOM
 修改 data， 触发 setter （此前在getter中已被监听）
 重新执行 render 函数，生成 newVnode
 patch(vnode, newVnode) //对比新旧结点
+### Vue渲染过程
+1. 把template模板编译为render函数
+2. 实例进行挂载, 根据根节点render函数的调用，递归的生成虚拟dom
+3. 对比虚拟dom，渲染到真实dom
+4. 组件内部data发生变化，组件和子组件引用data作为props重新调用render函数，生成虚拟dom, 返回到步骤3
 
 ### 18. Vue中模板编译原理
 第一步将模版字符串转换成element ASTs(解析器)
@@ -272,15 +278,7 @@ patch(vnode, newVnode) //对比新旧结点
 优化器（optimizer）的作用是找出那些静态节点和静态根节点并打上标记。
 代码生成器（code generator）的作用是使用 element ASTs 生成 render函数代码（generate render function code from element ASTs）。
 
-
-### Vue渲染过程
-1. 把template模板编译为render函数
-2. 实例进行挂载, 根据根节点render函数的调用，递归的生成虚拟dom
-3. 对比虚拟dom，渲染到真实dom
-4. 组件内部data发生变化，组件和子组件引用data作为props重新调用render函数，生成虚拟dom, 返回到步骤3
-
 ### 19. Vue中常见的性能优化
-
 
 ### Proxy相比于defineProperty的优势 
 Object.defineProperty() 的问题主要有三个：
@@ -486,6 +484,7 @@ obj: {
 - action可以包含任意异步操作
 - dispatch -> action
 - commit -> mutations
+- action可以整合多个mutation
 
 ### Vuex
 ```js
@@ -520,9 +519,32 @@ vue实现深度监听：遍历对象（递归） ->  通过Object.defineProperty
 
 2. 描述 Vue 响应式原理中的 Vue 类、Observer 类、Dep 类、Watcher 类、Compiler 类。
 
-3. 什么是 Virtural DOM。
-
 4. Snabbdom 的使用流程
 
 5. Snabbdom 的核心介绍
 
+vue3比vue2的优势 性能好，体积小，更好的ts支持
+
+vue3生命周期：
+  options API  小型项目，业务逻辑简单
+  延用vue2的周期，其中beforeDestroy改为beforeUnmount,destroyed改为unmounted 
+  composition API 中大型项目 逻辑复杂
+  onBeforeMount onMounted onBeforeUpdate onUpdated onBeforeUnmount onUnmouted
+  对比
+  composition API 有更好的 代码组织 逻辑复用 类型推导
+                  抽离逻辑代码到一个函数  函数命名约定为use开头
+
+如何理解 ref toRef toRefs
+  ref 生成值类型的响应式数据  可用于模板和reactive  .value修改值
+  toRef 针对响应式(reactive)对象的prop  用于reactive
+  toRefs 将响应式对象转换为普通对象
+
+watch 和 watchEffect的区别
+  watchEffect初始化会执行一次
+  watch需要明确监听哪个属性
+  watchEffect会根据其中的属性，自动监听变化
+
+composition API 和 React Hooks对比
+  composition API setup 只会被调用一次 Hooks函数可以被调用多次
+  composition API不用考虑调用顺序
+  reactive + ref比useState难理解

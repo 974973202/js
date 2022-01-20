@@ -80,8 +80,20 @@
 
 // 四
 
+const console = require('console');
 const path = require('path');
 console.log(__dirname);
 console.log(__filename);
 console.log(process.cwd());
 console.log(path.resolve('./'));
+
+
+// with 语法 将{}的自由变量，当作传入对象的属性来查找
+const obj = { a: 1, b: 2 };
+console.log(obj.c) // undefined
+
+with(obj) {
+  console.log(a); // 1
+  console.log(b); // 2
+  console.log(c); // 报错
+}
