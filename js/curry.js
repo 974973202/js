@@ -5,9 +5,9 @@
 
 const curry = fn =>
   (judge = (...args) => 
-    args.length >= fn.length
+    (args.length >= fn.length)
       ? fn(...args)
-      : (...arg) => judge(...args, ...arg)
+      : (...rest) => judge(...args, ...rest)
   
       );
 

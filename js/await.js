@@ -1,6 +1,6 @@
 // await 是求值，对promise求值
 
-//  
+// await 只能阻塞promise对象
 async function test() {
   await test1()
   console.log(2)
