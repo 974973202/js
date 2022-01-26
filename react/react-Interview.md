@@ -85,6 +85,10 @@
     [props],
     [...children]
   )
+
+  <div id="box" key="index">555</div>
+  React.createElement('div', { id: "box", key: "index" }, '555')
+  jsx -> createElement -> ReactElement
 ```
 - React.cloneElement()与 React.createElement()相似，不同的是它传入的第一个参数是一个 React 元素，而不是标签名或组件。新添加的属性会并入原有的属性，传入到返回的新元素中，而就的子元素奖杯替换。
 ```js

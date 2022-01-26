@@ -7,6 +7,11 @@
 // 这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。
 // 传统的网页（不使用 Ajax）如果需要更新内容，必须重载整个网页页面。
 
+// 1. XMLHttpRequest
+// 2. onreadystatechange
+//    3. readyState  status  responseText
+// 4. open send
+
 function ajax(method, url, callback, data, flag) {
   var xhr = null;
   if (window.XMLHttpRequest) {
@@ -25,9 +30,7 @@ function ajax(method, url, callback, data, flag) {
   }
   method = method.toUpperCase();
   if (method == 'GET') {
-    var date = new Date(),
-      timer = date.getTime();
-    xhr.open(method, url + '?' + data + '&timer=' + timer, flag);
+    xhr.open(method, url + '?' + data + '&timer=' + new Date().getTime(), flag);
     xhr.send();
   } else if (method == 'POST') {
     xhr.open(method, url, flag);
