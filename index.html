@@ -14,44 +14,44 @@
 111
 <div id="yes"></div>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<!-- <script type="text/javascript" src="./index.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+<script type="text/javascript" src="./index.js"></script>
 <script>
-  const getId = document.getElementById('yes');
-  console.log(getId)
-  function* myGenerator() {
-    yield Promise.resolve(1);
-    yield Promise.resolve(2);
-    yield Promise.resolve(3);
-  }
+  // const getId = document.getElementById('yes');
+  // console.log(getId)
+  // function* myGenerator() {
+  //   yield Promise.resolve(1);
+  //   yield Promise.resolve(2);
+  //   yield Promise.resolve(3);
+  // }
 
-  const gen = myGenerator()
-  console.log(gen)
-  gen.next().value.then(val => {
-    console.log(val)
-    gen.next().value.then(val => {
-      console.log(val)
-      gen.next().value.then(val => {
-        console.log(val)
-      })
-    })
-  })
+  // const gen = myGenerator()
+  // console.log(gen)
+  // gen.next().value.then(val => {
+  //   console.log(val)
+  //   gen.next().value.then(val => {
+  //     console.log(val)
+  //     gen.next().value.then(val => {
+  //       console.log(val)
+  //     })
+  //   })
+  // })
 
 
-  let arr = [];
-  for(let i = 0; i < 10; i++) {
-    arr[i] = new Array(i + 1)
-  }
+  // let arr = [];
+  // for(let i = 0; i < 10; i++) {
+  //   arr[i] = new Array(i + 1)
+  // }
 
-  for(let j = 0; j < 10; j++) {
-    for(let k = 0; k <= j; k++) {
-      if (k == 0 || j == k) {
-        arr[j][k] = 1;
-      } else {
-        arr[j][k] = arr[j - 1][k -1] + arr[j-1][k]
-      }
-    }
-  }
+  // for(let j = 0; j < 10; j++) {
+  //   for(let k = 0; k <= j; k++) {
+  //     if (k == 0 || j == k) {
+  //       arr[j][k] = 1;
+  //     } else {
+  //       arr[j][k] = arr[j - 1][k -1] + arr[j-1][k]
+  //     }
+  //   }
+  // }
 
 //   let arr = [];
 // // 创建二维数组，每行作为1个数组保存
@@ -69,14 +69,14 @@
 //     }
 // }
 
-  console.log(arr)
+  // console.log(arr)
 
-  for(let i = 0; i < 10; i ++) {
-    if(i%3 == 0) {
-      continue;
-    }
-    console.log(i)
-  }
+  // for(let i = 0; i < 10; i ++) {
+  //   if(i%3 == 0) {
+  //     continue;
+  //   }
+  //   console.log(i)
+  // }
 
   
 
