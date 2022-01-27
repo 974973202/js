@@ -149,3 +149,187 @@ JSX本质：语法糖，通过createElement(h函数)生成vnode
 合成事件机制
   react 16绑定到document
   react 17绑定到root
+
+### react-dom-render
+1. 创建ReactRoot
+2. 创建FiberRoot和RootFiber
+3. 创建更新
+
+### react源码使用数据结构
+scheduler：小顶堆
+调度：messageChannel通信
+render阶段的reconciler中：fiber、update、链表
+diff算法：dfs（深度优先遍历）
+lane模型：二进制掩码（”用一串二进制数字（掩码）去操作另一串二进制数字“的意思。）
+
+### react分为几个模块
+1. scheduler（调度器）：排列优先级，优先级高的先执行reconciler
+2. reconciler（协调器）：render阶段（主要工作：构建Fiber树和生成effectList），找哪个节点改变，打不同的tag（形成effectlist链表，记录需要更新的节点），创建或更新fiber节点（diff算法），采用深度优先遍历
+3. renderer（渲染器）：commit阶段，将reconciler打好标签的节点（主要遍历effectList），渲染到视图scheduler、reconciler在内存中进行，不影响真实节点
+- react 17版本的出现，带来了全新的concurrent mode，包含一类功能的合集（fiber、scheduler、lane、suspense），核心是实现了一套，异步可中断，带优先级的更新
+- $$typeof表示的是组件的类型
+- jsx对象上没有优先级、状态、effectTag等标记，fiber对象上有
+
+### scheduler时间片
+- js执行线程和GUI也就是浏览器的绘制是互斥的，如果在时间内，没有执行完js，则暂停执行，将执行权交还给浏览器绘制，等下一帧继续执行
+- 1. 任务暂停：shouldYield（当前时间 > 任务开始的时间+yieldInterval，打断任务进行）就是用来判断剩余的时间有没有用尽，用尽了则让权
+- 2. 调度优先级：两个函数创建具有优先级的任务
+    1、runWithPriority： 以一个优先级执行callback，若为同步任务，则优先级为ImmediateSchedulerPriority
+    2、scheduleCallback：以一个优先级注册callback，适当时机执行，涉及过期时间运算，所以粒度更细
+      1）优先级意味着过期时间（时间点）。过期时间 = 开始时间（当前时间） + timeout，过期时间 < 当前时间，则要立即执行，过期时间越长，执行优先级越低
+      2）scheduleCallback调度过程使用了【小顶堆】，所以每次都能取到离过期时间最近的任务
+      3）未过期任务task存放在timerQueue中，过期任务（每次先执行这个）存放在taskQueue中。
+- 3. 暂停后恢复执行： 在performConcurrentWorkOnRoot函数的结尾有这样一个判断，如果callbackNode等于originalCallbackNode那就恢复任务的执行
+
+
+### Lane
+- 每个优先级是一个31位的二进制数字，1表示位置可用，0表示位置不可用（转换为10进制，数值越小，优先级越高），Lane的优先级粒度更细，ps：二进制计算性能更高
+1. task任务怎么获取优先级的：从高优先级的lanes往下找，没有则换到稍微低一点优先级的lans里继续找
+2. 高优先级怎么插队：低优先级已经构建了一部分fiber树，将其还原
+3. 怎么解决饥饿问题：（低优先级的任务也要被执行），优先级调度过程中，遍历【未执行的任务包含的lane】，计算过期时间，加入root.expiredLanes，下次调用时优先返回expiredLanes（到期lane）
+
+### fiber双缓存
+1. fiber是在内存中的dom，包含节点的属性、类型、dom。
+2. 通过child、sibling、return（返回父节点）构成fiber树
+3. 还保存了updateQueue（链表结构），用来计算state，updateQueue有多个未计算的update，update（一种数据结构）保存了更新的数据、优先级（过期时间）
+4. fiberRoot：指整个应用的根节点，只存在一个
+5. rootFiber：应用的节点，可以存在多个
+6. 当前的fiber树和更新的fiber树切换的时候：fiberRoot的current指向更新的fiber树（即指向rootFiber）
+
+### render阶段
+1. 捕获阶段：beginWork，从应用的根结点rootfiber开始到叶子结点，主要工作是创建或复用子fiber节点
+2. 冒泡阶段：completeWork，主要工作是处理fiber的props、创建dom（创建的dom节点赋值给fiber.stateNode）、创建effectList
+3. render阶段，当遍历到只有一个子节点的Fiber时，该Fiber节点的子节点不会执行beginWork和completeWork，这是react的一种优化手段
+4. 在render阶段的末尾会调用commitRoot(fiberRoot)，进入commit阶段
+
+### commit阶段
+遍历render阶段生成的effectList（fiber节点保存着props变化）
+遍历effectList对应的dom操作、生命周期、hook回调、销毁函数
+
+### diff算法（单节点diff、双节点diff）
+diff算法三个前提
+- 同级dom比较
+- type不同，则销毁当前节点和子孙节点，并新建节点
+- 同一层级的节点，使用唯一key值来区分
+
+1. 单节点diff（Element、Portal、string、number）
+  - key、type都相同，复用
+  - key不同，删除节点并创建新的
+  - key同、type不同，删除当前节点、以及与兄弟节点的标记，创建新节点
+2. 多节点diff（Array、Iterator）
+会经历三次遍历（而newChildren存在于jsx当中）
+  第一次：处理节点更新（props更新，type更新、删除）
+    1、key不同，结束第一次遍历
+    2、newChildren或oldFiber遍历完，结束第一次遍历（newChildren遍历完但oldFiber存在，则剩余的全都打deletion标签）
+    3、key同，type不同，打deletion标签
+    4、key、type都同，复用
+  第二次：处理节点新增
+    1、newChildren和oldFiber都遍历完，多节点diff结束
+    2、newChildren、oldFiber都没遍历完，进入节点移动逻辑
+    3、newChildren没遍历完，oldFiber遍历完，newChildren剩余值打【插入】的tag
+  第三次：处理节点位置改变
+    1、对比newChildren和oldFiber的各个节点，newChildren[i]能和oldFiber[j]位置对比的上，则i++，j++；否则oldFiber值移动到最后，j++，在与i进行比较
+
+
+
+
+
+
+
+1. jsx和Fiber有什么关系
+2. react17之前jsx文件为什么要声明import React from 'react'，之后为什么不需要了
+3. Fiber是什么，它为什么能提高性能
+
+hooks
+4. 为什么hooks不能写在条件判断中
+
+状态/生命周期
+5. setState是同步的还是异步的
+6. componentWillMount、componentWillMount、componentWillUpdate为什么标记UNSAFE
+
+组件
+7. react元素$$typeof属性什么
+8. react怎么区分Class组件和Function组件
+9. 函数组件和类组件的相同点和不同点
+
+开放性问题
+10. 说说你对react的理解/请说一下react的渲染过程
+11. 聊聊react生命周期
+12. 简述diff算法
+13. react有哪些优化手段
+14. react为什么引入jsx
+15. 说说virtual Dom的理解
+16. 你对合成事件的理解
+17. 我们写的事件是绑定在dom上么，如果不是绑定在哪里？
+18. 为什么我们的事件手动绑定this(不是箭头函数的情况)
+19. 为什么不能用 return false 来阻止事件的默认行为？
+20. react怎么通过dom元素，找到与之对应的 fiber对象的？
+
+解释结果和现象
+21. 点击Father组件的div，Child会打印Child吗
+```js
+function Child() {
+  console.log('Child');
+  return <div>Child</div>;
+}
+    
+    
+function Father(props) {
+  const [num, setNum] = React.useState(0);
+  return (
+    <div onClick={() => {setNum(num + 1)}}>
+      {num}
+      {props.children}
+    </div>
+  );
+}
+    
+    
+function App() {
+  return (
+    <Father>
+      <Child/>
+    </Father>
+  );
+}
+    
+const rootEl = document.querySelector("#root");
+ReactDOM.render(<App/>, rootEl);
+```
+22. 打印顺序是什么
+```js
+function Child() {
+  useEffect(() => {
+    console.log('Child');
+  }, [])
+  return <h1>child</h1>;
+}
+    
+function Father() {
+  useEffect(() => {
+    console.log('Father');
+  }, [])
+      
+  return <Child/>;
+}
+    
+function App() {
+  useEffect(() => {
+    console.log('App');
+  }, [])
+    
+  return <Father/>;
+}
+```
+23. useLayoutEffect/componentDidMount和useEffect的区别是什么
+```js
+class App extends React.Component {
+  componentDidMount() {
+    console.log('mount');
+  }
+}
+    
+useEffect(() => {
+  console.log('useEffect');
+}, [])
+```

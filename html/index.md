@@ -104,7 +104,7 @@ history.replaceState() // 替换当前页在路由历史记录的信息
 11. WebSocket
 
 
-[audio-video属性方法表]https://www.jianshu.com/p/1fe701c9179f
+[audio-video属性方法表]https://www.jianshu.com/p/b329e951d7e1
 
 [前端必知必会--操作URL的黑科技]https://juejin.im/post/5d038c9051882548ac439933
 ```javascript
