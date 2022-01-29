@@ -1,3 +1,6 @@
+# echarts
+- 底层依赖矢量图形库ZRender
+
 # webgl
 - 底层OpenGl 图形化语言，用于制作2d或者3d图形API.
 1. webgl是一个图形学规范 要学习的是webglAPI

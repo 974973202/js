@@ -23,6 +23,13 @@ every、some、filter、map、forEach、reduce
 3. 形参实参相统一
 4. 在函数体里面找函数声明 
 
+### js语言特性
+- js是弱类型动态语言，静态作用域
+- 弱类型：变量类型可以随时更换
+- 解释性：错误发生的时间是运行时
+
+es5 scopechain  es6 outer
+
 ### 数组中常用的方法有哪些
 - 改变原有数组的方法： （9个）
 > splice() 添加/删除数组元素
@@ -229,31 +236,36 @@ JSON.stringify(user, null,'**');
 // 这里 * 取代了空格字符
 ```
 
-// 一 类数组转数组
+### 一 类数组转数组
+```js
 // 1. Array.prototype.slice.call()
 // 2. Array.from()
 // 3. [...arguments]
 // 4. Array.prototype.concat.apply([], arguments)
+```
 
-// 二 数组扁平化
+### 二 数组扁平化
+```js
 // 1. Array.prototype.flat(context)  参数context表示深度Infinity展开任意深度的嵌套数组
 // 2. JSON.stringify(arr).replace(/(\[|\])/g, '').split(',')
 // 3. 递归
-// var arr = [1, [2, [3, [4, 5]]], 6];
-// let result = [];
-// function test(arr) {
-//   arr.forEach(ele => {
-//     if (Array.isArray(ele)) {
-//       test(ele)
-//     } else {
-//       result.push(ele)
-//     }
-//   });
-//   return result
-// }
-// console.log(test(arr))
+var arr = [1, [2, [3, [4, 5]]], 6];
+let result = [];
+function test(arr) {
+  arr.forEach(ele => {
+    if (Array.isArray(ele)) {
+      test(ele)
+    } else {
+      result.push(ele)
+    }
+  });
+  return result
+}
+console.log(test(arr))
+```
 
-// 三 有以下 3 个判断数组的方法，请分别介绍它们之间的区别和优劣Object.prototype.toString.call() 、 instanceof 以及 Array.isArray()
+### 三 有以下 3 个判断数组的方法，请分别介绍它们之间的区别和优劣Object.prototype.toString.call() 、 instanceof 以及 Array.isArray()
+```js
 // 1. Object.prototype.toString.call()
 // 每一个继承 Object 的对象都有 toString 方法，如果 toString 方法没有重写的话，会返回 [Object type]，其中 type 为对象的类型。但当除了 Object 类型的对象外，其他类型直接使用 toString 方法时，会直接返回都是内容的字符串，所以我们需要使用call或者apply方法来改变toString方法的执行上下文。
 
@@ -308,18 +320,11 @@ JSON.stringify(user, null,'**');
 //     return Object.prototype.toString.call(arg) === '[object Array]';
 //   };
 // }
-
-// 四
-
-const console = require('console');
-const path = require('path');
-console.log(__dirname);
-console.log(__filename);
-console.log(process.cwd());
-console.log(path.resolve('./'));
+```
 
 
-// with 语法 将{}的自由变量，当作传入对象的属性来查找
+### with 语法 将{}的自由变量，当作传入对象的属性来查找
+```js
 const obj = { a: 1, b: 2 };
 console.log(obj.c) // undefined
 
@@ -328,3 +333,201 @@ with(obj) {
   console.log(b); // 2
   console.log(c); // 报错
 }
+```
+
+### 为什么js 0.1 + 0.2 != 0.3
+- 原理
+  - 在计算机中数字无论是定点数还是浮点数都是以多位二进制的方式进行存储的。
+  - 在JS中数字采用的**IEEE 754**的双精度标准进行存储(存储一个数值所使用的二进制位数比较多,精度更准确)
+```js
+// 在定点数中，如果我们以8位二进制来存储数字。
+// 对于整数来说，十进制的35会被存储为： 00100011 其代表 2^5 + 2^1 + 2^0。
+// 对于纯小数来说，十进制的0.375会被存储为： 0.011 其代表 1/2^2 + 1/2^3 = 1/4 + 1/8 = 0.375
+
+// 对于像0.1这样的十进制数值用二进制表示你就会发现无法整除，最后算下来会是 0.000110011…由于存储空间有限，最后计算机会舍弃后面的数值，所以我们最后就只能得到一个近似值。
+
+// 想办法规避掉这类小数计算时的精度问题就好了，那么最常用的方法就是将浮点数转化成整数计算。因为整数都是可以精确表示的
+
+// 解决办法
+0.1 + 0.2 => (0.1*10 + 0.2*10) / 10
+```
+
+### ?.
+```js
+let res = obj?.data?.list
+<=等价=> let res = obj && obj.data && obj.data.list
+```
+
+### for-in 中一定要有 hasOwnProperty 的判断（即禁止直接读取原型对象的属性）
+- hasOwnProperty: 检测一个对象是否含有特定的自身（非继承）属性
+```javascript
+const arr = [];
+const key = '';
+
+for (key in obj) {
+  if (obj.hasOwnProperty(key)) {
+    arr.push(obj[key]);
+  }
+}
+```
+
+### 惰性函数
+惰性函数[http://www.zhangyunling.com/375.html]
+- 惰性加载表示函数执行的分支仅会发生一次。有两种实现惰性加载的方式：在函数被
+调用时再处理函数；在声明函数时就指定适当函数。
+```javascript
+let addEvent1 = (type, element, fun) => {
+  if (element.addEventListener) {
+    addEvent1 = (type, element, fun) => {
+      element.addEventListener(type, fun, false);
+    }
+  } else if (element.attachEvent) {
+    addEvent1 =  (type, element, fun) => {
+      element.attachEvent('on' + type, fun);
+    }
+  } else {
+    addEvent1 = (type, element, fun) => {
+      element['on' + type] = fun;
+    }
+  }
+  return addEvent1(type, element, fun);
+}
+```
+
+### 实现一个双向绑定
+html: 
+```html
+<span id="span"></span>
+<input type="text" id="input">
+```
+- defineProperty实现
+ - Object.defineProperty(obj, prop, descriptor)
+ - obj 要在其上定义属性的对象。
+ - prop 要定义或修改的属性的名称。
+ - descriptor 将被定义或修改的属性描述符
+  * configurable特性表示对象的属性是否可以被删除
+  * enumerable定义了对象的属性是否可以在 for...in 循环和 Object.keys() 中被枚举
+  * writable属性设置为false时，该属性被称为“不可写”。它不能被重新分配
+  * 如果一个描述符同时有(value或writable)和(get或set)关键字，将会产生一个异常
+js:
+```javascript
+// 数据
+const data = {
+  text: 'default'
+};
+const input = document.getElementById('input');
+const span = document.getElementById('span');
+// 数据劫持
+Object.defineProperty(data, 'text', {
+  // 数据变化 --> 修改视图
+  set(newVal) {
+    input.value = newVal;
+    span.innerHTML = newVal;
+  }
+});
+// 视图更改 --> 数据变化
+input.addEventListener('keyup', function(e) {
+  data.text = e.target.value;
+});
+```
+- proxy实现
+js:
+```javascript
+// 数据
+const data = {
+  text: 'default'
+};
+const input = document.getElementById('input');
+const span = document.getElementById('span');
+// 数据劫持
+const handler = {
+  set(target, key, value) {
+    target[key] = value;
+    // 数据变化 --> 修改视图
+    input.value = value;
+    span.innerHTML = value;
+    return value;
+  }
+};
+const proxy = new Proxy(data, handler);
+// 视图更改 --> 数据变化
+input.addEventListener('keyup', function(e) {
+  proxy.text = e.target.value;
+});
+```
+
+### 同步实现等待执行
+```javascript
+  function CodingMan(name) { // 主要考察的是 面向对象以及JS运行机制（同步 异步 任务队列 事件循环）
+    function Man(name) {
+      setTimeout(() => { // 异步
+        console.log(`Hi! This is ${name}`);
+      }, 0);
+    }
+
+    Man.prototype.sleep = function (time) {
+      let curTime = new Date();
+      let delay = time * 1000;
+      setTimeout(() => { // 异步
+        while (new Date() - curTime < delay) { } // 阻塞当前主线程
+        console.log(`Wake up after ${time}`);
+      }, 0);
+      return this;
+    }
+
+    Man.prototype.sleepFirst = function (time) {
+      let curTime = new Date();
+      let delay = time * 1000;
+      while (new Date() - curTime < delay) { } // 阻塞当前主线程
+      console.log(`Wake up after ${time}`);
+      return this;
+    }
+
+    Man.prototype.eat = function (food) {
+      setTimeout(() => { // 异步
+        console.log(`Eat ${food}~~`);
+      }, 0)
+      return this;
+    }
+
+    return new Man(name);
+  }
+
+  // CodingMan('Peter');
+  CodingMan('Peter').sleep(3).eat('dinner');
+  // CodingMan('Peter').eat('dinner').eat('supper');
+  // CodingMan('Peter').sleepFirst(5).eat('supper');
+```
+
+### AMD CMD
+- AMD 是提前执行，CMD 是延迟执行
+- AMD 推崇依赖前置, CMD 推崇依赖就近
+```javascript
+// CMD
+define(function(require, exports, module) {
+  var a = require('./a')
+  a.doSomething()
+  // 此处略去 100 行
+  var b = require('./b') // 依赖可以就近书写
+  b.doSomething()
+  // ...
+})
+
+// AMD 默认推荐的是
+define(['./a', './b'], function(a, b) { // 依赖必须一开始就写好
+  a.doSomething()
+  // 此处略去 100 行
+  b.doSomething()
+  ...
+})
+```
+
+```js
+    /**
+    * 方法说明
+    * @method 方法名
+    * @for 所属类名
+    * @param {参数类型} 参数名 参数说明
+    * @return {返回值类型} 返回值说明
+    */
+```
