@@ -109,7 +109,7 @@ MyPromise.prototype.then = function (onFulfilled, onRejected) {
   let bridgePromise = new MyPromise((resolve, reject) => {
     if (_this.status === FULFILLED) {
       console.log('FULFILLED')
-      setTimeout(() => {
+      setTimeout(() => { // 加 setTimeout 是为了让 _resolvePromise 的第一个参数bridgePromise有效
         try {
           let x = onFulfilled(_this.value);
           // resolvePromise用来解析回调函数的返回值x，x可能是普通值也可能是个promise对象

@@ -31,7 +31,7 @@ every、some、filter、map、forEach、reduce
 es5 scopechain  es6 outer
 
 ### 数组中常用的方法有哪些
-- 改变原有数组的方法： （9个）
+- **改变**原有数组的方法： （9个）（不是纯函数）
 > splice() 添加/删除数组元素
 > sort() 数组排序
 > pop() 删除一个数组中的最后的一个元素
@@ -42,7 +42,7 @@ es5 scopechain  es6 outer
 > copyWithin() 指定位置的成员复制到其他位置
 > fill() 填充数组
 
-- 不改变原数组的方法(6种)
+- **不改变**原数组的方法(6种)（是纯函数）
 > join() 数组转字符串
 > cancat 合并两个或多个数组
 > ES6扩展运算符...合并数组
