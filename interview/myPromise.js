@@ -103,13 +103,14 @@ MyPromise.prototype.then = function (onFulfilled, onRejected) {
   let _this = this; // -> MyPromise
 
   // 防止使用者不传成功或失败回调函数，所以成功失败回调都给了默认回调函数
+  // .then().then().then()
   onFulfilled = typeof onFulfilled === "function" ? onFulfilled : value => value;
   onRejected = typeof onRejected === "function" ? onRejected : error => { throw error };
 
   let bridgePromise = new MyPromise((resolve, reject) => {
     if (_this.status === FULFILLED) {
       console.log('FULFILLED')
-      setTimeout(() => {
+      setTimeout(() => { // 加 setTimeout 是为了让 _resolvePromise 的第一个参数bridgePromise有效
         try {
           let x = onFulfilled(_this.value);
           // resolvePromise用来解析回调函数的返回值x，x可能是普通值也可能是个promise对象
@@ -171,7 +172,7 @@ MyPromise.all = function (promises) {
       promises[i].then(function (data) {
         // console.log('data', data)
         result[i] = data;
-        if (++count == promises.length) {
+        if (++count == promises.length) { // 都是成功 
           resolve(result);
         }
       }, function (error) {
@@ -190,15 +191,19 @@ MyPromise.race = function (promises) {
 }
 
 MyPromise.resolve = function (value) {
-  return new MyPromise(resolve => {
-    resolve(value);
-  });
+  return new MyPromise(resolve => resolve(value));
 }
 
 MyPromise.reject = function (error) {
-  return new MyPromise((resolve, reject) => {
-    reject(error);
-  });
+  return new MyPromise((resolve, reject) => reject(error));
+}
+
+MyPromise.reject = function (cb) {
+  return this.then((value) => {
+    return MyPromise.resolve(cb()).then(value => value)
+  }, (error) => {
+    return MyPromise.resolve(cb()).then(error => {throw error})
+  })
 }
 
 

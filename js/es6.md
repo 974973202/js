@@ -1,3 +1,5 @@
+首先声明，js的奇怪之处不叫bug，叫特性
+
 ### 新增的数组API
 - find(callback): 用于查找满足条件的第一个元素 返回true or undefined
 ```js
