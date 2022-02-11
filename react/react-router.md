@@ -128,3 +128,28 @@ react-router使用了第三方库：Path-to-RegExp，该库的作用是，将一
 
 1. 将路由信息从父组件一层一层传递到子组件
 2. 使用react-router提供的高阶组件withRouter，包装要使用的组件，该高阶组件会返回一个新组件，新组件将向提供的组件注入路由信息。
+```js
+在Route组件中的path属性中定义路径参数
+在组件内通过useParams hook访问路径参数
+<BrowserRouter>
+    <Routes>
+        <Route path='/foo/:id' element={Foo} />
+    </Routes>
+</BrowserRouter>
+​
+import { useParams } from 'react-router-dom';
+export default function Foo(){
+    const params = useParams();
+    return (
+        <div>
+            <h1>{params.id}</h1>
+        </div>
+    )
+}
+// 在以前版本中，组件的props会包含一个match对象，在其中可以取到路径参数。但在最新的6.x版本中，无法从props获取参数。
+
+// 并且，针对类组件的withRouter高阶组件已被移除。因此对于类组件来说，使用参数有两种兼容方法：
+
+// 将类组件改写为函数组件
+// 字节写一个HOC来包裹类组件，用useParams获取参数后通过props传入原本的类组件
+```

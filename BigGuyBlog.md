@@ -4,27 +4,14 @@
 阿里巴巴
 2、react hooks 原理是什么？
 https://blog.csdn.net/LuckyWinty/article/details/103740283
-3、useState 中的状态是怎么存储的？
+3、useState 中的状态是怎么存储的？通过闭包存储的
 https://blog.csdn.net/gtLBTNq9mr3/article/details/93547670
  
 爱奇艺
 1、react dom diff 算法，list 比较首先比较的是什么？
 https://www.jianshu.com/p/9f16b96a2dec
-2、为什么 react setState要做成异步的呢？
+2、为什么 react setState要做成异步的呢？setState 只在合成事件和钩子函数中是“异步”的，在原生事件和 setTimeout 中都是同步的。
 https://juejin.im/post/5b45c57c51882519790c7441
-3、vue如何实现按需加载配合webpack设置?
-https://blog.csdn.net/wang1006008051/article/details/78066810
- 
-字节跳动
-1、看过 antd 源码吗，如何实现一个 Model，Message 组件？
-2、你是怎样调试 React 代码问题的，你用哪些工具？
-3、手写一个节流函数。
- 
-网易
-1、介绍React优化；
-2、React组件中怎么做事件代理，React组件事件代理的原理；
-https://juejin.im/post/5d7678b06fb9a06b2b47a03c
-3、vuex是什么？怎么使用？哪种功能场景使用它？
  
 滴滴
 1、React-Router怎么实现路由切换？

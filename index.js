@@ -63,31 +63,42 @@
 
 
 
-// const obj ={
-//   a:1,
-//   b:2,
-// }
-// for(c in obj){
-//   console.log(c)
-// }
-
-const arr = [9, 7, 4, 9, 7, 3, 2, 0, 2];
-
-function selectSort(array) {
-  var min;
-  for (var i = 0; i < array.length - 1; i++) {
-    min = i; // 一开始默认当前为最小数的下标
-    for (var j = i + 1; j < array.length; j++) {
-      if (array[j] < array[min]) { // 记住最小数的下标，后面 《 前面
-        min = j
-      }
-    }
-    if (min != i) { // 最小值不是当前位置 则交换
-      [array[min], array[i]] = [array[i], array[min]]
+function curry(fn) {
+  return function other(arg) {
+    if(arg.length >= fn.lenght) {
+      fn(...arg)
+    } else {
+      return (...arg) => other(...arg, ...rest)
     }
   }
-  return array;
 }
-console.log(selectSort(arr))
 
+function create() {
+  let obj = new Object();
+  let Con = [].shift.call(arguments);
+  obj.__proto__ = Con.prototype;
+  let result = Con.apply(obj, arguments)
+  return typeof result === 'object'? result : obj
+}
+
+
+function debounce(func, wait, immediate){
+  let timeout;
+  return function () {
+    let context  = this;
+    let args = arguments;
+    if(timeout) clearTimeout(timeout);
+    if(immediate) {
+      var callNow = !timeout;
+      timeout = setTimeout(() => {
+        timeout = null;
+      }, wait)
+      if(callNow) func.apply(context, args);
+    } else {
+      setTimeout(() => {
+        func.apply(context, wait)
+      }, wait)
+    }
+  }
+}
 

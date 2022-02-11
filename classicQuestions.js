@@ -22,33 +22,33 @@ console.log('script end');
 
 // ----------
 // async function async1() {
-//   console.log('async1 start')
+//   console.log('async1 start')  // 2
 //   await async2()
-//   console.log('async1 end')
+//   console.log('async1 end')   // 8
 // }
 // async function async2() {
-//   console.log('async2')
+//   console.log('async2')    // 3
 // }
-// console.log('script start')
+// console.log('script start')  // 1
 // setTimeout(function () {
-//   console.log('setTimeout0')
+//   console.log('setTimeout0')  // 10
 // })
 // setTimeout(function () {
-//   console.log('setTimeout3')
+//   console.log('setTimeout3')  // 11
 // }, 3)
-// setImmediate(() => console.log('setImmediate'));
-// process.nextTick(() => console.log('nextTick'));
+// setImmediate(() => console.log('setImmediate'));  // 12
+// process.nextTick(() => console.log('nextTick'));  // 7
 // async1();
 // new Promise(function (resolve) {
-//   console.log('promise1')
+//   console.log('promise1')    // 4
 //   resolve();
-//   console.log('promise2')
+//   console.log('promise2')    // 5
 // }).then(function () {
-//   console.log('promise3')
+//   console.log('promise3')   // 9
 // })
-// console.log('script end')
+// console.log('script end')     // 6
 
-// two
+// two  124536
 const promise = new Promise((resolve, reject) => {
   console.log(1);
   resolve(5);
@@ -59,6 +59,9 @@ const promise = new Promise((resolve, reject) => {
 
 promise.then(() => {
   console.log(3);
+  setTimeout(function() {
+    console.log(7);
+  });
 });
 
 console.log(4);

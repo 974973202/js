@@ -402,7 +402,7 @@ animation-play-state: paused / running; 暂停动画 / 正在运行的动画
 2. 如果要简单的from to 效果，用 transition.
 3. 如果要使用js灵活设定动画属性，用transition.
 
-### CSS3D动画
+### CSS3D动画  开启3D transform-style
 ```
 transform-style: flat / preserve-3d;
 flat: 默认值，子元素将不保留其3d位置
