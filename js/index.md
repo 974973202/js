@@ -74,7 +74,7 @@ function isArray(obj){
 > 没有自己的 执行期上下文。意味着this和arguments都是从它们的父函数继承
 
 ### 事件委托
-- 是通过冒泡事件到父元素上触发
+- 是通过冒泡事件到父元素上触发 ul > li
 
 ### 作用域链 原型链 继承 闭包
 - 作用域
@@ -84,11 +84,11 @@ function isArray(obj){
 
 - 原型与继承
 
-- 原型链继承 prototype 
+- 1. 原型链继承 prototype 
 - 缺点： 1. 父类实例改变会影响子类 2. 无法向父类传参
-- 构造函数继承 call apply 
+- 2. 构造函数继承 call apply 
 - 缺点： 继承不到父类**原型**上的属性和方法
-- 组合式继承（原型链继承 + 构造函数继承）
+- 3. 组合式继承（原型链继承 + 构造函数继承）
 ```js
 function Parent(name) {
     this.name = [name]
@@ -106,10 +106,6 @@ Child.prototype.constructor = Child
 ```
 - 缺点: 每次创建子类实例都执行了两次构造函数(Parent.call()和new Parent())。子类创建时，原型中会存在两份相同的属性和方法。
 
-- [深度解析原型中的各个难点]https://juejin.im/post/5aa78fe66fb9a028d2079ca4
-- [从prototype与__proto__窥探JS继承之源|掘金技术征文]https://juejin.im/post/58f9d0290ce46300611ada65
-- [原型链与继承]https://juejin.im/post/58f94c9bb123db411953691b
-- [一文完全吃透JavaScript继承]https://juejin.im/post/5e5339b46fb9a07cb83e20d4
 ```javascript
   // 每个构造函数(Test)都有一个原型对象(prototype),原型对象都包含一个指向构造函数的指针,而实例(instance)都包含一个指向原型对象的内部指针.
 
@@ -133,6 +129,7 @@ Child.prototype.constructor = Child
   // console.log(a instanceof Test)
   // console.log(a instanceof Test1)
   // console.log(a instanceof T)
+  // Test.prototype.constructor === Test
 
   // console.log(Object.prototype.isPrototypeOf(a))
   // console.log(Test.prototype.isPrototypeOf(a))
@@ -160,10 +157,22 @@ Child.prototype.constructor = Child
 
   console.warn(Function.__proto__.__proto__ === Object.prototype);
   console.warn(Object.__proto__.__proto__ === Object.prototype);
+
+
+  //  圣杯模式
+  //  为了son继承father原型上的东西，还可以修改自己原型上的东西，对father原型不影响。
+  function inherit(Target,Origin){ 
+    function F (){};// 函数F作为一个中间层，上连father，下连Son，使两函数互不干扰
+    F.prototype = Origin.prototype;
+    Target.prototype = new F();
+    Target.prototype.constuctor = Target;
+    // son原型归位
+    Target.prototype.uber = Origin.prototype;
+  }
 ```
 
 - 闭包
-  - 在JavaScript中，根据词法作⽤域的规则，内部函数总是可以访问其外部函数中声明的变量， 当通过调⽤⼀个外部函数返回⼀个内部函数后，即使该外部函数已经执⾏结束了，但是**内部函数引⽤ 外部函数的变量依然保存在内存中**，我们就把这些变量的集合称为闭包。⽐如外部函数是foo，那么 这些变量的集合就称为foo函数的闭包
+  - 在JavaScript中，根据词法作⽤域的规则，内部函数总是可以访问其外部函数中声明的变量， 当通过调⽤⼀个外部函数返回⼀个内部函数后，即使该外部函数已经执⾏结束了，但是**内部函数引⽤ 通过外部函数的变量依然保存在内存中**，我们就把这些变量的集合称为闭包。⽐如外部函数是foo，那么 这些变量的集合就称为foo函数的闭包
   - 闭包的原理是作用域链，执行上下文 4个 变量环境词法环境outer 和this绑定，执行的时候通过outer建立起作用域链。
   - 能够读取其他函数内部变量的函数
   - 闭包是指在 JavaScript 中，内部函数总是可以访问其所在的外部函数中声明的参数和变量，即使在其外部函数被返回return掉（寿命终结）了之后
@@ -214,14 +223,17 @@ const user = {
   name: 'lzx',
   age: 18
 }
-```
-1. 第二个参数如果是个数组（[]string）, JSON.stringify(user, ['name']); // 筛选出key为name的值
-2. 第二个参数如果是个函数(function), JSON.stringify(user, (key, value) => {
+// 1. 第二个参数如果是个数组（[]string）, 
+JSON.stringify(user, ['name']); // 筛选出key为name的值
+
+// 2. 第二个参数如果是个函数(function), 
+JSON.stringify(user, (key, value) => {
   if (typeof value === 'string') {
     return undefined
   }
   return value
 })
+```
 3. 第三个参数如果是数字
 ```js
 // 注意：为了达到理解的目的，使用 '--' 替代了空格

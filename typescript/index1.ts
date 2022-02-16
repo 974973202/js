@@ -184,3 +184,5 @@ declare function $(selector: string): JqueryInstance;
 // keyof 获取当前属性组成的联合类型
  let obj = { name: 'l', age: 18 }
  type keyobj = keyof typeof obj;
+
+ // type 可以使用元组类型   interface 能够合并声明

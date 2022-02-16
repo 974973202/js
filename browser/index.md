@@ -72,17 +72,6 @@ display属性为none的元素上进行的DOM操作不会引发回流和重绘
 > 对具有复杂动画的元素使用绝对定位，使它脱离文档流，否则会引起父元素及后续
 元素频繁回流
 
-### 回流重绘和Event loop有关
-1. 当 Event loop 执行完 Microtasks 后，会判断 document 是否需要更新。因为浏览器是 60Hz 的刷新率，每 16ms 才会更新一次。
-2. 然后判断是否有 resize 或者 scroll ，有的话会去触发事件，所以 resize 和 scroll 事件也是至少 16ms 才会触发一次，并且自带节流功能。
-3. 判断是否触发了 media query
-4. 更新动画并且发送事件
-5. 判断是否有全屏操作事件
-6. 执行 requestAnimationFrame 回调
-7. 执行 IntersectionObserver 回调，该方法用于判断元素是否可见，可以用于懒加载上，但是兼容性不好
-8. 更新界面
-9. 以上就是一帧中可能会做的事情。如果在一帧中有空闲时间，就会去执行 requestIdleCallback 回调
-
 ### CSS加载会造成阻塞吗
 - css加载不会阻塞DOM树的解析
 - css加载会阻塞DOM树的渲染
@@ -95,13 +84,6 @@ display属性为none的元素上进行的DOM操作不会引发回流和重绘
 - DOMContentLoaded
  - 如果页面中同时存在css和js，并且存在js在css后面，则DOMContentLoaded事件会在css加载完后才执行。
  - 其他情况下，DOMContentLoaded都不会等待css加载，并且DOMContentLoaded事件也不会等待图片、视频等其他资源加载。
-
-### 为什么 Javascript 要是单线程的 ?
-这是因为 Javascript 这门脚本语言诞生的使命所致!JavaScript 为处理页面中用户的交互,以及操作 DOM 树、CSS 样式树来给用户呈现一份动态而丰富的交互体验和服务器逻辑的交互处理。
-如果 JavaScript 是多线程的方式来操作这些 UI DOM,则可能出现 UI 操作的冲突。
-如果 Javascript 是多线程的话,在多线程的交互下,处于 UI 中的 DOM 节点就可能成为一个临界资源,
-假设存在两个线程同时操作一个 DOM,一个负责修改一个负责删除,那么这个时候就需要浏览器来裁决如何生效哪个线程的执行结果。
-当然我们可以通过锁来解决上面的问题。但为了避免因为引入了锁而带来更大的复杂性,Javascript 在最初就选择了单线程执行。
 
 ### 为什么 JS 阻塞页面加载 ?
 由于 JavaScript 是可操纵 DOM 的,如果在修改这些元素属性同时渲染界面（即 JavaScript 线程和 UI 线程同时运行）,那么渲染线程前后获得的元素数据就可能不一致了。

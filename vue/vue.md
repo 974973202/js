@@ -151,102 +151,6 @@ if (typeof Promise !== 'undefined') {
 ### 14. 什么是作用域插槽？
 把父组件的数据扔到子组件里面展示，复用组件
 
-### 15. 用vnode来描述一个DOM结构
-```JS
-// 这是一个最基础的VNode节点，作为其他派生VNode类的基类，里面定义了下面这些数据。
-// tag: 当前节点的标签名
-// data: 当前节点对应的对象，包含了具体的一些数据信息，是一个VNodeData类型，可以参考VNodeData类型中的数据信息
-// children: 当前节点的子节点，是一个数组
-// text: 当前节点的文本
-// elm: 当前虚拟节点对应的真实dom节点
-// ns: 当前节点的名字空间
-// context: 当前节点的编译作用域
-// functionalContext: 函数化组件作用域
-// key: 节点的key属性，被当作节点的标志，用以优化
-// componentOptions: 组件的option选项
-// componentInstance: 当前节点对应的组件的实例
-// parent: 当前节点的父节点
-// raw: 简而言之就是是否为原生HTML或只是普通文本，innerHTML的时候为true，textContent的时候为false
-// isStatic: 是否为静态节点
-// isRootInsert: 是否作为跟节点插入
-// isComment: 是否为注释节点
-// isCloned: 是否为克隆节点
-// isOnce: 是否有v-once指令
-export default class VNode {
-  tag: string | void;
-  data: VNodeData | void;
-  children: ?Array<VNode>;
-  text: string | void;
-  elm: Node | void;
-  ns: string | void;
-  context: Component | void; // rendered in this component's scope
-  functionalContext: Component | void; // only for functional component root nodes
-  key: string | number | void;
-  componentOptions: VNodeComponentOptions | void;
-  componentInstance: Component | void; // component instance
-  parent: VNode | void; // component placeholder node
-  raw: boolean; // contains raw HTML? (server only)
-  isStatic: boolean; // hoisted static node
-  isRootInsert: boolean; // necessary for enter transition check
-  isComment: boolean; // empty comment placeholder?
-  isCloned: boolean; // is a cloned node?
-  isOnce: boolean; // is a v-once node?
-
-  constructor (
-    tag?: string,
-    data?: VNodeData,
-    children?: ?Array<VNode>,
-    text?: string,
-    elm?: Node,
-    context?: Component,
-    componentOptions?: VNodeComponentOptions
-  ) {
-    /*当前节点的标签名*/
-    this.tag = tag
-    /*当前节点对应的对象，包含了具体的一些数据信息，是一个VNodeData类型，可以参考VNodeData类型中的数据信息*/
-    this.data = data
-    /*当前节点的子节点，是一个数组*/
-    this.children = children
-    /*当前节点的文本*/
-    this.text = text
-    /*当前虚拟节点对应的真实dom节点*/
-    this.elm = elm
-    /*当前节点的名字空间*/
-    this.ns = undefined
-    /*编译作用域*/
-    this.context = context
-    /*函数化组件作用域*/
-    this.functionalContext = undefined
-    /*节点的key属性，被当作节点的标志，用以优化*/
-    this.key = data && data.key
-    /*组件的option选项*/
-    this.componentOptions = componentOptions
-    /*当前节点对应的组件的实例*/
-    this.componentInstance = undefined
-    /*当前节点的父节点*/
-    this.parent = undefined
-    /*简而言之就是是否为原生HTML或只是普通文本，innerHTML的时候为true，textContent的时候为false*/
-    this.raw = false
-    /*静态节点标志*/
-    this.isStatic = false
-    /*是否作为跟节点插入*/
-    this.isRootInsert = true
-    /*是否为注释节点*/
-    this.isComment = false
-    /*是否为克隆节点*/
-    this.isCloned = false
-    /*是否有v-once指令*/
-    this.isOnce = false
-  }
-
-  // DEPRECATED: alias for componentInstance for backwards compat.
-  /* istanbul ignore next https://github.com/answershuto/learnVue*/
-  get child (): Component | void {
-    return this.componentInstance
-  }
-}
-```
-
 ### 16. 简述Vue中diff算法原理 snabbdom
 vdom - 用js模拟DOM结构，计算出最小的变更，再操作DOM 
        h vnode patch diff key 
@@ -313,8 +217,6 @@ Vue通过数据劫持配合发布者-订阅者的设计模式，内部通过调�
 - 实现一个订阅者「Watcher」：Watcher订阅者是Observer和Compile之间通信的桥梁，主要任务是订阅Observer中的属性值变化的消息，当收到属性值变化的消息时，触发解析器Compile中对应的更新函数
 - 实现一个订阅器「Dep」：订阅器采用发布-订阅设计模式，用来收集订阅者Watcher，对监听器Observer和订阅者Watcher进行统一管理
 
-### Vue如何通过vm.$set()来解决对象/数组新增/删除属性不能响应的问题
-
 
 ### computed / watch 的区别是什么
 - computed是依赖于其他属性的一个计算值，并且具备缓存，只有当依赖的值发生变化才会更新（自动监听依赖值的变化，从而动态返回内容）
@@ -336,7 +238,7 @@ Vue通过数据劫持配合发布者-订阅者的设计模式，内部通过调�
   1. 7个，push、pop、shift、unshift、splice、sort、reverse
   2. vm.$set()
 
-
+### Vue如何通过vm.$set()来解决对象/数组新增/删除属性不能响应的问题
 ### vm.$set()实现原理是什么
 1. 如果目标是数组,使用 vue 实现的变异方法 splice 实现响应式
 2. 如果目标是对象,判断属性存在,即为响应式,直接赋值
@@ -548,3 +450,6 @@ composition API 和 React Hooks对比
   composition API setup 只会被调用一次 Hooks函数可以被调用多次
   composition API不用考虑调用顺序
   reactive + ref比useState难理解
+
+Vue 中的 computed 是如何实现的
+是⼀个惰性的watcher，在取值操作时根据⾃⾝标记 dirty属性返回上⼀次计算结果/重新计算值 在创建时就进⾏⼀次取值操作，收集依赖变动的对象/属性(将⾃⾝压⼊dep中) 在依赖的对象/属性变动 时，仅将⾃⾝标记dirty致为true

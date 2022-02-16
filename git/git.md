@@ -30,3 +30,23 @@ build：主要目的是修改项目构建系统(例如 glup，webpack，rollup �
 ci：主要目的是修改项目继续集成流程(例如 Travis，Jenkins，GitLab CI，Circle等)的提交
 chore：不属于以上类型的其他类，比如构建流程, 依赖管理
 revert：回滚某个更早之前的提交
+
+### Git 合并两个分支内容
+1. 将开发分支代码合入到master中
+```
+git checkout dev           #切换到dev开发分支
+git pull
+git checkout master
+git merge dev              #合并dev分支到master上
+git push origin master     #将代码推到master上
+```
+
+2. 将master的代码同步更新到开发分支中
+   merge方法：保证主干提交线干净(可以安全回溯)
+```
+git checkout master
+git pull
+git checkout dev
+git merge master
+git pull origin dev
+```

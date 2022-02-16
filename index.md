@@ -9,8 +9,6 @@ cookies, seess..., local..
 2. 有效时间
 3. 服务端交互
 
-html5的新特性，canvas,svg，
-
 css 选择器优先级
 important > style > id > class = [] = : > p = :: > *
 
@@ -123,10 +121,6 @@ session和cookie
 
 进程是CPU资源分配的最小单位，线程是CPU调度的最小单位
 
-五层网络协议
-应用层- 传输层- 网络层- 数据链路层- 物理层
-七层在应用层和传输层间加了会话层和表示层
-
 浏览器性能监控：performance
 
 
@@ -212,112 +206,6 @@ WDS结合HotModeuleReplacementPlugin插件使用
 4. CommonJs 是动态语法可以写在判断里，ES6 Module 静态语法只能写在顶层
 5. CommonJs 的 this 是当前模块，ES6 Module的 this 是 undefined
 
-
-节流 - throttle
-无论触发多少次，只在规定时间执行一次
-时间戳版： 函数触发是时间段内开始
-定时器版：函数触发是在时间段内结束
-```js
-/**
- * @desc 节流函数
- * @param func 执行函数
- * @param wait 秒数
- * @param type true 时间戳版 false 定时器版
-*/
-function throttle(func, wait, type) {
-  var timeDate = 0;
-  var timer = null;
-  return function () {
-    let context = this;
-    let args = arguments;
-    if (type) {
-      var now = Date.now();
-      if(now - timeDate > wait) {
-        func.apply(context, args);
-        timeDate = now
-      }
-    } else {
-      timer = setTimeout(() => {
-        timer = null;
-        func.apply(context, args)
-      }, wait)
-    }
-  }
-}
-```
-
-防抖 - debounce
-无论触发多少次，只在你停止触发的时候执行一次
-立即执行和非立即执行
-```js
-/**
- * @desc 函数防抖
- * @param 
-*/
-function debounce(func, wait, type) {
-  let timer = null;
-  return function () {
-    let context = this;
-    let args = arguments;
-
-    if(timer) {
-      clearTimeout(timer)
-    }
-    if (type) {
-      var callNow = !timer;
-      timer = setTimeout(() => {
-        timer = null;
-      }, wait)
-      if(callNow) func.apply(context, args)
-    } else {
-      timer = setTimeout(() => {
-        func.apply(context, args)
-      }) 
-    }
-  }
-}
-```
-
-call - apply - bind
-```js
-Function.prototype.call = function(context) {
-  var context = context || window;
-  context.fn = this;
-  var args = [];
-  for(var i = 0; i < arguments.length; i ++) {
-    args.push(`arguments[${i}]`)
-  }
-  var result = eval(`context.fn(${args})`);
-  delete context.fn
-  return result;
-}
-Function.prototype.apply = function(context, arr) {
-  var context = context || window;
-  context.fn = this;
-  var args = [];
-  for(var i = 0; i < arr.length; i ++) {
-    args.push(`arr[${i}]`)
-  }
-  var result = eval(`context.fn(${args})`);
-  delete context.fn
-  return result;
-}
-Function.prototype.bind = function(context, arr) {
-  var self = this;
-  var fNOP = function () { };
-  var aArgs = Array.prototype.slice.call(arguments, 1)
-  var fbound = function () {
-    self.apply(this instanceof self 
-      ? this : context,
-      aArgs.concat(Array.prototype.slice.call(arguments)));
-  }
-
-  fNOP.prototype = this.prototype;
-  fbound.prototype = new fNOP();
-  return fbound;
-}
-```
-
 克隆deepClone
 ```js
 function isObject(obj) {
@@ -389,17 +277,6 @@ function deepClone (obj) {
 - 状态逻辑难复用(HOC)
 - 趋向复杂难以维护(生命周期)
 - this 指向问题
-
-### 5. setState什么时候同步什么时候异步
-- React控制之外的事件中调用setState是同步更新的。比如原生js绑定的事件，setTimeout/setInterval等。
-- 所以就能理解大部分开发中用到的都是React封装的事件，比如onChange、onClick、onTouchMove等，这些事件处理程序中的setState都是异步处理的
-
-
-# typescript
-type和interface的区别
-- type可以声明基本类型别名，联合类型，元组等类型
-- interface可以声明合并
-
 
 # VUE
 ### 全局路由钩子  beforeEach  beforeResolve  afterEach

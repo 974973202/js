@@ -441,7 +441,7 @@ backface-visibility: visible / hidden;
 - 利用CSS继承减少代码量
 - 避免！important，可以选择其他选择器
 - 动画使用transform属性代替margin,height,width...等
-- 开启gpu硬件加速 （合成线程去处理这些变换，而不牵扯到主线程，大大提高渲染效率）
+- 开启gpu硬件加速 **（合成线程去处理这些变换，而不牵扯到主线程，大大提高渲染效率）**
 
 将元素的will-change 设置为 opacity、transform、top、left、bottom、right 。这样子渲染引擎会为其单独实现一个图层，当这些变换发生时，仅仅只是利用合成线程去处理这些变换，而不牵扯到主线程，大大提高渲染效率。
 对于不支持will-change 属性的浏览器，使用一个3D transform属性来强制提升为合成 transform: translateZ(0)
