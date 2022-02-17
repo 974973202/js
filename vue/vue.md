@@ -169,7 +169,7 @@ patch(vnode, newVnode) //对比新旧结点
 ### Vue渲染过程
 1. 把template模板编译为render函数
 2. 实例进行挂载, 根据根节点render函数的调用，递归的生成虚拟dom
-3. 对比虚拟dom，渲染到真实dom
+3. 通过patch方法对比虚拟dom，渲染到真实dom
 4. 组件内部data发生变化，组件和子组件引用data作为props重新调用render函数，生成虚拟dom, 返回到步骤3
 
 ### 18. Vue中模板编译原理

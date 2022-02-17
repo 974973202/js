@@ -73,8 +73,8 @@ display属性为none的元素上进行的DOM操作不会引发回流和重绘
 元素频繁回流
 
 ### CSS加载会造成阻塞吗
-- css加载不会阻塞DOM树的解析
-- css加载会阻塞DOM树的渲染
+- css加载不会阻塞DOM树的**解析**
+- css加载会阻塞DOM树的**渲染**
 - css加载会阻塞**后面js**语句的执行
 
 - 怎么判断页面是否加载完成
@@ -119,7 +119,7 @@ DOMContentLoaded -> load。
 2. <script async src="script.js">
 有 async,加载和渲染后续文档元素的过程将和 script.js 的加载与执行并行进行（异步）。
 3. <script defer src="myscript.js">
-有 defer,加载后续文档元素的过程将和 script.js 的加载并行进行（异步）,但是 script.js 的**执行**要在所有元素解析完成之后,DOMContentLoaded 事件触发之前完成。
+有 defer,加载后续文档元素的过程将和 script.js 的**加载**并行进行（异步）,但是 script.js 的**执行**要在所有元素解析完成之后,DOMContentLoaded 事件触发之前完成。
 从实用角度来说,首先把所有脚本都丢到 </body> 之前是最佳实践,因为对于旧浏览器来说这是唯一的优化选择,此法可保证非脚本的其他一切元素能够以最快的速度得到加载和解析。
 
 接着,我们来看一张图:
