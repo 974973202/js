@@ -355,12 +355,12 @@ function deepClone(obj) {
 
   var target = Array.isArray(obj) ? [] : {};
 
-  for(var prop in obj) {
-    if(obj.hasOwnProperty(prop)) {
-      if(isObject(obj[prop])) {
-        target[prop] = deepClone(obj[prop])
+  for(var key in obj) {
+    if(obj.hasOwnProperty(key)) {
+      if(isObject(obj[key])) {
+        target[key] = deepClone(obj[key])
       } else {
-        target[prop] = obj[prop]
+        target[key] = obj[key]
       }
     }
   }

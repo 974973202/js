@@ -262,3 +262,13 @@ function quickSort(arr) {
   return quickSort(left).concat([mid], quickSort(right));
 
 }
+
+// 圣杯模式继承
+function extend(Target, Origin) {
+  function F() {};
+  F.prototype = Origin.prototype;
+  Target.prototype = new F();
+
+  Target.prototype.constructor = Target;
+  Target.prototype.uber = Origin.prototype;
+}
