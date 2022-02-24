@@ -1,21 +1,3 @@
-### 如何使用 react hooks 实现一个计数器的组件
-```
-  function App() {
-    const [count, setCount] = useState(0);
-    useEffect(() => {
-      const timer = setInterval(() => {
-        setCount(count => count + 1)
-      }, 1000)
-
-      return () => {
-        clearInterval(timer)
-      }
-    }, [])
-
-    return <h1>{count}</h1>
-  }
-```
-
 ### React.Fiber 原理
 - [React.Fiber原理]https://www.youtube.com/watch?v=ZCuYPiUIONs
 
@@ -61,6 +43,13 @@
       (其实这个key的存在与否只会影响diff算法的复杂度,换言之,你不加key的情况下,
       diff算法就会以暴力的方式去根据一二的策略更新,但是你加了key,diff算法会引入一些另外的操作)
 
+### React 事件机制  React 组件中怎么做事件代理？它的原理是什么？ 事件委托（事件代理）
+React并不是将click事件绑定到了div的真实DOM上，而是在document处监听了所有的事件，当事件发生并且冒泡到document处的时候，React将事件内容封装并交由真正的处理函数运行。
+### React的事件和普通的HTML事件有什么不同
+对于事件名称命名方式，原生事件为全小写，react 事件采用小驼峰；
+对于事件函数处理语法，原生事件为字符串，react 事件为函数；
+react 事件不能采用 return false 的方式来阻止浏览器的默认行为，而必须要地明确地调用preventDefault()来阻止默认行为
+
 ### 2.vue 虚拟DOM和react 虚拟DOM的区别 
 VUE在渲染过程中，会跟踪每⼀个组件的依赖关系，不需要重新渲染整个组件树。
 ⽽对于React⽽⾔，每当 应⽤的状态被改变时，全部⼦组件都会重新渲染。 在 React 应⽤中，当某个组件的状态发⽣变化时， 它会以该组件为根，重新渲染整个组件⼦树。 如要避免不必要的⼦组件的重新渲染，你需要在所有可 能的地⽅使⽤ PureComponent，或是⼿动实现shouldComponentUpdate ⽅法 在React中，数据流是⾃上⽽下单向的从⽗节点传递到⼦节点，所以组件是简单且容易把握的，⼦组件 只需要从⽗节点提供的props中获取数据并渲染即可。如果顶层组件的某个prop改变了，React会递归 地向下遍历整棵组件树，重新渲染所有使⽤这个属性的组件。
@@ -76,7 +65,7 @@ VUE在渲染过程中，会跟踪每⼀个组件的依赖关系，不需要重�
 - 选择性子树渲染。开发人员可以重写 shouldComponentUpdate 提高 diff 的性能
 
 ### 3. 调用 super(props) 的目的是什么
-- 传递 props 给 super() 的原因则是便于(在子类中)能在 constructor 访问 this.props
+- 传递 props 给 super() 的原因则是为了能在 constructor 访问 this.props
 
 ### 4. createElement 和 cloneElement 有什么区别？
 - React.createElement():JSX 语法就是用 React.createElement()来构建 React 元素的。它接受三个参数，第一个参数可以是一个标签名。如 div、span，或者 React 组件。第二个参数为传入的属性。第三个以及之后的参数，皆作为组件的子组件。
@@ -100,7 +89,7 @@ VUE在渲染过程中，会跟踪每⼀个组件的依赖关系，不需要重�
   )
 ```
 
-### 5. setState什么时候同步什么时候异步
+### 5. setState什么时候同步什么时候异步?  setState(partialState, callback) 中的callback拿到更新后的结果。
 - React控制之外的事件中调用setState是同步更新的。比如原生js绑定的事件，setTimeout/setInterval等。
 - 所以就能理解大部分开发中用到的都是React封装的事件，比如onChange、onClick、onTouchMove等，这些事件处理程序中的setState都是异步处理的
 
@@ -112,23 +101,42 @@ VUE在渲染过程中，会跟踪每⼀个组件的依赖关系，不需要重�
 
 batchedUpdates
 
-### react生命周期
-01 constructor
-02 render
-03 componentDidMount
-
 ### 7.父子组件传值
 1 props
-2 createContext()  privider
+2 const Context = React.createContext();  Provider  Consumer
 3 ref
+4 ctx = createContext(0)    ctx.Provider     子 useContex(ctx)
 
 按需加载
 lazy Suspense
 
 ReactDOM.createPortal 创建根节点外的弹窗
 
-### Fiber架构
-两个阶段 调度阶段，提交阶段
+### react 性能优化
+1. shouldComponentUpdata
+2. react.memo useMemo useCallback 
+3. key
+4. lazy Suspense
+5. 合并多个setState
+
+### Fiber架构  react的渲染过程
+<!-- 两个阶段 调度阶段（调度器，协调器，渲染器），提交阶段
+
+jsx会被babel经过ast解析成React.createElement，
+而React.createElement函数执行之后就是virtual-dom（jsx对象）
+在mount的时候，render阶段会根据jsx对象生成新的Fiber节点
+在update的时候，render阶段会根据最新的jsx和老的Fiber进行对比，生成新的Fiber -->
+
+### jsx和Fiber有什么关系
+jsx是一种描述当前组件内容的数据结构，它不包含schedule,reconcile,render所需的相关信息；
+mount时通过jsx对象（调用createElement的结果）调用createFiberFromElement生成Fiber update时通过reconcileChildFibers或reconcileChildrenArray对比新jsx和老的Fiber（current Fiber）生成新的wip Fiber树
+
+### Fiber是什么，它为什么能提高性能
+Fiber是一个js对象，能承载节点信息、优先级、updateQueue，同时它还是一个工作单元。
+
+Fiber双缓存可以在构建好wip Fiber树之后切换成current Fiber，内存中直接一次性切换，提高了性能
+Fiber的存在使异步可中断的更新成为了可能，作为工作单元，可以在时间片内执行工作，没时间了交还执行权给浏览器，下次时间片继续执行之前暂停之后返回的Fiber
+Fiber可以在reconcile的时候进行相应的diff更新，让最后的更新应用在真实节点上
 
 调度阶段：调度帧
 ```js
@@ -162,6 +170,7 @@ scheduler：小顶堆
 render阶段的reconciler中：fiber、update、链表
 diff算法：dfs（深度优先遍历）
 lane模型：二进制掩码（”用一串二进制数字（掩码）去操作另一串二进制数字“的意思。）
+
 
 ### react分为几个模块
 1. scheduler（调度器）：排列优先级，优先级高的先执行reconciler
@@ -232,35 +241,98 @@ diff算法三个前提
     1、对比newChildren和oldFiber的各个节点，newChildren[i]能和oldFiber[j]位置对比的上，则i++，j++；否则oldFiber值移动到最后，j++，在与i进行比较
 
 
+### react17之前jsx文件为什么要声明import React from 'react'，之后为什么不需要了
+jsx经过编译之后编程React.createElement，不引入React就会报错，react17改变了编译方式，变成了jsx.createElement
 
-
-
-
-
-1. jsx和Fiber有什么关系
-2. react17之前jsx文件为什么要声明import React from 'react'，之后为什么不需要了
-3. Fiber是什么，它为什么能提高性能
-
-hooks
+### hooks
 4. 为什么hooks不能写在条件判断中
+hook会按顺序存储在链表中，如果写在条件判断中，就没法保持链表的顺序
 
 状态/生命周期
 5. setState是同步的还是异步的
+legacy模式下：命中batchedUpdates时是异步 未命中batchedUpdates时是同步的
+concurrent模式下：都是异步的
+
 6. componentWillMount、componentWillMount、componentWillUpdate为什么标记UNSAFE
+新的Fiber架构能在scheduler的调度下实现暂停继续，排列优先级，Lane模型能使Fiber节点具有优先级，在高优先级的任务打断低优先级的任务时，低优先级的更新可能会被跳过，所有以上生命周期可能会被执行多次，和之前版本的行为不一致
+
 
 组件
 7. react元素$$typeof属性什么
+用来表示元素的类型，是一个symbol类型
+
 8. react怎么区分Class组件和Function组件
+Class组件prototype上有isReactComponent属性
+
 9. 函数组件和类组件的相同点和不同点
+相同点：都可以接收props返回react元素
+
+不同点：
+编程思想：类组件需要创建实例，面向对象，函数组件不需要创建实例，接收输入，返回输出，函数式编程
+内存占用：类组建需要创建并保存实例，占用一定的内存
+值捕获特性：函数组件具有值捕获的特性
+可测试性：函数组件方便测试
+状态：类组件有自己的状态，函数组件没有只能通过useState
+生命周期：类组件有完整生命周期，函数组件没有可以使用useEffect实现类似的生命周期
+逻辑复用：类组件继承 Hoc（逻辑混乱 嵌套），组合优于继承，函数组件hook逻辑复用
+跳过更新：shouldComponentUpdate PureComponent，React.memo
+发展未来：函数组件将成为主流，屏蔽this、规范、复用，适合时间分片和渲染
 
 开放性问题
 10. 说说你对react的理解/请说一下react的渲染过程
+是什么：react是构建用户界面的js库
+能干什么：可以用组件化的方式构建快速响应的web应用程序
+如何干：声明式（jsx） 组件化（方便拆分和复用 高内聚 低耦合） 一次学习随处编写
+做的怎么样： 优缺（社区繁荣 一次学习随处编写 api简介）缺点（没有系统解决方案 选型成本高 过于灵活）
+设计理念：跨平台（虚拟dom） 快速响应（异步可中断 增量更新）
+性能瓶颈：cpu io fiber时间片 concurrent mode
+渲染过程：scheduler render commit Fiber架构
+
 11. 聊聊react生命周期
+render阶段：
+mount时：组件首先会经历constructor、getDerivedStateFromProps、componnetWillMount、render
+update时：组件首先会经历componentWillReceiveProps、getDerivedStateFromProps、shouldComponentUpdate、render
+error时：会调用getDerivedStateFromError
+commit阶段
+mount时：组件会经历componnetDidMount
+update时：组件会调用getSnapshotBeforeUpdate、componnetDidUpdate
+unMount时：调用componnetWillUnmount
+error时：调用componnetDidCatch
+
+
 12. 简述diff算法
 13. react有哪些优化手段
+shouldComponentUpdate、不可变数据结构、列表key、pureComponent、react.memo、useEffect依赖项、useCallback、useMemo、bailoutOnAlreadyFinishedWork
+
 14. react为什么引入jsx
+解释概念：jsx是js语法的扩展 可以很好的描述ui jsx是React.createElement的语法糖
+想实现什么目的：声明式 代码结构简洁 可读性强 结构样式和事件可以实现高内聚 低耦合 、复用和组合 不需要引入新的概念和语法 只写js， 虚拟dom跨平台
+有哪些可选方案：模版语法 vue ag引入了控制器 作用域 服务等概念
+jsx原理：babel抽象语法树 classic是老的转换 automatic新的转换
+
 15. 说说virtual Dom的理解
+是什么：React.createElement函数返回的就是虚拟dom，用js对象描述真实dom的js对象
+优点：处理了浏览器的兼容性 防范xss攻击 跨平台 差异化更新 减少更新的dom操作
+缺点：额外的内存 初次渲染不一定快
+
 16. 你对合成事件的理解
+原生事件：全小写、事件处理函数（字符串）、阻止默认行为（返回false）
+合成事件：小驼峰、事件处理函数（函数对象）、阻止默认行为（event.preventDefault()）
+
+理解：
+React把事件委托到document上（v17是container节点上）
+先处理原生事件 冒泡到document上在处理react事件
+React事件绑定发生在reconcile阶段 会在原生事件绑定前执行
+
+优势：
+进行了浏览器兼容。顶层事件代理，能保证冒泡一致性(混合使用会出现混乱)
+默认批量更新
+避免事件对象频繁创建和回收，react引入事件池，在事件池中获取和释放对象（react17中废弃） react17事件绑定在容器上了
+我们写的事件是绑定在dom上么，如果不是绑定在哪里？ 答：v16绑定在document上，v17绑定在container上
+为什么我们的事件手动绑定this(不是箭头函数的情况) 答：合成事件监听函数在执行的时候会丢失上下文
+为什么不能用 return false来阻止事件的默认行为？ 答：说到底还是合成事件和原生事件触发时机不一样
+react怎么通过dom元素，找到与之对应的 fiber对象的？ 答：通过internalInstanceKey对应
+
 17. 我们写的事件是绑定在dom上么，如果不是绑定在哪里？
 18. 为什么我们的事件手动绑定this(不是箭头函数的情况)
 19. 为什么不能用 return false 来阻止事件的默认行为？

@@ -81,31 +81,20 @@ function create() {
   return typeof result === 'object'? result : obj
 }
 
-
-function debounce(func, wait, immediate){
-  let timeout;
-  return function () {
-    let context  = this;
-    let args = arguments;
-    if(timeout) clearTimeout(timeout);
-    if(immediate) {
-      var callNow = !timeout;
-      timeout = setTimeout(() => {
-        timeout = null;
-      }, wait)
-      if(callNow) func.apply(context, args);
-    } else {
-      setTimeout(() => {
-        func.apply(context, wait)
-      }, wait)
-    }
-  }
-}
-
 // 1
 function unique(arr) {
   const result = [];
   for (let i = 0; i < arr.length; i++) {
+    if(arr.indexOf(arr[i]) === -1) {
+      result.push(arr[i])
+    }
+  }
+  return result;
+}
+
+function unique(arr) {
+  const result = [];
+  for(let i = 0; i < arr.length; i++) {
     if(arr.indexOf(arr[i]) === -1) {
       result.push(arr[i])
     }
@@ -143,6 +132,7 @@ function throttle(func, wait) {
     }
   }
 }
+
 // 防抖 停止触发执行
 function debounce(func, wait) {
   let timeout;
@@ -212,18 +202,18 @@ suject.ob(obj1)
 suject.notify()
 
 // 广
-function scopeSearch(rootList, target) {
-  if (rootList == null || rootList.length == 0) return false;
-  var childList = []; // 当前层所有子节点的节点
-  for (var i = 0; i < rootList.length; i++) {
-      if (rootList[i] != null && rootList[i].value == target) {
-          return true
-      } else {
-          childList.push(rootList[i].left)
-          childList.push(rootList[i].right)
-      }
+function scopeSearch(root, target) {
+  if(root == null) return false;
+  let childRoot = []; // 当前层所有子节点的节点
+  for(let i = 0; i < root.length; i ++) {
+    if(root[i].value == target) {
+      return true
+    } else {
+      childRoot.push(root[i].left)
+      childRoot.push(root[i].right)
+    }
   }
-  return scopeSearch(childList, target)
+  return scopeSearch(childRoot, target)
 }
 
 // 深
@@ -251,16 +241,16 @@ function bubbleSort(arr) {
 function quickSort(arr) {
   let midIndex = Math.floor(arr.length/2);
   let mid = arr.splice(midIndex, 1)[0];
-  let right=[], left = [];
-  for(let i = 0; i < arr.lenght; i ++) {
-    if(arr[i] > mid) {
-      right.push(arr[i]);
+  let right = []
+  let left = []
+  for(let i = 0; i < arr.length; i ++) {
+    if(arr[i] > mid) { // 前比后大，去右边
+      right.push(arr[i])
     } else {
       left.push(arr[i])
     }
-  } 
-  return quickSort(left).concat([mid], quickSort(right));
-
+  }
+  return quickSort(left).concat([mid], quickSort(right))
 }
 
 // 圣杯模式继承
@@ -271,4 +261,24 @@ function extend(Target, Origin) {
 
   Target.prototype.constructor = Target;
   Target.prototype.uber = Origin.prototype;
+}
+
+// join slice ... concat indexOf includes
+// animation keyframes transition transform-style compositor
+
+// DOMcontentLoaded
+
+function Clone(obj) {
+  if(!obj) return obj
+    let target = Array.isArray(obj) ? [] : {};
+    for(let key in obj) {
+      if(obj.hasOwnProperty(key)) {
+        if(typeof obj[key] == 'object' && obj != null){
+          target[key] =  Clone(obj[key])
+        } else {
+          target[key] =obj[key]
+        }
+      }
+    }
+    return target;
 }

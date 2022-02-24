@@ -1,10 +1,12 @@
-1. new
+1. new  instanceOf
 2. call & apply
 3. bind
 4. 防抖 debounce
 5. 节流 throttle
 6. deepClone, real deepCopy
 7. curry柯里化
+8. 用setTimeout实现setInterval  用setInterval实现setTimeout
+9. 实现(a == 1 && a == 2 && a == 3)为true
 
 ### new
 ```js
@@ -23,7 +25,7 @@ var obj = new Object("name","sansan");
 // 通过new创建的每个对象将最终被[[Prototype]]链接到这个函数的prototype对象上
 // 如果函数没有返回对象类型Object(包含Function，Array，Date，RegExg，Error)，那么new表达式中的函数调用将返回对象引用
 // 模拟 new
-function create() {
+function New() {
   // 创建一个空的对象
   let obj = new Object()
   // 获得构造函数
@@ -34,6 +36,18 @@ function create() {
   let result = Con.apply(obj, arguments)
   // 确保 new 出来的是个对象
   return typeof result === 'object' ? result : obj
+}
+
+function instanceOf(father, child) {
+  const fp = father.prototype
+  var cp = child.__proto__
+  while (cp) {
+    if (cp === fp) {
+      return true
+    }
+    cp = cp.__proto__
+  }
+  return false
 }
 
 // 模拟Object.create()
@@ -398,11 +412,11 @@ function deepCopy(ori) {
   const type = getType(ori);
   let copy;
   switch (type) {
-    case 'array':
+    case 'array': // 递归
       return copyArray(ori, type, copy);
-    case 'object':
+    case 'object': // 递归
       return copyObject(ori, type, copy);
-    case 'function':
+    case 'function': // eval
       return copyFunction(ori, type, copy);
     default:
       return ori;
@@ -462,4 +476,39 @@ const currySum = curry(sum);
 console.log(currySum(1)(2)(3)(4)); // 10
 // currySum(1, 2)(3)(4); // 10
 // currySum(1)(2, 3)(4); // 10
+```
+
+### 用setTimeout实现setInterval  用setInterval实现setTimeout
+```js
+function mySetTimout(fn, delay) {
+  let timer = null
+  const interval = () => {
+    fn()
+    timer = setTimeout(interval, delay)
+  }
+  setTimeout(interval, delay)
+  return {
+    cancel: () => {
+      clearTimeout(timer)
+    }
+  }
+}
+
+function mySetInterval(fn, delay) {
+  const timer = setInterval(() => {
+    fn()
+    clearInterval(timer)
+  }, delay)
+}
+```
+
+### 实现(a == 1 && a == 2 && a == 3)为true
+```js
+var val = 0;
+Object.defineProperty(window, 'a', {
+    get: function () {
+        return ++val;
+    }
+});
+console.log(a == 1 && a == 2 && a == 3)
 ```

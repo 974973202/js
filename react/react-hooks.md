@@ -402,7 +402,7 @@ createRef
 
 ### useLayoutEffect
 - useEffect：浏览器渲染完成后，用户看到新的渲染结果之后
-- useLayoutEffectHook：完成了DOM改动，但还没有呈现给用户
+- useLayoutEffectHook  DOM加载完成还未渲染
 
 - 应该尽量使用useEffect，因为它不会导致渲染阻塞，如果出现了问题，再考虑使用useLayoutEffectHook
 

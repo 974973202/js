@@ -60,7 +60,7 @@ es5 scopechain  es6 outer
 
 ### 判断一个object是否是数组
 1. 使用 Object.prototype.toString.call 来判断是否是数组
-2. 使用 原型链 来完成判断
+2. 使用 原型链 来完成判断  Object.setPrototypeOf
 ```js
 function isArray(obj){
  return obj.__proto__ === Array.prototype;
@@ -376,6 +376,14 @@ with(obj) {
 ```js
 let res = obj?.data?.list
 <=等价=> let res = obj && obj.data && obj.data.list
+```
+
+### !.
+```js
+// !. 在变量名后添加!，可以断言排除undefined和null类型
+let a: string | null | undefined
+a.length // error
+a!.length // ok
 ```
 
 ### for-in 中一定要有 hasOwnProperty 的判断（即禁止直接读取原型对象的属性）

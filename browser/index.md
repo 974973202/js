@@ -111,7 +111,7 @@ JS文件不只是阻塞DOM的构建，它会导致CSSOM也阻塞DOM的构建。
 当 DOMContentLoaded 事件触发时,仅当 DOM 解析完成后,不包括样式表,图片。我们前面提到 CSS 加载会阻塞 Dom 的渲染和后面 js 的执行,js 会阻塞 Dom 解析,所以我们可以得到结论:当文档中没有脚本时,浏览器解析完文档便能触发 DOMContentLoaded 事件。如果文档中包含脚本,则脚本会阻塞文档的解析,而脚本需要等 CSSOM 构建完成才能执行。在任何情况下,DOMContentLoaded 的触发不需要等待图片等其他资源加载完成。
 当 onload 事件触发时,页面上所有的 DOM,样式表,脚本,图片等资源已经加载完毕。
 DOMContentLoaded -> load。
-
+### 加载解析渲染
 ### defer 和 async 的区别 ?
 当浏览器碰到 script 脚本的时候 :
 1. <script src="script.js">

@@ -1,5 +1,32 @@
 
 // [fetch]: https://www.cnblogs.com/libin-1/p/6853677.html
+// Fetch 是 Web 提供的一个用于获取资源的接口，如果要终止 fetch 请求，则可以使用 Web 提供的 AbortController 接口。
+
+// 首先我们使用 AbortController() 构造函数创建一个控制器，然后使用 AbortController.signal 属性获取其关联 AbortSignal 对象的引用。
+//当一个 fetch request 初始化时，我们把 AbortSignal 作为一个选项传递到请求对象 (如下：{signal}) 。
+//这将信号和控制器与获取请求相关联，然后允许我们通过调用 AbortController.abort() 中止请求
+// const controller = new AbortController();
+// let signal = controller.signal;
+//  console.log('signal 的初始状态: ', signal);
+
+// const downloadBtn = document.querySelector('.download');
+// const abortBtn = document.querySelector('.abort');
+
+// downloadBtn.addEventListener('click', fetchVideo);
+
+// abortBtn.addEventListener('click', function() {
+//   controller.abort();
+//  console.log('signal 的中止状态: ', signal);
+// });
+
+// function fetchVideo() {
+//   //...
+//   fetch(url, {signal}).then(function(response) {
+//     //...
+//   }).catch(function(e) {
+//     reports.textContent = 'Download error: ' + e.message;
+//   })
+// }
 
 import { Toast } from 'antd-mobile'
 
