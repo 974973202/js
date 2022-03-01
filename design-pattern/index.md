@@ -29,7 +29,7 @@ javascript 动态类型语言 弱类型语言
 > 使用方只关注接口而不关注具体类的实现
 
 ### 多态
-```
+```js
 var makeSound = function( animal ) {
   if( animal instanceof Duck ) {
     console.log('gagaga')
@@ -44,7 +44,7 @@ makeSound( new Dog() )
 makeSound( new Chicken() )
 ```
 - 开闭原则拆分
-```
+```js
 var makeSound = function ( animal ) {
   animal.sound();
 }
@@ -79,7 +79,7 @@ makeSound( new Duck() )
 > 策略模式指的是定义一系列的算法，把它们一个个封装起来。
 > (将不变的部分和变化的部分隔开来是每个设计模式的主题)
 > 策略模式的目的就是将算法的使用与算法的实现分离开来 
-```
+```js
   var performanceS = function () {
   }
   performanceS.prototype.calculate = function (salary) {
@@ -121,7 +121,7 @@ makeSound( new Duck() )
 
 ### 代理模式
 小明送花 - 中转站处理
-```
+```js
 //虚拟代理把一些开销很大的对象，延迟到真正需要它的时候才去创建
 var Flower = function () {}
 
@@ -147,7 +147,7 @@ var A = {
 }
 ```
 - 用高阶函数动态创建代理
-```
+```js
 /**************** *****************/ 
   var mult = function() {
     var a = 1; 
@@ -283,7 +283,7 @@ subject.notify()
 象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它为止
 - 最大优点：请求发送者只需要知道链中的第一个节点，从而弱化了发送者和一组接收者之间
 的强联系.
-```
+```js
   //采用一种更灵活的方式，让各个节点可以灵活拆分和重组
 
   // 500元订单
@@ -340,7 +340,7 @@ subject.notify()
   chainOrder500.passRequest(1, false, 0);
   //假如又想出了300元方案，我们就在该链中加一个节点即可
 ```
-```
+```js
   //利用js的函数型特性,用一种更加方便的方法来创建职责链
   Function.prototype.after = function (fn) {
     var self = this
@@ -389,7 +389,7 @@ subject.notify()
 ### 中介者模式
 - 中介者模式的作用就是解除对象与对象之间的紧耦合关系
 - 以中介者和对象之间的一对多关系取代了对死昂之间的网状多对多关系
-```
+```js
   function Player(name, teamColor) {
     this.name = name //角色名字
     this.teamColor = teamColor //队伍颜色
@@ -520,7 +520,7 @@ subject.notify()
 - 装饰器模式能够在不改变对象自身的基础上，在程序运行期间给对象动态地添加职责
 - 跟继承相比，这是一种更轻便灵活的做法，这是一种‘即用即付’的方式
 - 装饰器其实也是一种包装器(wrapper)
-```
+```js
   var Plane = function () { }
 
   Plane.prototype.fire = function () {
@@ -556,7 +556,7 @@ subject.notify()
 在一个古老的顶目中，这个函数的源代码被隐藏在一个完美不愿碰触的阴暗角落里。
 现在需要一个办法，在不改变函数源代码的情况下．能给函数增加功能．这正是开放一封闭
 原则给我们指出的光明道路。
-```
+```js
   var a = function () {
     console.log(1)
   }
@@ -568,7 +568,7 @@ subject.notify()
   }
   a()
 ```
-```
+```js
   //采取不污染原型的方式
   var before = function (fn, beforeFn) {
     return function () {

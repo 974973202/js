@@ -1,9 +1,19 @@
 ## webpack
 https://juejin.im/post/5e6f4b4e6fb9a07cd443d4a5
 
-### Webpack 的构建流程主要有哪些环节
-### Webpack 打包的整个过程
+### Webpack 的构建流程主要有哪些环节  Webpack 打包的整个过程
+1. 初始化参数：根据用户在命令窗口输入的参数以及 webpack.config.js 文件的配置，得到最后的配置。
+2. 开始编译：根据上一步得到的最终配置初始化得到一个 compiler 对象，注册所有的插件 plugins，插件开始监听 webpack 构建过程的生命周期的环节（事件），不同的环节会有相应的处理，然后开始执行编译。
+3. 确定入口：根据 webpack.config.js 文件中的 entry 入口，开始解析文件构建 AST 语法树，找出依赖，递归下去。
+4. 编译模块：递归过程中，根据文件类型和 loader 配置，调用相应的 loader 对不同的文件做不同的转换处理，再找出该模块依赖的模块，然后递归本步骤，直到项目中依赖的所有模块都经过了本步骤的编译处理。
+5. 编译过程中，有一系列的插件在不同的环节做相应的事情，比如 UglifyPlugin 会在 loader 转换递归完对结果使用 UglifyJs 压缩覆盖之前的结果；再比如 clean-webpack-plugin ，会在结果输出之前清除 dist 目录等等。
+6. 完成编译并输出：递归结束后，得到每个文件结果，包含转换后的模块以及他们之间的依赖关系，根据 entry 以及 output 等配置生成代码块 chunk。
+7. 打包完成：根据 output 输出所有的 chunk 到相应的文件目录
+
 ### Loader 和 Plugin 有哪些不同
+Loader，直译为"加载器"。主要是用来解析和检测对应资源，负责源文件从输入到输出的转换，它专注于实现资源模块加载
+
+Plugin，直译为"插件"。主要是通过webpack内部的钩子机制，在webpack构建的不同阶段执行一些额外的工作，它的插件是一个函数或者是一个包含apply方法的对象，接受一个compile对象，通过webpack的钩子来处理资源
 
 ### 常见webpack工具名称
 - 抽离css：mini-css-extract-plugin

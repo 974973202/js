@@ -20,12 +20,27 @@ declare 声明形式
 枚举(enum)：对代码具有侵入式
 
 ### Record
+<!-- type Record<K extends keyof any, T> = {[P in K]: T}; -->
 Record能够快速创建对象类型。它的使用方式是Record<K, V>，能够快速的为object创建统一的key和value类型
 ```js
 const person: Record<string, string> = {
   name: 'l',
   age: 18 // X --- value type should string
 } 
+
+interface IUser {
+  name: string;
+  age?: number;
+  class?: string;
+  sex: string;
+}
+type IRH = Record<keyof IUser, string>
+let hh: IRH = {
+  name: '6',
+  age: '6',
+  class: '6',
+  sex: '0'
+}
 ```
 ### Pick
 Pick：主要作用是从一组属性中拿出某个属性，并将其返回
@@ -33,6 +48,16 @@ Pick的使用方法是Pick<P, K>，如（P）类型中拥有name,age,desc三个�
 ### Omit
 Omit：主要作用是从一组属性中排除某个属性，并将排除属性后的结果返回。
 Omit的使用方法是Omit<P, K>，与Pick的结果是相反的，如果说Pick是取出，那么Omit则是过滤的效果.
+```ts
+type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
+
+type IOF = Omit<IUser, 'sex'>
+let ff: IOF = {
+  name: '4',
+  age: 4,
+  class: '4',
+}
+```
 ### Exclude
 Exclude：从一个联合类型中排除掉属于另一个联合类型的子集
 来看下，Exclude使用形式是Exclude<T, S>，如果T中的属性在S不存在那么就会返回
@@ -60,11 +85,27 @@ interface Person {
 const a: Partial<Person> = {} // name?: string | undefined
 ```
 
+### Required：将传入的属性变为必选项
+```ts
+type Required<T> = { [P in keyof T]-?: T[P] };
+type IRC = Required<IUser>;
+
+let cc: IRC = {
+  name: '2',
+  age: 2,
+  class: '2',
+  sex: '0'
+}
+```
+
 ### never, void 的区别
 ```js
 // never，never表示永远不存在的类型。比如一个函数总是抛出错误，而没有返回值。或者一个函数内部有死循环，永远不会有返回值。函数的返回值就是never类型。
 // void, 没有显示的返回值的函数返回值为void类型。如果一个变量为void类型，只能赋予undefined或者null
 ```
+
+### any unknown
+<!-- any 会绕过类型检查，直接可用，而 unkonwn 则必须要在判断完它是什么类型之后才能继续用，会使我们的代码更加安全。 -->
 
 
 

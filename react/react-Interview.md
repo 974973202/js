@@ -12,10 +12,6 @@
     
     React的开发者可能知道，react是没有模板的，直接就是一个渲染函数，它中间返回的就是一个虚拟DOM树，
     React推荐的做法是  JSX + inline style, 也就是把HTML和CSS全都写进JavaScript了,即'all in  js'。
-3.构建工具
-    vue提供了CLI 脚手架，可以帮助你非常容易地构建项目。
-    
-    React 在这方面也提供了 create-react-app，但是现在还存在一些局限性，不能配置等等
 4.数据绑定
     vue是实现了双向数据绑定的mvvm框架，当视图改变更新模型层，当模型层改变更新视图层。
     在vue中，使用了双向绑定技术，就是View的变化能实时让Model发生变化，而Model的变化也能实时更新到View。
@@ -105,25 +101,24 @@ batchedUpdates
 1 props
 2 const Context = React.createContext();  Provider  Consumer
 3 ref
-4 ctx = createContext(0)    ctx.Provider     子 useContex(ctx)
+4 ctx = createContext(0)    ctx.Provider     子 useContext(ctx)
 
-按需加载
-lazy Suspense
 
 ReactDOM.createPortal 创建根节点外的弹窗
 
 ### react 性能优化
-1. shouldComponentUpdata
+1. shouldComponentUpdata  pureComponent
 2. react.memo useMemo useCallback 
 3. key
-4. lazy Suspense
+4. 按需加载 lazy Suspense
 5. 合并多个setState
 
 ### Fiber架构  react的渲染过程
 <!-- 两个阶段 调度阶段（调度器，协调器，渲染器），提交阶段
 
 jsx会被babel经过ast解析成React.createElement，
-而React.createElement函数执行之后就是virtual-dom（jsx对象）
+而React.createElement函数执行之后就是virtual-dom（jsx对象）（ReactElement）
+virtual-dom -》 Fiber -> Fiber[] -> DOM
 在mount的时候，render阶段会根据jsx对象生成新的Fiber节点
 在update的时候，render阶段会根据最新的jsx和老的Fiber进行对比，生成新的Fiber -->
 
@@ -151,9 +146,6 @@ componentDidUpdate
 componentWillUnmount
 ```
 提交阶段：
-
-
-JSX本质：语法糖，通过createElement(h函数)生成vnode
 
 合成事件机制
   react 16绑定到document

@@ -354,6 +354,7 @@ const list = useMemo(() => {
 
 ### ImperativeHandle Hook
 让父组件拿到子组件返回的值
+可以让你在使用 ref 时，自定义暴露给父组件的实例值，不能让父组件想干嘛就干嘛
 例： APP拿到Test组件返回的method方法
 
 - 函数：useImperativeHandleHook
@@ -366,6 +367,7 @@ function Test(props, ref) {
         //如果使用了依赖项，则第一次调用后，会进行缓存，只有依赖项发生变化时才会重新调用函数
         //相当于给 ref.current = 1
         return {
+            // 只给App父组件method方法
             method(){
                 console.log("Test Component Called")
             }
@@ -399,6 +401,8 @@ useRef可以保存状态  const ref = useRef(100)
 
 createRef
 
+React.createRef用于class组件，React.useRef用于函数组件
+
 
 ### useLayoutEffect
 - useEffect：浏览器渲染完成后，用户看到新的渲染结果之后
@@ -412,4 +416,3 @@ createRef
 ### React Hooks
 
 - [ReactHooks 详解]https://juejin.im/post/5dbbdbd5f265da4d4b5fe57d
-- [ReactHooksAPI]https://juejin.im/post/5e53d9116fb9a07c9070da44

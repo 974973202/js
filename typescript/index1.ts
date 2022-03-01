@@ -181,8 +181,17 @@ declare function $(readyFunc: () => void): void;
 declare function $(selector: string): JqueryInstance;
 
 
-// keyof 获取当前属性组成的联合类型
+// keyof 获取当前属性组成的联合类型  作用是获取键
  let obj = { name: 'l', age: 18 }
- type keyobj = keyof typeof obj;
+ type keyobj = keyof typeof obj; // name age
 
  // type 可以使用元组类型   interface 能够合并声明
+
+ interface IUser {
+  name: string;
+  age?: number;
+  class?: string;
+  sex: string;
+}
+
+type keys = keyof IUser;

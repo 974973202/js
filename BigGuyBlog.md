@@ -39,6 +39,4 @@ https://juejin.im/post/5b45c57c51882519790c7441
 2、React常见的通信方式；
 
 百度
-1、微信小程序与Vue的区别；
-2、Vue组件间通信 vuex原理；
 3、React如何实现自己的事件机制？

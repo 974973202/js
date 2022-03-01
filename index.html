@@ -12,13 +12,18 @@
     width: 300px;
     height: 300px;
     border: 1px solid red;
+    position: relative;
   }
   .no {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto; 
     width: 100px;
     height: 100px;
-    margin: 0 auto;
     background-color: red;
-    line-height: 300px;
   }
 </style>
 
@@ -27,44 +32,20 @@
 <div class="yes">
   <div class="no"></div>
 </div>
+<hrader>定义了文档的头部区域</header>	 
+  <footer>定义了文档的尾部区域</footer>	 
+  <span>定义文档的导航</nav>	
+  <section> 定义文档中的节（section、区段）</section>	
+  <article> 定义页面独立的内容区域</article>	
+  <aside>	定义页面的侧边栏内容</aside>
+  <detailes>用于描述文档或文档某个部分的细节</detailes>	
+  <summary>标签包含 details 元素的标题</summary>	
+  <dialog>	定义对话框，比如提示框</dialog>
 </body>
 <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
 <!-- <script type="text/javascript" src="./work/fetch.js"></script> -->
 <!-- <script type="text/javascript" src="./index.js"></script> -->
 <script>
-  function ajax(method, url, callback, data, flag) {
-  var xhr = null;
-  if (window.XMLHttpRequest) {
-    xhr = new XMLHttpRequest();
-  } else {
-    xhr = new ActiveXObject('Microsoft.XMLHttp') //兼容IE
-  }
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState == 4) {
-      if (xhr.status == 200) {
-        callback(xhr.responseText);
-      } else {
-        console.log('error');
-      }
-    }
-  }
-  method = method.toUpperCase();
-  if (method == 'GET') {
-    xhr.open(method, url + '?' + data + '&timer=' + new Date().getTime(), flag);
-    xhr.send();
-  } else if (method == 'POST') {
-    xhr.open(method, url, flag);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.send(data);
-  }
-}
-ajax('post', 'https://diyxc.my8m.com/api/common/login',function (m) {
-  console.log(m)
-}, JSON.stringify({
-    class_id: 1,
-    code: "0719rv0w3CMx0Y2ADq1w3RdInA09rv0g",
-    type: "1",
-  }), true)
   // const getId = document.getElementById('yes');
   // console.log(getId)
   // function* myGenerator() {
