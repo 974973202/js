@@ -11,9 +11,50 @@ https://juejin.im/post/5e6f4b4e6fb9a07cd443d4a5
 7. 打包完成：根据 output 输出所有的 chunk 到相应的文件目录
 
 ### Loader 和 Plugin 有哪些不同
-Loader，直译为"加载器"。主要是用来解析和检测对应资源，负责源文件从输入到输出的转换，它专注于实现资源模块加载
+Loader，文件加载器：对文件进行转换。主要是用来解析和检测对应资源，负责源文件从输入到输出的转换，它专注于实现资源模块加载
+```js
+const loaderUtils = require("loader-utils");
+// 不能使用剪头函数
+module.exports = function (source) {
+  // console.log(this.query)
+  const options = loaderUtils.getOptions(this);
+  //定义⼀一个异步处理理
+  // 通过this.async 返回一个异步loader 
+  const callback = this.async();
+  // 关掉loader缓存
+  // this.cacheable(false)
+  setTimeout(() => {
+    const result = source.replace("webpack", options.name);
+    callback(null, result);
+  }, 3000);
+};
+```
 
-Plugin，直译为"插件"。主要是通过webpack内部的钩子机制，在webpack构建的不同阶段执行一些额外的工作，它的插件是一个函数或者是一个包含apply方法的对象，接受一个compile对象，通过webpack的钩子来处理资源
+Plugin，插件：扩展器增强功能。主要是通过webpack内部的钩子机制，在webpack构建的不同阶段执行一些额外的工作，它的插件是一个函数或者是一个包含apply方法的对象，接受一个compile对象，通过webpack的钩子来处理资源
+```js
+apply(compiler) {
+    //hooks.emit 定义在某个时刻   
+    // 同步的写法   
+    // compiler.hooks.compile.tap
+    // 异步的写法
+    compiler.hooks.emit.tapAsync(
+      "CopyrightWebpackPlugin", // 类
+      (compilation, cb) => {
+        console.log(compilation.assets, '123456789')
+        compilation.assets["copyright.txt"] = {
+          source: function () {
+            return "hello copy";
+          },
+          size: function () {
+            return 20;
+          }
+        };
+        cb();
+      }
+    );
+    
+  }
+```
 
 ### 常见webpack工具名称
 - 抽离css：mini-css-extract-plugin

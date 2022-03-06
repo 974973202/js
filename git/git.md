@@ -62,3 +62,10 @@ git log
 
 ### 添加子模块
 git submodule add https://github.com/chaconinc/DbConnector
+
+### fork 
+git remote -v 
+git remote add upstream git@github.com:xxx/xxx.git
+git fetch upstream
+git merge upstream/master
+git push
