@@ -362,3 +362,6 @@ export const daysDiff = (date, date2) => Math.ceil(Math.abs(date - date2) / 8640
 export const copyTextToClipboard = async (text) => {
   await navigator.clipboard.writeText(text);
 };
+
+// 判断文件类型是否以.xxx格式结尾
+// 1. 'xx.png'.endsWith('.png', 4)    2. 'xx.png'.split('.').slice(-1)[0] === 'png'

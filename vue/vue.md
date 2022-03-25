@@ -438,7 +438,7 @@ vue3生命周期：
 
 如何理解 ref toRef toRefs
   ref 生成值类型的响应式数据  可用于模板和reactive  .value修改值
-  toRef 针对响应式(reactive)对象的prop  用于reactive
+  toRef 针对响应式(reactive)对象的prop  用于reactive   toRef(props, 'title')默认值title
   toRefs 将响应式对象转换为普通对象
 
 watch 和 watchEffect的区别
@@ -453,3 +453,121 @@ composition API 和 React Hooks对比
 
 Vue 中的 computed 是如何实现的
 是⼀个惰性的watcher，在取值操作时根据⾃⾝标记 dirty属性返回上⼀次计算结果/重新计算值 在创建时就进⾏⼀次取值操作，收集依赖变动的对象/属性(将⾃⾝压⼊dep中) 在依赖的对象/属性变动 时，仅将⾃⾝标记dirty致为true
+
+### vue3 setup(props, context)
+```js
+// Props响应式数据  context普通js对象，暴露setup中有用的值：{ attrs, slots, emit, expose } 
+
+import { fetchUserRepositories } from '@/api/repositories'
+import { ref, onMounted } from 'vue'
+
+// 在我们的组件中
+setup (props) {
+  const repositories = ref([])
+  const getUserRepositories = async () => {
+    repositories.value = await fetchUserRepositories(props.user)
+  }
+  onMounted(getUserRepositories) // 在 `mounted` 时调用 `getUserRepositories`
+  return {
+    repositories,
+    getUserRepositories
+  }
+}
+```
+
+### vue3 watch 
+```js
+import { ref, watch } from 'vue'
+const counter = ref(0)
+watch(counter, (newValue, oldValue) => {
+  console.log('The new counter value is: ' + counter.value)
+})
+
+// 应用
+import { fetchUserRepositories } from '@/api/repositories'
+import { ref, onMounted, watch, toRefs } from 'vue'
+
+// 在我们组件中
+setup (props) {
+  // 使用 `toRefs` 创建对 `props` 中的 `user` property 的响应式引用
+  const { user } = toRefs(props)
+  const repositories = ref([])
+  const getUserRepositories = async () => {
+    // 更新 `prop.user` 到 `user.value` 访问引用值
+    repositories.value = await fetchUserRepositories(user.value)
+  }
+  onMounted(getUserRepositories)
+  // 在 user prop 的响应式引用上设置一个侦听器
+  watch(user, getUserRepositories)
+  return {
+    repositories,
+    getUserRepositories
+  }
+}
+```
+
+### vue3  computed
+```js
+const searchQuery = ref('')
+  const repositoriesMatchingSearchQuery = computed(() => {
+    return repositories.value.filter(
+      repository => repository.name.includes(searchQuery.value)
+    )
+  })
+```
+
+### vue3 provide(name<string>, value)  inject(name, value) // value是默认值
+```js
+import { provide } from 'vue'
+import MyMarker from './MyMarker.vue'
+
+export default {
+  components: {
+    MyMarker
+  },
+  setup() {
+    provide('location', 'North Pole')
+    provide('geolocation', {
+      longitude: 90,
+      latitude: 135
+    })
+  }
+}
+
+// src/components/MyMarker.vue 
+import { inject } from 'vue'
+export default {
+  setup() {
+    const userLocation = inject('location', 'The Universe') // 默认值The Universe
+    const userGeolocation = inject('geolocation')
+
+    return {
+      userLocation,
+      userGeolocation
+    }
+  }
+}
+
+// 响应式
+import { provide, reactive, ref } from 'vue'
+import MyMarker from './MyMarker.vue'
+
+export default {
+  components: {
+    MyMarker
+  },
+  setup() {
+    const location = ref('North Pole')
+    const geolocation = reactive({
+      longitude: 90,
+      latitude: 135
+    })
+
+    provide('location', location)
+    provide('geolocation', geolocation)
+    // 这俩响应式数据更改，MyMarker 组件也将自动更新
+  }
+}
+```
+
+### vue3 Teleport
