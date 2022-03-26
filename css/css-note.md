@@ -31,3 +31,6 @@ overflow: hidden;
 overflow: auto;
 -webkit-overflow-scrolling: touch;
 ```
+
+<!-- css使用注意事项 -->
+1. 使用伪元素时 content: 'xx'. xx是中文的时候，尽量使用unicode编码 避免乱码情况

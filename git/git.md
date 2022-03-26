@@ -10,6 +10,14 @@
 2. 当前分支开功能开发完了，提交一版本，一会发现有问题，可能只是一行代码，在提交一次。来来回回提交了好几次代码；
 - 针对这两种情况：
 1. 可以使用 **git stash**，去暂时保存，但不提交代码，等切换回分支的时候，再读取出来开发 **git stash apply**；
+- 保存当前未commit的代码  git stash
+- 保存当前未commit的代码并添加备注  git stash save "备注的内容"
+- 列出stash的所有记录  git stash list
+- 删除stash的所有记录  git stash clear
+- 应用最近一次的stash  git stash apply
+- 应用最近一次的stash，随后删除该记录  git stash pop
+- 删除最近的一次stash  git stash drop
+
 2. 针对第二种情况已经提交了，这时候可以用 **git reset --soft HEAD^**，撤销上一次提交到暂存区，并重新提交内容；
 > 注意：该方法一定要在未提交到远程的commit进行操作，千万不要提交到远程之后在执行此命令。
 > HEAD^的意思是上一个版本，也可以写成HEAD~1
