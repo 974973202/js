@@ -365,3 +365,6 @@ export const copyTextToClipboard = async (text) => {
 
 // 判断文件类型是否以.xxx格式结尾
 // 1. 'xx.png'.endsWith('.png', 4)    2. 'xx.png'.split('.').slice(-1)[0] === 'png'
+
+// 取小数点后两位
+// 1. xxx.toFixed(2)  2. Math.floor(xxx * 100) / 100  3. Number(xxx.toString().match(/^\d+(?:\.\d{0,2})?/))

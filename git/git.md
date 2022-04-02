@@ -1,9 +1,9 @@
 [最常见的Git问题和操作清单汇总]https://juejin.im/post/5d5d61e96fb9a06ace5254bd
-- 删除本地分支
-命令行 : $ git branch -d <BranchName>
 
-- 删除远程分支
-命令行 : $ git push origin --delete <BranchName>
+- 本地分支改名： git branch -m old_branch new_branch
+- 删除本地分支： git branch -d <BranchName>
+
+- 删除远程分支： git push origin --delete <BranchName>
 
 ### 场景：
 1. 当前分支开发到了一半需要紧急切换其他分支，如果不提交，可能不允许切换分支或者出现把当前的修改带到了新的分支的情况，所有先提交一个临时的，回头再次开发；

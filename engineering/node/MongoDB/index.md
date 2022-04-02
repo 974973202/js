@@ -40,3 +40,11 @@ MongoDB 教程[https://www.yuque.com/books/share/27406466-0fb6-48da-88db-0270fbe
 关系型数据库的优势：
   1. 复杂查询可以用SQL语句方便的在一个表以及多个表之间做非常复杂的数据查询。
   2. 事务支持使得对于安全性能很高的数据访问要求得以实现。对于这两类数据库，对方的优势就是自己的弱势，反之亦然。
+
+MongoDB Server 2.4.x: mongoose ^3.8 or 4.x
+MongoDB Server 2.6.x: mongoose ^3.8.8 or 4.x
+MongoDB Server 3.0.x: mongoose ^3.8.22, 4.x, or 5.x
+MongoDB Server 3.2.x: mongoose ^4.3.0 or 5.x
+MongoDB Server 3.4.x: mongoose ^4.7.3 or 5.x
+MongoDB Server 3.6.x: mongoose 5.x
+MongoDB Server 4.0.x: mongoose ^5.2.0
