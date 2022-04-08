@@ -195,3 +195,5 @@ declare function $(selector: string): JqueryInstance;
 }
 
 type keys = keyof IUser;
+
+// &符号 就是将多个类型合并为一个类型。

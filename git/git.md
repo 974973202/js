@@ -77,3 +77,40 @@ git remote add upstream git@github.com:xxx/xxx.git
 git fetch upstream
 git merge upstream/master
 git push
+
+### --
+代码 fork 一份到自己的仓库
+git clone https://github.com/xxx.git
+cd xxx
+// 添加主代码库
+git remote add upstream https://github.com/xxx.git
+
+// 拉去主仓库的代码
+git fetch upstream
+// 同步对应分支的代码
+git rebase upstream/master
+git rebase upstream/feature
+
+// 先从 master 切换至 feature
+git checkout feature
+// 然后从 feature 上切一个新的分支出来
+git checkout -b feature-xxx
+
+本地提交之前要先运行好 npm run test 和 npm run lint 以确保所有的代码检验都通过。
+
+// 提交 pr
+自己的修改提交到自己 fork 过来的仓库相对应的分支上面去
+git add 修改文件
+git commit -m "xxx"
+git push origin feature-xxx
+
+
+// 修改 pr 因为很大部分的 pr 其实都会被指出意见
+git add 修改文件
+git commit -m "fix: xxxx"
+git fetch upstream
+// 这里注意分支
+git rebase upstream/feature
+// 然后将修改提交到之前到分支，这时候github会自动帮你把提交同步过去的
+git push origin feature-xxx
+
