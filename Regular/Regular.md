@@ -161,7 +161,7 @@ console.log(result);
 ```
 
 - 偶数情况
-```
+```js
 var string1 = "12345678",
 string2 = "123456789";
 reg = /(?!^)(?=(\d{3})+$)/g;
@@ -171,6 +171,7 @@ console.log(result);
 result = string2.replace(reg, ',');
 console.log(result); 
 // => "123,456,789"
+// toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'); // 千分位切保留小数点后两位  398,944.02
 ```
 
 - 其他形式
