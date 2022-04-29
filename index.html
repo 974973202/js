@@ -8,23 +8,27 @@
   <title>Document</title>
 </head>
 <style>
-  .yes{
-    width: 300px;
-    height: 300px;
-    border: 1px solid red;
-    position: relative;
-  }
-  .no {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto; 
-    width: 100px;
-    height: 100px;
-    background-color: red;
-  }
+  .progress-9 {    
+  --r1: 154%;
+  --r2: 68.5%;
+  width:60px;
+  height:60px;
+  border-radius: 50%; 
+  background:
+    radial-gradient(var(--r1) var(--r2) at top ,#0000 79.5%,#269af2 80%) center left,
+    radial-gradient(var(--r1) var(--r2) at bottom,#269af2 79.5%,#0000 80%) center center,
+    radial-gradient(var(--r1) var(--r2) at top ,#0000 79.5%,#269af2 80%) center right,
+    #ccc;
+  background-size: 50.5% 220%;
+  background-position: -100% 0%,0% 0%,100% 0%;
+  background-repeat:no-repeat;
+  animation:p9 5s infinite linear;
+}
+@keyframes p9 {
+    33%  {background-position:    0% 33% ,100% 33% ,200% 33% }
+    66%  {background-position: -100%  66%,0%   66% ,100% 66% }
+    100% {background-position:    0% 100%,100% 100%,200% 100%}
+}
 </style>
 
 <body>
@@ -32,15 +36,8 @@
 <div class="yes">
   <div class="no"></div>
 </div>
-<hrader>定义了文档的头部区域</header>	 
-  <footer>定义了文档的尾部区域</footer>	 
-  <span>定义文档的导航</nav>	
-  <section> 定义文档中的节（section、区段）</section>	
-  <article> 定义页面独立的内容区域</article>	
-  <aside>	定义页面的侧边栏内容</aside>
-  <detailes>用于描述文档或文档某个部分的细节</detailes>	
-  <summary>标签包含 details 元素的标题</summary>	
-  <dialog>	定义对话框，比如提示框</dialog>
+
+  <div class="progress-9"></div>
 </body>
 <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
 <!-- <script type="text/javascript" src="./work/fetch.js"></script> -->
