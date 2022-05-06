@@ -413,6 +413,42 @@ React.createRef用于class组件，React.useRef用于函数组件
 - useLayoutEffectHook的挂载更新快于useEffect
 
 
+### useContext
+- 配合React.createContext实现跨组件共享
+```js
+// 1. createContext
+const TestContext = React.createContext({});
+// 2. 组件代码
+<TestContext.Provider value={{ name: 'lzx' }}>...</TestContext.Provider>
+// 3. useContext
+const { name } = useContext(TestContext)
+```
+```js
+// mobx-react-lite配合useContext
+// 1. mobx...
+export default class Test {
+  count = 0;
+  constructor() {
+    makeAutoObservable(this);
+  }
+  increase() {
+    this.count += 1
+  }
+  ...
+}
+// 2. createContext
+const stores = React.createContext({
+  test: new Test(),
+  ...
+})
+export default stores;
+// 3. useContext 简单包装简化调用
+export default useStores = () => React.useContext(stores);
+// 4 使用
+const { test: { count } } = useStores()
+```
+
+
 ### React Hooks
 
 - [ReactHooks 详解]https://juejin.im/post/5dbbdbd5f265da4d4b5fe57d
