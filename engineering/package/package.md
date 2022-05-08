@@ -12,10 +12,17 @@
 我们的项目可能依赖一个或多个外部依赖包，根据依赖包的不同用途，我们将他们配置在下面几个属性下：dependencies、devDependencies、peerDependencies、bundledDependencies、optionalDependencies
 
 - dependencies 指定了项目运行所依赖的模块，开发环境和生产环境的依赖模块都可以配置到这里
+  - 指定项目运行时所依赖的模块  loadsh
+
 - devDependencies 有一些包有可能你只是在开发环境中用到，例如你用于检测代码规范的 eslint ,用于进行测试的 jest ，用户使用你的包时即使不安装这些依赖也可以正常运行，反而安装他们会耗费更多的时间和资源，所以你可以把这些依赖添加到 devDependencies 中，这些依赖照样会在你本地进行 npm install 时被安装和管理，但是不会被安装到生产环境
+  - 指定项目开发时所需要的模块，主要是用来打包，解析文件的一些包
+
 - peerDependencies 用于指定你正在开发的模块所依赖的版本以及用户安装的依赖包版本的兼容性。 
+  - 指定当前模块所在的宿主环境所需要的模块及其版本
+  
 - optionalDependencies 某些场景下，依赖包可能不是强依赖的，这个依赖包的功能可有可无，当这个依赖包无法被获取到时，你希望 npm install 继续运行，而不会导致失败，你可以将这个依赖放到 optionalDependencies 中，注意 optionalDependencies 中的配置将会覆盖掉 dependencies 所以只需在一个地方进行配置
 * 当然，引用 optionalDependencies 中安装的依赖时，一定要做好异常处理，否则在模块获取不到时会导致报错
+
 - bundledDependencies 的值是一个数组，数组里可以指定一些模块，这些模块将在这个包发布时被一起打包
 
 - main 属性可以指定程序的主入口文件
