@@ -43,3 +43,9 @@ nvm use [version] [arch] ：使用制定版本node。可指定32/64位。
 nvm root [path] ：设置存储不同版本node的目录。如果未设置，默认使用当前目录。
 
 nvm version ：显示nvm版本。version可简化为v
+
+
+### npm 
+npm查看源：npm config get registry
+npm源：npm config set registry https://registry.npmjs.org
+npm淘宝源：npm config set registry https://registry.npm.taobao.org
