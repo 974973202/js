@@ -571,3 +571,403 @@ export default {
 ```
 
 ### vue3 Teleport
+
+
+### vue3 父子组件传值
+- 1. props
+```vue
+<!-- 组合式API -->
+<!-- //父组件  -->
+<template>
+  <div>
+    <Child :msg="parentMsg" />
+  </div>
+</template>
+<script>
+import { ref,defineComponent } from 'vue'
+import Child from './Child.vue'
+export default defineComponent({
+  components:{
+    Child
+  },
+  setup() {
+    const parentMsg = ref('父组件信息')
+    return {
+      parentMsg
+    };
+  },
+});
+</script>
+
+//子组件
+<template>
+    <div>
+        {{ parentMsg }}
+    </div>
+</template>
+<script>
+import { defineComponent,toRef } from "vue";
+export default defineComponent({
+    props: ["msg"],// 如果这行不写，下面就接收不到
+    setup(props) {
+        console.log(props.msg) //父组件信息
+        let parentMsg = toRef(props, 'msg')
+        return {
+            parentMsg
+        };
+    },
+});
+</script>
+```
+
+```vue
+<!-- setup语法糖 -->
+//父组件
+<template>
+  <div>
+    <Child :msg="parentMsg" />
+  </div>
+</template>
+<script setup>
+import { ref } from 'vue'
+import Child from './Child.vue'
+const parentMsg = ref('父组件信息')
+</script>
+
+//子组件
+<template>
+    <div>
+        {{ parentMsg }}
+    </div>
+</template>
+<script setup>
+import { toRef, defineProps } from "vue";
+const props = defineProps(["msg"]);
+console.log(props.msg) //父组件信息
+let parentMsg = toRef(props, 'msg')
+</script>
+```
+> props中数据流是单项的，即子组件不可改变父组件传来的值
+> 在组合式API中，如果想在子组件中用其它变量接收props的值时需要使用toRef将props中的属性转为响应式
+
+- 2. emit
+```vue
+<!-- 组合式API -->
+<!-- 父组件 -->
+<template>
+  <div>
+    <Child @sendMsg="getFromChild" />
+  </div>
+</template>
+<script>
+import Child from './Child'
+import { defineComponent } from "vue";
+export default defineComponent({
+  components: {
+    Child
+  },
+  setup() {
+    const getFromChild = (val) => {
+      console.log(val) //我是子组件数据
+    }
+    return {
+      getFromChild
+    };
+  },
+});
+</script>
+
+//子组件
+<template>
+  <div>
+    <button @click="sendFun">send</button>
+  </div>
+</template>
+<script>
+import { defineComponent } from "vue";
+export default defineComponent({
+  emits: ['sendMsg'],
+  setup(props, ctx) {
+    const sendFun = () => {
+      ctx.emit('sendMsg', '我是子组件数据')
+    }
+    return {
+      sendFun
+    };
+  },
+});
+</script>
+```
+```vue
+<!-- setup语法糖 -->
+//父组件
+<template>
+  <div>
+    <Child @sendMsg="getFromChild" />
+  </div>
+</template>
+<script setup>
+import Child from './Child'
+const getFromChild = (val) => {
+      console.log(val) //我是子组件数据
+    }
+</script>
+
+//子组件
+<template>
+    <div>
+        <button @click="sendFun">send</button>
+    </div>
+</template>
+<script setup>
+import { defineEmits } from "vue";
+const emits = defineEmits(['sendMsg'])
+const sendFun = () => {
+    emits('sendMsg', '我是子组件数据')
+}
+</script>
+```
+
+- 3. attrs
+```vue
+<!-- 组合式API -->
+//父组件
+<template>
+  <div>
+    <Child @parentFun="parentFun" :msg1="msg1" :msg2="msg2" />
+  </div>
+</template>
+<script>
+import Child from './Child'
+import { defineComponent,ref } from "vue";
+export default defineComponent({
+  components: {
+    Child
+  },
+  setup() {
+    const msg1 = ref('子组件msg1')
+    const msg2 = ref('子组件msg2')
+    const parentFun = (val) => {
+      console.log(`父组件方法被调用,获得子组件传值：${val}`)
+    }
+    return {
+      parentFun,
+      msg1,
+      msg2
+    };
+  },
+});
+</script>
+
+//子组件
+<template>
+    <div>
+        <button @click="getParentFun">调用父组件方法</button>
+    </div>
+</template>
+<script>
+import { defineComponent } from "vue";
+export default defineComponent({
+    emits: ['sendMsg'],
+    setup(props, ctx) {
+        //获取父组件方法和事件
+        console.log(ctx.attrs) //Proxy {"msg1": "子组件msg1","msg2": "子组件msg2"}
+        const getParentFun = () => {
+            //调用父组件方法
+            ctx.attrs.onParentFun('我是子组件数据')
+        }
+        return {
+            getParentFun
+        };
+    },
+});
+</script>
+
+<!-- setup语法糖 -->
+//父组件
+<template>
+  <div>
+    <Child @parentFun="parentFun" :msg1="msg1" :msg2="msg2" />
+  </div>
+</template>
+<script setup>
+import Child from './Child'
+import { ref } from "vue";
+const msg1 = ref('子组件msg1')
+const msg2 = ref('子组件msg2')
+const parentFun = (val) => {
+  console.log(`父组件方法被调用,获得子组件传值：${val}`)
+}
+</script>
+
+//子组件
+<template>
+    <div>
+        <button @click="getParentFun">调用父组件方法</button>
+    </div>
+</template>
+<script setup>
+import { useAttrs } from "vue";
+
+const attrs = useAttrs()
+//获取父组件方法和事件
+console.log(attrs) //Proxy {"msg1": "子组件msg1","msg2": "子组件msg2"}
+const getParentFun = () => {
+    //调用父组件方法
+    attrs.onParentFun('我是子组件数据')
+}
+</script>
+```
+> Vue3中使用attrs调用父组件方法时，方法前需要加上on；如parentFun->onParentFun
+
+- 4. provide/inject
+```vue
+//父组件
+<script>
+import Child from './Child'
+import { ref, defineComponent,provide } from "vue";
+export default defineComponent({
+  components:{
+    Child
+  },
+  setup() {
+    const msg1 = ref('子组件msg1')
+    const msg2 = ref('子组件msg2')
+    provide("msg1", msg1)
+    provide("msg2", msg2)
+    return {
+      
+    }
+  },
+});
+</script>
+
+//子组件
+<template>
+    <div>
+        <button @click="getParentFun">调用父组件方法</button>
+    </div>
+</template>
+<script>
+import { inject, defineComponent } from "vue";
+export default defineComponent({
+    setup() {
+        console.log(inject('msg1').value) //子组件msg1
+        console.log(inject('msg2').value) //子组件msg2
+    },
+});
+</script>
+
+
+//父组件
+<script setup>
+import Child from './Child'
+import { ref,provide } from "vue";
+const msg1 = ref('子组件msg1')
+const msg2 = ref('子组件msg2')
+provide("msg1",msg1)
+provide("msg2",msg2)
+</script>
+
+//子组件
+
+<script setup>
+import { inject } from "vue";
+console.log(inject('msg1').value) //子组件msg1
+console.log(inject('msg2').value) //子组件msg2
+</script>
+```
+> provide/inject一般在深层组件嵌套中使用合适。一般在组件开发中用的居多。
+
+- 5. expose&ref
+```vue
+//父组件
+<template>
+  <div>
+    <Child ref="child" />
+  </div>
+</template>
+<script>
+import Child from './Child'
+import { ref, defineComponent, onMounted } from "vue";
+export default defineComponent({
+  components: {
+    Child
+  },
+  setup() {
+    const child = ref() //注意命名需要和template中ref对应
+    onMounted(() => {
+      //获取子组件属性
+      console.log(child.value.msg) //子组件元素
+
+      //调用子组件方法
+      child.value.childFun('父组件信息')
+    })
+    return {
+      child //必须return出去 否则获取不到实例
+    }
+  },
+});
+</script>
+
+//子组件
+<template>
+    <div>
+    </div>
+</template>
+<script>
+import { defineComponent, ref } from "vue";
+export default defineComponent({
+    setup() {
+        const msg = ref('子组件元素')
+        const childFun = (val) => {
+            console.log(`子组件方法被调用,值${val}`)
+        }
+        return {
+            msg,
+            childFun
+        }
+    },
+});
+</script>
+
+<!-- setup语法糖 -->
+//父组件
+<template>
+  <div>
+    <Child ref="child" />
+  </div>
+</template>
+<script setup>
+import Child from './Child'
+import { ref, onMounted } from "vue";
+const child = ref() //注意命名需要和template中ref对应
+onMounted(() => {
+  //获取子组件属性
+  console.log(child.value.msg) //子组件元素
+
+  //调用子组件方法
+  child.value.childFun('父组件信息')
+})
+</script>
+
+//子组件
+
+<template>
+    <div>
+    </div>
+</template>
+<script setup>
+import { ref,defineExpose } from "vue";
+const msg = ref('子组件元素')
+const childFun = (val) => {
+    console.log(`子组件方法被调用,值${val}`)
+}
+//必须暴露出去父组件才会获取到
+defineExpose({
+    childFun,
+    msg
+})
+</script>
+
+```

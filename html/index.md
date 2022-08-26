@@ -129,6 +129,10 @@ for (let p of searchParams) {
 // ["wd", "蔡徐坤"]
 // ["skill", "篮球"]
 // ["year", "2019"]
+
+// 把键值对列表转换为一个对象
+const params = Object.fromEntries(urlSearchParams.entries());
+// { skill: "篮球", wd: "蔡徐坤", year: "2019" }
 ```
 
 ### ios微信h5视频自动播放

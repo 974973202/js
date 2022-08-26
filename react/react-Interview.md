@@ -2,28 +2,16 @@
 - [React.Fiber原理]https://www.youtube.com/watch?v=ZCuYPiUIONs
 
 ### react和vue的区别  
-1.设计思想
-    vue的官网中说它是一款渐进式框架，采用自底向上增量开发的设计。
+1.状态管理
+    vue响应式 Object.defineProperty Proxy 通过对状态做代理，get 的时候收集以来，然后修改状态的时候就可以触发对应组件的 render
     
-    react主张函数式编程，所以推崇纯组件，数据不可变，单向数据流，当然需要双向的地方也可以手动实现，
-    比如借助 onChange 和 setState 来实现一个双向的数据流。
+    react setState Api触发状态更新的，更新以后就重新渲染整个 vdom。
 2.编写语法
     Vue推荐的做法是webpack+vue-loader的单文件组件格式，vue保留了html、css、js分离的写法
     
     React的开发者可能知道，react是没有模板的，直接就是一个渲染函数，它中间返回的就是一个虚拟DOM树，
     React推荐的做法是  JSX + inline style, 也就是把HTML和CSS全都写进JavaScript了,即'all in  js'。
-4.数据绑定
-    vue是实现了双向数据绑定的mvvm框架，当视图改变更新模型层，当模型层改变更新视图层。
-    在vue中，使用了双向绑定技术，就是View的变化能实时让Model发生变化，而Model的变化也能实时更新到View。
-    (这里我们可以继续深入讲解一下双向数据绑定的原理，我之前的文章手写Vue源码可参考)
-    
-    react是单向数据流，react中属性是不允许更改的，状态是允许更改的。
-    react中组件不允许通过this.state这种方式直接更改组件的状态。自身设置的状态，可以通过setState来进行更改。
-    (注意：React中setState是异步的，导致获取dom可能拿的还是之前的内容，
-    所以我们需要在setState第二个参数（回调函数）中获取更新后的新的内容。)
-    
-    【这里如果你了解深入的话可以尝试描述一下React中setState的异步操作是怎么实现的，Vue中的更新是通过微任务等】
-5.diff算法
+3.diff算法
   vue中diff算法实现流程：
       1.在内存中构建虚拟dom树
       2.将内存中虚拟dom树渲染成真实dom结构
