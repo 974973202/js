@@ -361,8 +361,8 @@ const list = useMemo(() => {
 ```js
 import React, { useRef, useImperativeHandle } from 'react'
 
-function Test(props, ref) {
-    useImperativeHandle(ref, () => {
+function Test(props, testRef) {
+    useImperativeHandle(testRef, () => {
         //如果不给依赖项，则每次运行函数组件都会调用该方法
         //如果使用了依赖项，则第一次调用后，会进行缓存，只有依赖项发生变化时才会重新调用函数
         //相当于给 ref.current = 1
@@ -384,7 +384,7 @@ export default function App() {
     const testRef = useRef();
     return (
         <div>
-            <TestWrapper ref={testRef} />
+            <TestWrapper testRef={testRef} />
             <button onClick={() => {
                 testRef.current.method();
                 // console.log(testRef)
@@ -402,6 +402,31 @@ useRef可以保存状态  const ref = useRef(100)
 createRef
 
 React.createRef用于class组件，React.useRef用于函数组件
+```js
+function Parent() {
+  const PRef = useRef();
+  const handleDetail = () => {
+    PRef.current.get()
+  }
+  return (
+    <Child PRef={PRef}/>
+    <button onClick={handleDetail}></button>
+  )
+}
+
+function Child({ PRef }) {
+
+  PRef.current = {
+    create: () => {},
+    delete: () => {},
+    edit: () => {},
+    get: () => {},
+    save: () => {},
+  }
+
+  return <div></div>
+}
+```
 
 
 ### useLayoutEffect
