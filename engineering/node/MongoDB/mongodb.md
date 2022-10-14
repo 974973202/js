@@ -100,6 +100,64 @@ $not	反转查询表达式的效果，并返回与查询表达式不匹配的文
 $nor	用逻辑NOR连接查询子句，返回所有不能匹配这两个子句的文档。
 $or	用逻辑连接查询子句，或返回与任一子句条件匹配的所有文档。
 
+$regex　　 正则，用于模糊查询
+$size　　　 匹配数组大小
+$maxDistance　 范围查询，距离（基于LBS）
+$mod　　　　 取模运算
+$near　　　 邻域查询，查询附近的位置（基于LBS）
+$exists　　 字段是否存在
+$elemMatch　 匹配内数组内的元素
+$within　　　 范围查询（基于LBS）
+$box　　　　 范围查询，矩形范围（基于LBS）
+$center　　　 范围醒询，圆形范围（基于LBS）
+$centerSphere　范围查询，球形范围（基于LBS）
+$slice　　　　 查询字段集合中的元素（比如从第几个之后，第N到第M个元素
+
+
+### 特定类型查询 
+- sort 
+```js
+// 排序
+sort('test') // 按test从小到大排序
+sort('-test') // 按test从大到小排列
+```
+
+- skip
+```js
+// 跳过
+skip(1) // 跳过1个，显示其他
+```
+
+- limit
+```js
+// 限制
+limit(2) // 显示2个
+```
+
+- select
+```js
+// 显示字段
+select('name grades -_id') // 显示name、grades字段，不显示_id字段
+```
+
+- exect
+```js
+// 执行
+```
+
+- count
+```js
+// 显示集合中的文档数量
+const num = await stuModel.find().count()
+```
+
+- distinct
+```js
+// 返回集合中的grades的值
+distinct('grades') //[ 46, 52, 60, 76, 78, 94 ]
+```
+
+
 ```js
 // 匹配嵌套文档
 // 查询嵌套字段

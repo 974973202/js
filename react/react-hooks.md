@@ -294,6 +294,36 @@ useCallback:
 
 该函数返回：引用相对固定的函数地址
 
+补充知识：类组件用React.PureComponent，函数式组件用React.memo
+```js
+function T(props: any) {
+  console.log('Test Render');
+  return (
+    <div>
+      <h1>{props.text}</h1>
+      <button onClick={props.onClick}>改变文本</button>
+    </div>
+  );
+}
+const Test = React.memo(T);
+
+```
+
+- React.memo 高级用法
+```js
+function MyComponent(props) {
+  /* 使用 props 渲染 */
+}
+function areEqual(prevProps, nextProps) {
+  /*
+  如果把 nextProps 传入 render 方法的返回结果与
+  将 prevProps 传入 render 方法的返回结果一致则返回 true，
+  否则返回 false
+  */
+}
+export default React.memo(MyComponent, areEqual);
+```
+
 ```js
 import React, { useState, useCallback } from "react";
 
@@ -318,7 +348,7 @@ function Parent() {
   // }, [txt]);
   const handleClick = () => {
     setTxt(txt + 1);
-  });
+  };
 
   return (
     <div>
