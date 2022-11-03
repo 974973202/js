@@ -1,3 +1,7 @@
+
+0. 优化方向
+vue: 编译时优化 模板语法在预编译层面做更多的预判，让 Vue 在运行时有更好的性能
+react: 纯js写法，编译时很难做太多事，主要优化方向在运行时。运行时的主要瓶颈就是 CPU（16.6 ms）、IO
 1. vdom
 vue 的 template compiler 是自己实现的，而 react 的 jsx 的编译器是 babel 实现的.
 编译成 render function 后再执行就是我们需要的 vdom。
@@ -59,6 +63,20 @@ react 把渲染流程分为了两部分： render 和 commit
 
 // 之后全部计算完了，就一次性更新到 dom，叫做 commit。
 // 改造成了 render（reconcile + schdule） + commit 两个阶段的渲染。
+
+// react 15架构
+// Reconciler（协调器）—— 负责调用 render 生成虚拟 Dom 进行 Diff，找出变化后的虚拟 Dom
+// Renderer（渲染器）—— 负责接到 Reconciler 通知，将变化的组件渲染在当前宿主环境，比如浏览器，不同的宿主环境会有不同的 Renderer。
+
+// react 16架构  -- Concurrent Mode
+// Scheduler（调度器）—— 调度任务的优先级，高优任务优先进入 Reconciler
+// Reconciler（协调器）—— 负责找出变化的组件（使用 Fiber 重构）
+// Renderer（渲染器）—— 负责将变化的组件渲染到页面上
+
+// React 17 - 稳定 Concurrent Mode 的过渡版本
+// 新的优先级算法 - lanes
+
+// React 18 - 更灵活 Concurrent Renderring
 ```
 第二个问题: 
 现有的 vdom 是不行的，需要再记录下 parent、silbing 的信息。所以 react 创造了 fiber 的数据结构。(链表结构)

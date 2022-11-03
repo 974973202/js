@@ -54,3 +54,83 @@ npm unpublic
 查看全局安装的软件包：npm list -g --depth
 
 [前端工程化-剖析 npm 的包管理机制]https://juejin.im/post/5df789066fb9a0161f30580c
+
+
+### 常用命令的生命周期脚本
+- npm publish 命令的生命周期会执行的脚本顺序：
+
+  - prepublish > prepare > prepublishOnly > publish > postpublish
+  - prepublishOnly: 最重要的一个生命周期，如果你需要在发包之前自动做一些事情，如测试、构建等，可以在这里完成
+　　
+
+ - npm pack 命令的生命周期会执行的脚本顺序：
+
+   - prepare > prepack > postpack
+　　
+
+ - npm install 命令的生命周期会执行的脚本顺序：
+
+   - prepare > preinstall > install > postinstall
+　　
+
+ - npm uninstall 命令的生命周期会执行的脚本顺序：
+
+   - preuninstall > uninstall > postuninstall
+　
+
+ - npm version 命令的生命周期会执行的脚本顺序：
+
+   - preversion > version > postversion
+　　
+
+
+ - npm test 命令的生命周期会执行的脚本顺序：
+
+   - pretest > test > posttest
+　　
+
+ - npm start 命令的生命周期会执行的脚本顺序：
+
+   - prestart > start > poststart
+　　
+
+ - npm stop 命令的生命周期会执行的脚本顺序：
+
+   - prestop > stop > poststop
+　　
+
+ - npm restart 命令的生命周期会执行的脚本顺序：
+
+   - prerestart > restart > postrestart
+　　
+
+ - npm shinkwrap 命令的生命周期会执行的脚本顺序：
+
+   - preshinkwrap > shinkwrap > postshinkwrap
+
+### npm钩子
+- npm钩子，也称npm生命周期。npm默认提供pre和post两个钩子，当我们执行任意npm run脚本时，都将自动触发pre/post的钩子但是这2个钩子的内容需要由你自定义
+```json
+{
+  "scripts": {
+    "preabc": "xxx",
+    "abc": "xxx",
+    "postabc": "xxx"
+  }
+}
+```
+- 当你执行npm run abc时，会自动按照下面的顺序执行
+```js
+npm run preabc -> npm run abc -> npm run postabc
+```
+
+### prepare钩子
+- 一个最常用的生命周期钩子，它的执行时机：
+  - npm install 之后自动执行
+  - npm publish 之前自动执行
+  - 常用的git hook工具husky通常就被放置在这个钩子里执行
+  ```css
+  {
+    prepare: "husky install";
+  }
+  ```
