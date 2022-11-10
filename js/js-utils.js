@@ -14,8 +14,8 @@ export const arrScrambling = (arr) => {
 export const flatten = (arr) => {
   let result = [];
 
-  for(let i = 0; i < arr.length; i++) {
-    if(Array.isArray(arr[i])) {
+  for (let i = 0; i < arr.length; i++) {
+    if (Array.isArray(arr[i])) {
       result = result.concat(flatten(arr[i]));
     } else {
       result.push(arr[i]);
@@ -33,7 +33,7 @@ export const randomString = (len) => {
   let strLen = chars.length;
   let randomStr = '';
   for (let i = 0; i < len; i++) {
-      randomStr += chars.charAt(Math.floor(Math.random() * strLen));
+    randomStr += chars.charAt(Math.floor(Math.random() * strLen));
   }
   return randomStr;
 };
@@ -45,8 +45,8 @@ export const fistLetterUpper = (str) => {
 
 // 手机号中间四位变成*
 export const telFormat = (tel) => {
-  tel = String(tel); 
-   return tel.substr(0,3) + "****" + tel.substr(7);
+  tel = String(tel);
+  return tel.substr(0, 3) + "****" + tel.substr(7);
   //  return tel.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
 };
 
@@ -57,7 +57,7 @@ export const getKebabCase = (str) => {
 
 // 短横线命名转换成驼峰命名
 export const getCamelCase = (str) => {
-  return str.replace( /-([a-z])/g, (i, item) => item.toUpperCase())
+  return str.replace(/-([a-z])/g, (i, item) => item.toUpperCase())
 }
 
 // 校验身份证号码
@@ -67,7 +67,7 @@ export const checkCardNo = (value) => {
 };
 
 // 校验是否包含中文
-export const haveCNChars => (value) => {
+export const haveCNChars = (value) => {
   return /[\u4e00-\u9fa5]/.test(value);
 }
 
@@ -78,7 +78,7 @@ export const isPostCode = (value) => {
 
 // 校验是否为IPv6地址
 export const isIPv6 = (str) => {
-  return Boolean(str.match(/:/g)?str.match(/:/g).length<=7:false && /::/.test(str)?/^([\da-f]{1,4}(:|::)){1,6}[\da-f]{1,4}$/i.test(str):/^([\da-f]{1,4}:){7}[\da-f]{1,4}$/i.test(str));
+  return Boolean(str.match(/:/g) ? str.match(/:/g).length <= 7 : false && /::/.test(str) ? /^([\da-f]{1,4}(:|::)){1,6}[\da-f]{1,4}$/i.test(str) : /^([\da-f]{1,4}:){7}[\da-f]{1,4}$/i.test(str));
 }
 
 // 校验是否为邮箱地址
@@ -148,8 +148,8 @@ export const params2Url = (obj) => {
 // 修改URL中的参数
 export const replaceParamVal = (paramName, replaceWith) => {
   const oUrl = location.href.toString();
-  const re = eval('/('+ paramName+'=)([^&]*)/gi');
-  location.href = oUrl.replace(re,paramName+'='+replaceWith);
+  const re = eval('/(' + paramName + '=)([^&]*)/gi');
+  location.href = oUrl.replace(re, paramName + '=' + replaceWith);
   return location.href;
 }
 
@@ -165,14 +165,14 @@ export const funcUrlDel = (name) => {
       obj[arr[i][0]] = arr[i][1];
     }
     delete obj[name];
-    return baseUrl + JSON.stringify(obj).replace(/[\"\{\}]/g,"").replace(/\:/g,"=").replace(/\,/g,"&");
+    return baseUrl + JSON.stringify(obj).replace(/[\"\{\}]/g, "").replace(/\:/g, "=").replace(/\,/g, "&");
   }
 }
 
 // 判断是移动还是PC设备
 export const isMobile = () => {
   if ((navigator.userAgent.match(/(iPhone|iPod|Android|ios|iOS|iPad|Backerry|WebOS|Symbian|Windows Phone|Phone)/i))) {
-  return 'mobile';
+    return 'mobile';
   }
   return 'desktop';
 }
@@ -192,12 +192,12 @@ export const isAndroidMobileDevice = () => {
 export const osType = () => {
   const agent = navigator.userAgent.toLowerCase();
   const isMac = /macintosh|mac os x/i.test(navigator.userAgent);
- const isWindows = agent.indexOf("win64") >= 0 || agent.indexOf("wow64") >= 0 || agent.indexOf("win32") >= 0 || agent.indexOf("wow32") >= 0;
+  const isWindows = agent.indexOf("win64") >= 0 || agent.indexOf("wow64") >= 0 || agent.indexOf("win32") >= 0 || agent.indexOf("wow32") >= 0;
   if (isWindows) {
-      return "windows";
+    return "windows";
   }
-  if(isMac){
-      return "mac";
+  if (isMac) {
+    return "mac";
   }
 }
 
@@ -205,9 +205,9 @@ export const osType = () => {
 export const broswer = () => {
   const ua = navigator.userAgent.toLowerCase();
   if (ua.match(/MicroMessenger/i) == "micromessenger") {
-      return "weixin";
+    return "weixin";
   } else if (ua.match(/QQ/i) == "qq") {
-      return "QQ";
+    return "QQ";
   }
   return false;
 }
@@ -216,29 +216,29 @@ export const broswer = () => {
 export const getExplorerInfo = () => {
   let t = navigator.userAgent.toLowerCase();
   return 0 <= t.indexOf("msie") ? { //ie < 11
-      type: "IE",
-      version: Number(t.match(/msie ([\d]+)/)[1])
+    type: "IE",
+    version: Number(t.match(/msie ([\d]+)/)[1])
   } : !!t.match(/trident\/.+?rv:(([\d.]+))/) ? { // ie 11
-      type: "IE",
-      version: 11
+    type: "IE",
+    version: 11
   } : 0 <= t.indexOf("edge") ? {
-      type: "Edge",
-      version: Number(t.match(/edge\/([\d]+)/)[1])
+    type: "Edge",
+    version: Number(t.match(/edge\/([\d]+)/)[1])
   } : 0 <= t.indexOf("firefox") ? {
-      type: "Firefox",
-      version: Number(t.match(/firefox\/([\d]+)/)[1])
+    type: "Firefox",
+    version: Number(t.match(/firefox\/([\d]+)/)[1])
   } : 0 <= t.indexOf("chrome") ? {
-      type: "Chrome",
-      version: Number(t.match(/chrome\/([\d]+)/)[1])
+    type: "Chrome",
+    version: Number(t.match(/chrome\/([\d]+)/)[1])
   } : 0 <= t.indexOf("opera") ? {
-      type: "Opera",
-      version: Number(t.match(/opera.([\d]+)/)[1])
+    type: "Opera",
+    version: Number(t.match(/opera.([\d]+)/)[1])
   } : 0 <= t.indexOf("Safari") ? {
-      type: "Safari",
-      version: Number(t.match(/version\/([\d]+)/)[1])
+    type: "Safari",
+    version: Number(t.match(/version\/([\d]+)/)[1])
   } : {
-      type: t,
-      version: -1
+    type: t,
+    version: -1
   }
 }
 
@@ -253,13 +253,13 @@ export const scrollToTop = () => {
 
 // 滚动到页面底部
 export const scrollToBottom = () => {
-  window.scrollTo(0, document.documentElement.clientHeight);  
+  window.scrollTo(0, document.documentElement.clientHeight);
 }
 
 // 滚动到指定元素区域
 export const smoothScroll = (element) => {
   document.querySelector(element).scrollIntoView({
-      behavior: 'smooth'
+    behavior: 'smooth'
   });
 };
 
@@ -267,10 +267,10 @@ export const smoothScroll = (element) => {
 export const getClientHeight = () => {
   let clientHeight = 0;
   if (document.body.clientHeight && document.documentElement.clientHeight) {
-      clientHeight = (document.body.clientHeight < document.documentElement.clientHeight) ? document.body.clientHeight : document.documentElement.clientHeight;
+    clientHeight = (document.body.clientHeight < document.documentElement.clientHeight) ? document.body.clientHeight : document.documentElement.clientHeight;
   }
   else {
-      clientHeight = (document.body.clientHeight > document.documentElement.clientHeight) ? document.body.clientHeight : document.documentElement.clientHeight;
+    clientHeight = (document.body.clientHeight > document.documentElement.clientHeight) ? document.body.clientHeight : document.documentElement.clientHeight;
   }
   return clientHeight;
 }
@@ -322,32 +322,32 @@ export const nowTime = () => {
 // 格式化时间
 export const dateFormater = (formater, time) => {
   let date = time ? new Date(time) : new Date(),
-      Y = date.getFullYear() + '',
-      M = date.getMonth() + 1,
-      D = date.getDate(),
-      H = date.getHours(),
-      m = date.getMinutes(),
-      s = date.getSeconds();
+    Y = date.getFullYear() + '',
+    M = date.getMonth() + 1,
+    D = date.getDate(),
+    H = date.getHours(),
+    m = date.getMinutes(),
+    s = date.getSeconds();
   return formater.replace(/YYYY|yyyy/g, Y)
-      .replace(/YY|yy/g, Y.substr(2, 2))
-      .replace(/MM/g,(M<10 ? '0' : '') + M)
-      .replace(/DD/g,(D<10 ? '0' : '') + D)
-      .replace(/HH|hh/g,(H<10 ? '0' : '') + H)
-      .replace(/mm/g,(m<10 ? '0' : '') + m)
-      .replace(/ss/g,(s<10 ? '0' : '') + s)
+    .replace(/YY|yy/g, Y.substr(2, 2))
+    .replace(/MM/g, (M < 10 ? '0' : '') + M)
+    .replace(/DD/g, (D < 10 ? '0' : '') + D)
+    .replace(/HH|hh/g, (H < 10 ? '0' : '') + H)
+    .replace(/mm/g, (m < 10 ? '0' : '') + m)
+    .replace(/ss/g, (s < 10 ? '0' : '') + s)
 }
 // dateFormater('YYYY-MM-DD HH:mm:ss')
 // dateFormater('YYYYMMDDHHmmss')
 
 // 阻止冒泡事件
-export const stopPropagation = (e) => { 
-  e = e || window.event; 
-  if(e.stopPropagation) {    // W3C阻止冒泡方法 
-      e.stopPropagation(); 
-  } else { 
-      e.cancelBubble = true; // IE阻止冒泡方法 
-  } 
-} 
+export const stopPropagation = (e) => {
+  e = e || window.event;
+  if (e.stopPropagation) {    // W3C阻止冒泡方法 
+    e.stopPropagation();
+  } else {
+    e.cancelBubble = true; // IE阻止冒泡方法 
+  }
+}
 
 // 随机获取布尔值
 export const getRandomBoolean = () => Math.random() >= 0.5;

@@ -38,14 +38,14 @@ function getLengthOfCodePoint(str) {
   for (let i = 0; i < str.length; i++) {
     // i 索引码元
     if (is32bit(str, i)) {
-      i ++
+      i++
     };
-    len ++;
+    len++;
   }
   return len;
 }
 
-Object.freeze对象冻结
+// Object.freeze对象冻结
 
 解构赋值
 
@@ -80,15 +80,15 @@ Math对象的扩展
 Math.trunc方法用于去除一个数的小数部分，返回整数部分
 Math.sign方法用来判断一个数到底是正数、负数、还是零。对于非数值，会先将其转换为数值。
 它会返回五种值。
-参数为正数，返回+1；
-参数为负数，返回-1；
+参数为正数，返回 + 1；
+参数为负数，返回 - 1；
 参数为 0，返回0；
-参数为-0，返回-0;
+参数为 - 0，返回 - 0;
 其他值，返回NaN
 
 函数的扩展
 数组的扩展
-Array.from方法用于将两类对象转为真正的数组：类似数组的对象（array-like object）和可遍历（iterable）的对象
+Array.from方法用于将两类对象转为真正的数组：类似数组的对象（array - like object）和可遍历（iterable）的对象
 Array.of方法用于将一组值，转换为数组。
 fill方法使用给定值，填充一个数组。
 数组实例的copyWithin()方法，在当前数组内部，将指定位置的成员复制到其他位置（会覆盖原有成员），然后返回当前数组。也就是说，使用这个方法，会修改当前数组。
