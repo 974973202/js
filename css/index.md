@@ -296,6 +296,35 @@ margin:0 auto;设置块元素（或与之类似的元素）的居中。
 > float + overflow实现
 > flex实现
 
+### 换行
+- 块元素 flex-wrap: nowrap;
+- 文字  white-space: nowrap;
+
+### 三角形的实现
+- border 的 color 属性实现 border-color: transparent transparent #000 transparent;
+- clip-path
+  1. clip-path: url ()
+  ```html
+    <svg height="0" width="0"> 
+      <defs> 
+          <clipPath id="svgPath">
+              <path id="heart" d="M 250 500 Q 50 250 200 350 Q 200 350 300 450 Q 300 150 350 350 C 400 400 400 150 450 450 C 500 450 600 400 600 250 A 50 50 0 1 1 250 500 Z" />
+          </clipPath> 
+      </defs> 
+    </svg>
+    <img class="clipImg" src="https://pic.qqtn.com/up/2019-9/15690311636958128.jpg" />
+  ```
+  ```css
+    .clipImg{
+      width: 800px;
+      clip-path:url(#svgPath)
+    }
+  ```
+  2. 矩形剪裁 clip-path:inset(top,right,bottom,left)
+  3. 圆形剪裁 clip-path:circle(50% at 50% 50%)    at前的50% 代表 半径为50%
+  4. 椭圆剪裁 clip-path: ellipse(50px 60px at 0 10% 20%); at 前参数为圆心位置，at后面参数为椭圆半径
+  5. 多边形剪裁 clip-path: polygon(30% 50%，20% 10% ，20% 10%)
+
 ### 伪元素和伪类的区别
 - 伪类的操作对象是文档树中已有的元素，而伪元素则创建了一个文档树外的元素。
 因此，伪类与伪元素的区别在于：有没有创建一个文档树之外的元素

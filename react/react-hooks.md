@@ -295,6 +295,8 @@ useCallback:
 该函数返回：引用相对固定的函数地址
 
 补充知识：类组件用React.PureComponent，函数式组件用React.memo
+useCallback需要和 PureComponent或memo 配合使用
+
 ```js
 function T(props: any) {
   console.log('Test Render');
@@ -426,7 +428,7 @@ export default function App() {
 ```
 
 ### useRef
-使用useRef修改数据不会出发render
+使用useRef修改数据不会触发render
 useRef可以保存状态  const ref = useRef(100)
 
 createRef
