@@ -563,3 +563,15 @@ define(['./a', './b'], function(a, b) { // 依赖必须一开始就写好
     * @return {返回值类型} 返回值说明
     */
 ```
+
+### 捕获全局promise错误
+1. addEventListener
+```js
+window.addEventListener('unhandledrejection', function (event) {
+  console.log('event', event);
+  console.log('message', event.message);
+  // event.reason //获取到catch的err的原因(内容) 与控制台报错一致
+  // event.promise //获取到未处理的promise对象
+  event.preventDefault()
+});
+```
