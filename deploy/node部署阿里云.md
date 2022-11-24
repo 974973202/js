@@ -36,6 +36,25 @@
   和node步骤一样，查询路径 --> ln -s(创建软链接
   ```
 
+
+  ```js
+    安装 Node.js
+    执行以下命令，下载 Node.js。
+    wget https://npmmirror.com/mirrors/node/v16.13.2/node-v16.13.2-linux-x64.tar.xz
+    执行以下命令，解压 Node.js 的安装包。
+    tar -xvf node-v16.13.2-linux-x64.tar.xz
+    执行以下命令，移动并重命名 Node.js 安装目录。
+    mv node-v16.13.2-linux-x64/ /usr/local/node
+    3. 配置 Node.js
+    执行以下命令，将 Node.js 的可执行文件目录加入到系统环境变量中。
+    echo "export PATH=$PATH:/usr/local/node/bin" >> /etc/profile
+    执行以下命令，使刚配置的 Node.js 环境变量立即生效。
+    source /etc/profile
+    执行以下命令，分别查看 node 和 npm 版本。
+    node -v
+    npm -v
+  ```
+
 ### forever 
   npm i forever -g 
 　　  forever list 正在守护的项目
@@ -44,27 +63,7 @@
  - 可以用pm2代替forever
 
 ### 部署web
-```js
-  npm build  打包项目， 注意：需要再package.json中加入  "homepage": "react_demo"
-    服务器：
-        cd /var/www          切换到www下
-        mkdir react_demo  创建项目目录
-    打开dos窗口 将本地打包文件 上传到服务器
-        scp -r C://Users/W10003705/Desktop/react_demo/build/* root@xxx.xxx.xxx.xxx:/var/www/react_demo
-        或者下载： WinSCP
-    配置nginx
-        打开nginx配置文件编辑：vim /usr/local/webserver/nginx/conf/nginx.conf
-           下面内容复制放在server里面 ps:可以配置多个站点
-           # react_demo
-           location /react_demo {
-                root /var/www;
-                index  index.html index.htm;
-           } 
-    运行 服务器地址+react_demo 比如：xxx.xxx.xxx.xxx/react_demo　　　　　正常打开说明web部署完成并且成功。　　　　　　
-　　　 果出现页面报404 ，则需要检查nginx配置 ，文件路径          
-      如果是加载资源404，去需要看下资源加载路径，看看hoempage的配置和nginx是否对应
-```
-![](/ng2.png)
+
 
 ### 部署node.js
 ```js

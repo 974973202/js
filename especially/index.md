@@ -184,6 +184,7 @@ function selectSort(array) {
     }
   }
   return array;
+}
 
 
 /*方法说明：堆排序

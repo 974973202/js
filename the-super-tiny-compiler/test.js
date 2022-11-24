@@ -7,21 +7,23 @@ const {
 } = require('./the-super-tiny-compiler');
 const assert = require('assert');
 
-const input  = '(add 2 (subtract 4 2))';
+const input = '(add 2 (subtract 4 2))';
 const output = 'add(2, subtract(4, 2));';
 
+// 词法分析
 const tokens = [
-  { type: 'paren',  value: '('        },
-  { type: 'name',   value: 'add'      },
-  { type: 'number', value: '2'        },
-  { type: 'paren',  value: '('        },
-  { type: 'name',   value: 'subtract' },
-  { type: 'number', value: '4'        },
-  { type: 'number', value: '2'        },
-  { type: 'paren',  value: ')'        },
-  { type: 'paren',  value: ')'        }
+  { type: 'paren', value: '(' },
+  { type: 'name', value: 'add' },
+  { type: 'number', value: '2' },
+  { type: 'paren', value: '(' },
+  { type: 'name', value: 'subtract' },
+  { type: 'number', value: '4' },
+  { type: 'number', value: '2' },
+  { type: 'paren', value: ')' },
+  { type: 'paren', value: ')' }
 ];
 
+// 语法分析
 const ast = {
   type: 'Program',
   body: [{
