@@ -395,6 +395,15 @@ auto（表示继承父元素align-items属性，如果没有父元素，等同�
   align-self: auto | flex-start | flex-end | center | baseline | stretch;
 ```
 
+### filter属性
+- blur() 设置元素模糊效果 常用于实现图片的毛玻璃效果  filter: blur(1px)
+- brightness()  调整图像的亮度级别  filter: brightness(120%);
+- contrast()  调整图像的对比度 filter: contrast(190%); 
+- opacity() 透明效果应用于图像 和 opacity 的区别在于可以开启GPU硬件加速  filter: opacity(40%); 
+- sepia()  为图像添加柔和的褐色色调  filter: sepia(40%); 
+- drop-shadow() 增加图像的阴影，和box-shadow类似，使图像看起来更加立体 filter: drop-shadow(10px 10px 10px #ff0000);
+- saturate() 改变元素中颜色的饱和度  filter: saturate(40%); 
+
 ### CSS动画
 - transition: 过渡动画
 ```

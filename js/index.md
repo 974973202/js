@@ -260,6 +260,16 @@ JSON.stringify(user, null,'**');
 // 这里 * 取代了空格字符
 ```
 
+### 对象转url参数
+```js
+const param = {
+  a: 123,
+  b: 456
+}
+Object.keys(param).map(key => `${key}=${param[key]}`).join('&');
+// 'a=123&b=345'
+```
+
 ### 一 类数组转数组
 ```js
 // 1. Array.prototype.slice.call()
