@@ -201,6 +201,11 @@ Proxy 在 ES2015 规范中被正式加入，它有以下几个特点：
 
 Proxy 不能监听嵌套数据 
 
+- Vue3为什么要用Reflect  reflect可以修正this指向问题
+
+- Proxy 只会代理对象的第一层，Vue3 如何处理
+  - 判断当前 Reflect.get 的返回值是否为 Object，如果是则再通过 reactive 方法做代理，这样就实现了深度观测
+  - 检测数组的时候可能触发了多个 get/set，那么如何防止触发多次呢？我们可以判断 key 是否是当前被代理的 target 自身属性；
 
 
 ### MVVM和MVC的区别

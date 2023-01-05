@@ -253,3 +253,7 @@ var regex = /<([^>]+)>[\d\D]*<\/\1>/;
 ```js
 var regex = /(?<![#$]){[^{}]+}/g
 ```
+
+- 匹配多个<code>xx</code>标签之间的内容
+- 包含code    ---   var regex = /<code[^>]*>(?:(?!<\/code>)[\s\S])*<\/code>/gi;
+- 不包含code  ---   var regex = /(?<=<code[^>]*>)(?:(?!<\/code>)[\s\S])*(?=<\/code>)/gi;

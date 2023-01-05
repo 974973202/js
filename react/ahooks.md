@@ -30,7 +30,7 @@ const {
   defaultParams, // 首次默认执行时，传递给 service 的参数	
   pollingInterval, // 轮询，pollingInterval: 1000，定时发送请求
   pollingWhenHidden, // 在页面隐藏时，是否继续轮询 true false
-  fetchKey,  // 请求分类 并行请求
+  fetchKey,  // 请求分类 并行请求 (id) => id
   refreshOnWindowFocus, // 屏幕聚焦重新请求
   focusTimespan, // 重新请求间隔，单位为毫秒
   debounceInterval, // 防抖
