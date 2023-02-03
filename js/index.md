@@ -1,8 +1,26 @@
 - 基本数据类型（原始值）：Number  Boolean  String  undefined  null  **栈内存（stack）**
 - 引⽤类型（引用值）：array  Object  function  data  RegExp...   **堆内存（heap）**
+- 栈和堆的区别
+ - 栈：下馆子
+ - 堆：自己搞
+
 - 判断布尔值为false的6种情况： undefined  null  NaN  “”  0  false 
 - javascript有8种内置类型：null, undefined, boolean, number, string, object, symbol，bigInt
 - typeof可判断的类型： 1.string  2.number  3.boolean  4.object  5.undefined  6.function  7. symbol
+
+### null和undefined区别
+- undefined 代表的含义是未定义，null 代表的含义是空对象
+- typeof undefined === 'undefined'   typeof null === 'number'
+
+### Object.is() 和 ===
+- NaN === NaN 为 false   Object.is(NaN, NaN) 为 true
+- -0 === +0 为true   Object.is(-0, +0) 为 false
+
+### this 绑定的优先级
+- new绑定优先级 > 显示绑定优先级 > 隐式绑定优先级 > 默认绑定优先级
+
+### forEach如何跳出循环
+- try catch 配合 throw Error()
 
 ### 操作数组常用的方法：
 - es5：
@@ -78,7 +96,7 @@ function isArray(obj){
 ### 事件委托
 - 是通过冒泡事件到父元素上触发 ul > li 最终冒泡到window对象
 - 事件捕获则相反，
-- 先捕获后冒泡
+- 先捕获后冒泡（先里后外）
 
 ### 作用域链 原型链 继承 闭包
 - 作用域
@@ -417,6 +435,7 @@ for (key in obj) {
 惰性函数[http://www.zhangyunling.com/375.html]
 - 惰性加载表示函数执行的分支仅会发生一次。有两种实现惰性加载的方式：在函数被
 调用时再处理函数；在声明函数时就指定适当函数。
+- 在执行函数时，函数他 改变 函数自己
 ```javascript
 let addEvent1 = (type, element, fun) => {
   if (element.addEventListener) {

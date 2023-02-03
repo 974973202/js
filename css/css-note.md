@@ -56,3 +56,21 @@ overflow: auto;
     background-position: 280px;
   }
 }
+
+
+<!-- 绘制三角形 -->
+```css
+width: 0;
+height: 0;
+border: 50px solid transparent;
+border-bottom-color: blue;
+```
+
+<!-- 绘制扇形 -->
+```css
+border: 50px solid transparent;
+width: 0;
+heigt: 0;
+border-radius: 50px;
+border-top-color: blue;
+```

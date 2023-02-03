@@ -1,3 +1,111 @@
+### react理念
+- 将同步的更新变为可中断的异步更新
+
+### react15 的架构
+- 分为两层： 
+ - Reconciler（协调器）—— 负责找出变化的组件
+ - Renderer（渲染器）—— 负责将变化的组件渲染到页面上
+
+- 缺点：在Reconciler中，mount的组件会调用mountComponent (opens new window)，update的组件会调用updateComponent (opens new window)。这两个方法都会递归更新子组件，而递归一旦开始就无法中断
+
+### React16 架构
+- 三层：
+ - Scheduler（调度器）—— 调度任务的优先级，高优任务优先进入Reconciler
+    - 由于requestIdleCallback兼容性问题，React放弃使用
+    - React实现了功能更完备的requestIdleCallback polyfill，这就是Scheduler
+
+ - Reconciler（协调器）—— 负责找出变化的组件
+    - Reconciler内部采用了Fiber的架构
+    - Reconciler与Renderer不再是交替工作。当Scheduler将任务交给Reconciler后，Reconciler会为变化的虚拟DOM打上代表增/删/更新的标记
+
+ - Renderer（渲染器）—— 负责将变化的组件渲染到页面上
+    - 整个Scheduler与Reconciler的工作都在内存中进行。只有当所有组件都完成Reconciler的工作，才会统一交给Renderer。
+
+### Fiber
+- 每个Fiber节点对应一个React element保存了该组件的类型（函数组件/类组件/原生组件...）、对应的DOM节点等信息。
+- 每个Fiber节点保存了本次更新中该组件改变的状态、要执行的工作（需要被删除/被插入页面中/被更新...）
+```js
+// Fiber结构
+function FiberNode(
+  tag: WorkTag,
+  pendingProps: mixed,
+  key: null | string,
+  mode: TypeOfMode,
+) {
+  // 作为静态数据结构的属性
+  // Fiber对应组件的类型 Function/Class/Host...
+  this.tag = tag;
+  // key属性
+  this.key = key;
+  // 大部分情况同type，某些情况不同，比如FunctionComponent使用React.memo包裹
+  this.elementType = null;
+  // 对于 FunctionComponent，指函数本身，对于ClassComponent，指class，对于HostComponent，指DOM节点tagName
+  this.type = null;
+  // Fiber对应的真实DOM节点
+  this.stateNode = null;
+
+  // 用于连接其他Fiber节点形成Fiber树
+  // 指向父级Fiber节点
+  this.return = null;
+  // 指向子Fiber节点
+  this.child = null;
+  // 指向右边第一个兄弟Fiber节点
+  this.sibling = null;
+  this.index = 0;
+
+  this.ref = null;
+
+  // 作为动态的工作单元的属性
+  this.pendingProps = pendingProps;
+  this.memoizedProps = null;
+  this.updateQueue = null;
+  this.memoizedState = null;
+  this.dependencies = null;
+
+  this.mode = mode;
+
+  this.effectTag = NoEffect;
+  this.nextEffect = null;
+
+  this.firstEffect = null;
+  this.lastEffect = null;
+
+  // 调度优先级相关
+  this.lanes = NoLanes;
+  this.childLanes = NoLanes;
+
+  // 指向该fiber在另一次更新时对应的fiber
+  this.alternate = null;
+}
+```
+- Fiber节点构成的Fiber树就对应DOM树
+
+#### 如何更新DOM --> Fiber “双缓存” 
+- 当前**屏幕**上显示内容对应的Fiber树称为**current Fiber**树，正在**内存**中构建的Fiber树称为**workInProgress Fiber**树
+- 当workInProgress Fiber树构建完成交给**Renderer**渲染在页面上后，应用根节点的current指针指向workInProgress Fiber树，此时workInProgress Fiber树就变为current Fiber树
+
+- mount阶段
+- 执行**ReactDOM.render**会创建**fiberRootNode（源码中叫fiberRoot）和rootFiber**。其中fiberRootNode是整个**应用**的根节点，rootFiber是<App/>所在**组件树**的根节点
+- mount更新完时，fiberRootNode的current指针指向workInProgress Fiber树使其变为current Fiber 树
+
+- update阶段
+- workInProgress Fiber 树在render阶段完成构建后进入commit阶段渲染到页面上。渲染完毕后，workInProgress Fiber 树变为current Fiber 树
+
+### Fiber 与 jsx
+- Reconciler根据JSX描述的组件内容生成组件对应的Fiber节点。
+- JSX是一种描述当前组件内容的数据结构，不包含组件schedule、reconcile、render所需的相关信息
+
+
+
+
+
+
+
+
+
+
+
+
 ### React.Fiber 原理
 - [React.Fiber原理]https://www.youtube.com/watch?v=ZCuYPiUIONs
 
@@ -109,10 +217,6 @@ jsx会被babel经过ast解析成React.createElement，
 virtual-dom -》 Fiber -> Fiber[] -> DOM
 在mount的时候，render阶段会根据jsx对象生成新的Fiber节点
 在update的时候，render阶段会根据最新的jsx和老的Fiber进行对比，生成新的Fiber -->
-
-### jsx和Fiber有什么关系
-jsx是一种描述当前组件内容的数据结构，它不包含schedule,reconcile,render所需的相关信息；
-mount时通过jsx对象（调用createElement的结果）调用createFiberFromElement生成Fiber update时通过reconcileChildFibers或reconcileChildrenArray对比新jsx和老的Fiber（current Fiber）生成新的wip Fiber树
 
 ### Fiber是什么，它为什么能提高性能
 Fiber是一个js对象，能承载节点信息、优先级、updateQueue，同时它还是一个工作单元。
