@@ -360,7 +360,7 @@ margin:0 auto;设置块元素（或与之类似的元素）的居中。
 
 - justify-content 定义容器在主轴上的对齐方式
 ```
-  justify-content: flex-start | flex-end | center | space-between | space-around;
+  justify-content: flex-start | flex-end | center | space-between | space-around | space-evenly;
 ```
 
 - align-items 定义容器在交叉轴上的对齐方式
@@ -462,11 +462,11 @@ backface-visibility: visible / hidden;
 
 - 外链link 除了可以加载css之外,还可以定义rss、rel等属性，没有兼容性问题，支持使用javascript改变样式
 
-- @import 是css提供的，只能用于加载css，不支持通过javascript修改样式
+- @import 是css提供的，只能用于加载css，**不支持通过javascript修改样式**
 
-- 页面被加载的时候，link会被同时加载，而@import则需等到页面加载完后再加载，可能出现无样式网页
+- 页面被加载的时候，link会被同时加载，**而@import则需等到页面加载完后再加载**，可能出现无样式网页
 
-- 可以通过 JS 操作 DOM ，插入link标签来改变样式；由于DOM方法是基于文档的，无法使用@import的方式插入样式
+- 可以通过 JS 操作 DOM ，插入link标签来改变样式；由于DOM方法是基于文档的，**无法使用@import的方式插入样式**
 
 ### CSS优化、提高性能的方法有哪些
 - 尽量将样式写在单独的css文件里面，在head元素中引用 将代码写成单独的css文件有几点好处：
@@ -511,7 +511,7 @@ transform:\scale(0.85,0.90)\ translate(0px,-30px)\ skew(-9deg,0deg)\Animation:
 - 后处理器例如：PostCSS，通常被视为在完成的样式表中根据CSS规范处理CSS，让其更有效；目前最常做的
   是给CSS属性添加浏览器私有前缀，实现跨浏览器兼容性的问题。
 
-- CSS 选择符从右往左匹配查找，避免 DOM 深度过深
+- **CSS 选择符从右往左匹配查找**，避免 DOM 深度过深
 
 ### 使用动画（js实现动画，css3实现动画）时两者的区别？
 > css实现动画：animation transition transform

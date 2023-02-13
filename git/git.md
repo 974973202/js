@@ -27,6 +27,7 @@
 > 顺便说一下，如果commit注释写错了，只是想改一下注释，只需要：
 > git commit --amend #对最近一次的提交的信息进行修改,此操作会修改 commit 的 hash 值
 > 此时会进入默认vim编辑器，修改注释完毕后保存就好了。
+- 也相当于 git commit --amend --only -m 'xxxxxxx'  用一条命令一次完成次
 
 ### git commit
 feat：新增功能
