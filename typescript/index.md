@@ -18,6 +18,7 @@ enum Status {
 }
 
 // typeof 获取一个变量或对象的类型
+// typeof 类型推断
 let p = {
   name: 'zs',
   age:10
@@ -41,7 +42,8 @@ type keyobj = keyof typeof obj; // name age
 
 type keys = keyof IUser; // "name" | "age" | "class" | "sex"
 
-
+// ReadOnly 用于修改类型中属性为只读
+// 源码：type ReadOnly<T> = {readonly [P in keyof T]:T[P]}
 
 interface Person {
   // readonly name: string; // 只读不能改
@@ -155,9 +157,8 @@ declare 声明形式
 实现签名：对函数内部方法的具体实现
 
 枚举(enum)：对代码具有侵入式
-
 ### Record
-<!-- type Record<K extends keyof any, T> = {[P in K]: T}; -->
+源码： type Record<K extends keyof any, T> = {[P in K]: T}; 
 Record能够快速创建对象类型。它的使用方式是Record<K, V>，能够快速的为object创建统一的key和value类型
 ```js
 const person: Record<string, string> = {
@@ -180,8 +181,10 @@ let hh: IRH = {
 }
 ```
 ### Pick
+Pick<T, K>从一个复合类型 T 中取出几个想要的属性 K，构造一个新类型。
 Pick：主要作用是从一组属性中拿出某个属性，并将其返回
 Pick的使用方法是Pick<P, K>，如（P）类型中拥有name,age,desc三个属性，那么K为 name则最终将取到只有name的属性，其他的将会被排出。
+源码：type MyPick<T, K extends keyof T> = { [S in K]: T[S] };
 ### Omit
 Omit：主要作用是从一组属性中排除某个属性，并将排除属性后的结果返回。
 Omit的使用方法是Omit<P, K>，与Pick的结果是相反的，如果说Pick是取出，那么Omit则是过滤的效果.
@@ -199,6 +202,7 @@ let ff: IOF = {
 Exclude：从一个联合类型中排除掉属于另一个联合类型的子集
 来看下，Exclude使用形式是Exclude<T, S>，如果T中的属性在S不存在那么就会返回
 ```js
+// 源码：type Exclude<T, U> = T extends U ? never : T;
 interface A {
   show: boolean,
   hidden: boolean,
@@ -215,6 +219,7 @@ Extract：跟Exclude相反，从从一个联合类型中取出属于另一个联
 举一反三，如果Exclude是取差集，那么Extract就是取交集。会返回两个联合类型中相同的部分。
 ### Partial
 Partial是一个将类型转为可选类型的工具，对于不明确的类型来说，需要将所有的属性转化为可选的?.形式，转换成为可选的属性类型
+源码： type Partial<T> = {[P in keyof T]?:T[P]}
 ```js
 interface Person {
   name: string,
@@ -224,7 +229,7 @@ const a: Partial<Person> = {} // name?: string | undefined
 
 ### Required：将传入的属性变为必选项
 ```ts
-type Required<T> = { [P in keyof T]-?: T[P] };
+// 源码： type Required<T> = { [P in keyof T]-?: T[P] };
 type IRC = Required<IUser>;
 
 let cc: IRC = {
@@ -248,6 +253,8 @@ let cc: IRC = {
 
 ### 类型断言 as
 - ts 只管编译时，不管运行时。as 就是典型的例子，你用 as 告诉编译器类型，编译器就听你的。但运行时，后果自负。
+- as 语句的作用：会对映射类型中的键进行重新映射（TypeScript4.1版本中新增加的语法）
+- as 语句后面新映射类型必须是 string|number|symbol 联合类型的子类型。
 
 ### 非空断言操作符 !
 - ! 用于排除 null undefined ，即告诉编译器：xx 变量肯定不是 null 或 undefined
@@ -257,3 +264,109 @@ let cc: IRC = {
 只是很多吹捧的人会把屎山说香。它只是一个类型系统，并没有传的那么神乎其神，
 能做的只是杜绝了很多奇技淫巧，让代码可以在一个较为正常的环境下进行开发。 -->
 <!-- ts 是一门静态类型语言，但它要编译成为 js 这个弱类型语言来执行，所以它管得了编译时，却管不了运行时 -->
+
+
+### 1. 写业务，类型拆分解耦
+```ts
+// 有一个需求：做一个答题 PK 小程序问答记录排行榜的时候
+// 这两个 interface 的定义，具有相同的片段，可以根据功能和模块拆分一下重复接口声明
+interface IUserBaseInfo {
+  createTime: string;
+  userName: string;
+  userAvatar: string;
+}
+interface IQuestionRecord {
+  question: {
+    title: string;
+    content: string;
+    picture: string[];
+  };
+}
+interface IAnswerRecord {
+  answer: {
+    comment: string;
+    audio?: {
+      url: string;
+    };
+  };
+}
+
+// 使用交叉类型进行接口混入
+type Mixin<T, X> = {
+  [P in keyof (T & X)]: (T & X)[P];
+};
+// 更简单的写法
+type Mixin<T, X> = T & X;
+
+// 用泛型混入，方便之后还会出现什么数据也带有用户基础信息
+// 方便做拓展和复用
+type MixinUserBaseInfo<T> = Mixin<IUserBaseInfo, T>;
+
+interface IRecordConfig {
+  question?: MixinUserBaseInfo<IQuestionRecord>;
+  answer?: MixinUserBaseInfo<IAnswerRecord>;
+}
+// 最终使用的时候输列表数据
+export type RecordConfigList = IRecordConfig[];
+
+```
+
+### 例子2: 处理函数参数
+```ts
+// 函数需要定义一些传参，而这些参数的定义可能用到多个函数，有时候是必填参数，有时候是可选参数
+
+// IArgsBase 接口
+export interface IArgsBase<T>{
+  name?:string;
+  description?:string;
+  visible?:boolean;
+  execConf:T:(() => T);
+}
+
+// RequireArg 类型
+export type RequiredArg<T> = IArgsBase<T> & {
+  required: true;
+  value: T;
+};
+
+// OptionalArg 类型
+export type OptionalArg<T> = IArgsBase<T> & {
+  required: false;
+  value?: T;
+};
+
+// OptionalArg 类型使用例子
+interface User {
+  val: string;
+}
+const testFun = (args: OptionalArg<User>):User => {
+  return {
+    val: '好好好',
+  };
+}
+testFun({ name: '123', required: true, execConf: { val: '123' } });
+
+// 与 例子 1 异曲同工，只是使用场景有些不同。
+type Getters<T> = {
+  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K]
+};
+
+interface Person {
+    name: string;
+    age: number;
+    location: string;
+}
+
+type LazyPerson = Getters<Person>;
+// {
+//   getName: () => string;
+//   getAge: () => number;
+//   getLocation: () => string;
+// }
+```
+
+### 例子3 我们用其他组件库的组件，但是会在他的 props 基础上增加一些我们的 props 属性
+```ts
+// 以开发某个组件为例
+class CustomModal<T> extends React.Component<ComponentProps & T> {}
+```

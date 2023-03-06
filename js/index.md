@@ -418,6 +418,11 @@ a.length // error
 a!.length // ok
 ```
 
+### ??
+```js
+// 当左侧值为 null 或 undefined 时，返回 ?? 符号右边的值
+```
+
 ### for-in 中一定要有 hasOwnProperty 的判断（即禁止直接读取原型对象的属性）
 - hasOwnProperty: 检测一个对象是否含有特定的自身（非继承）属性
 ```javascript

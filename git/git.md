@@ -44,6 +44,10 @@ revert：回滚某个更早之前的提交
 
 git commit -am  #等同于 git add . && git commit -m
 
+### 从tabs切换个分支
+git checkout -b 2.12.10 2.12.9-release
+git checkout -b 新分支 原tag分支名
+
 ### Git 合并两个分支内容
 1. 将开发分支代码合入到master中
 ```
