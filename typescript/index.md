@@ -191,7 +191,7 @@ Omit的使用方法是Omit<P, K>，与Pick的结果是相反的，如果说Pick�
 ```ts
 type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 
-type IOF = Omit<IUser, 'sex'>
+type IOF = Omit<IUser, 'sex' | 'xx'>
 let ff: IOF = {
   name: '4',
   age: 4,
@@ -369,4 +369,10 @@ type LazyPerson = Getters<Person>;
 ```ts
 // 以开发某个组件为例
 class CustomModal<T> extends React.Component<ComponentProps & T> {}
+
+function func<T>(type: T) {
+  // ...
+  ele[type as T] = 'xxx'
+}
+func<keyof DataTableModelModel>('123')
 ```

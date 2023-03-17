@@ -88,6 +88,9 @@ function isArray(obj){
 ```
 3. Array.isArray()
 
+### JavaScript 中 in 和 hasOwnProperty 的区别
+- in 会向原型上查找, hasOwnProperty不会
+-  hasOwnProperty() 大多数时候是正确的选择，因为您可以避免特殊键的问题，例如 constructor。 一个好的经验法则是，如果您要查看一个对象是否具有属性，您应该使用 hasOwnProperty()。如果您想查看一个对象是否有您打算调用的函数，例如检查一个对象是否有 toString()，你应该使用 in
 ### hasOwnProperty() 方法用于检测一个对象是否含有特定的自身属性，返回一个布尔值
 
 ### 箭头函数原理

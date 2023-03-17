@@ -52,6 +52,10 @@
  - defineProperty 只能监听 get、set，而 Proxy 可以拦截多达13种方法；
  - Proxy 兼容性相对较差，且无法通过 pollyfill 解决；所以Vue3不支持IE；
 
+> 只有通过 原始Obj 进行操作的时候才能通过定义的操作拦截方法进行处理，直接使用原对象则无法触发拦截器。
+> 这也是 Vue 3 中要求的 reactive 声明的对象修改原对象无法触发视图更新的原因。
+> 并且 Proxy 也只针对 引用类型数据 才能进行代理，所以这也是 Vue 的基础数据都需要通过 ref 进行声明的原因，内部会建立一个新对象保存原有的基础数据值。
+
 #### 为什么需要 Reflect
 
  - 使用 Reflect 可以修正 Proxy 的this指向问题
@@ -102,4 +106,12 @@
 - Ref 赋值给 reactive 属性 时，也会自动解包；
 - 值得注意的是，当访问到某个响应式数组或 Map这样的原生集合类型中的 ref 元素时，不会执行 ref 的解包。
 - 响应式转换是深层的，会影响到所有的嵌套属性，如果只想要浅层的话，只要在前面加shallow即可（shallowRef、shallowReactive）
+
+### Vue 提供了一下几个 响应式数据声明 的核心 API
+- ref：接受一个内部值，返回一个响应式的、可更改的 ref 对象，此对象只有一个指向其内部值的属性 .value
+- shallowRef：ref() 的浅层作用形式
+- reactive：返回一个对象的响应式代理
+- shallowReactive：reactive() 的浅层作用形式
+- readonly：接受一个对象 (不论是响应式还是普通的) 或是一个 ref，返回一个原值的只读代理
+- shallowReadonly：readonly 的浅层作用形式
 

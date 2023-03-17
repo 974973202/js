@@ -5,7 +5,7 @@ https://juejin.im/post/5e6f4b4e6fb9a07cd443d4a5
 1. 初始化参数：根据用户在命令窗口输入的参数以及 webpack.config.js 文件的配置，得到最后的配置。
 2. 开始编译：根据上一步得到的最终配置初始化得到一个 compiler 对象，注册所有的插件 plugins，插件开始监听 webpack 构建过程的生命周期的环节（事件），不同的环节会有相应的处理，然后开始执行编译。
 3. 确定入口：根据 webpack.config.js 文件中的 entry 入口，开始解析文件构建 AST 语法树，找出依赖，递归下去。
-4. 编译模块：递归过程中，根据文件类型和 loader 配置，调用相应的 loader 对不同的文件做不同的转换处理，再找出该模块依赖的模块，然后递归本步骤，直到项目中依赖的所有模块都经过了本步骤的编译处理。
+4. 编译模块：递归过程中，根据**文件类型和 loader 配置，调用相应的 loader 对不同的文件做不同的转换处理**，再找出该模块依赖的模块，然后递归本步骤，直到项目中依赖的所有模块都经过了本步骤的编译处理。
 5. 编译过程中，有一系列的插件在不同的环节做相应的事情，比如 UglifyPlugin 会在 loader 转换递归完对结果使用 UglifyJs 压缩覆盖之前的结果；再比如 clean-webpack-plugin ，会在结果输出之前清除 dist 目录等等。
 6. 完成编译并输出：递归结束后，得到每个文件结果，包含转换后的模块以及他们之间的依赖关系，根据 entry 以及 output 等配置生成代码块 chunk。
 7. 打包完成：根据 output 输出所有的 chunk 到相应的文件目录
@@ -21,7 +21,7 @@ https://juejin.im/post/5e6f4b4e6fb9a07cd443d4a5
 6）最后将生成的文件输出到 output 的目录中
 
 ### Loader 和 Plugin 有哪些不同
-Loader，文件加载器：对文件进行转换。主要是用来解析和检测对应资源，负责源文件从输入到输出的转换，它专注于实现资源模块加载
+Loader，文件加载器：对文件进行转换。主要是用来解析和检测对应资源，负责源文件从输入到输出的转换，它专注于**实现资源模块加载**
 ```js
 const loaderUtils = require("loader-utils");
 // 不能使用剪头函数
@@ -123,10 +123,9 @@ module.exports = {
 - 通过npm run build运⾏构建webpack，原理：模块局部安装会在node_modules/.bin ⽬录创建软链接
 
 ### 核心概念
-1. Entry⽤来指定 webpack 的打包⼊⼝
-2. Output⽤来告诉 webpack 如何将编译后的⽂件输出到磁盘
-3. Loaders webpack 开箱即用只支持 JS 和 JSON 两种文件类型，通过 Loaders 去支持其它文
-件类型并且把它们转化成有效的模块，并且可以添加到依赖图中。
+1. entry 是 webpack 构建项目时的入口点，它定义了整个应用程序的起点，webpack 将基于 entry 分析出项目中的所有依赖，并将其打包为最终的静态资源文件
+2. output 是指打包后生成的文件输出路径和文件名规则配置。通过 output 配置，可以定义 webpack 构建项目时最终生成的文件的名称、路径等信息
+3. loader 本质上是导出函数的 JavaScript 模块。所导出的函数，可用于实现内容转换，由于 webpack 只能识别 Js 和 Json，因此其它类型的模块，如 css，图片等，必须借助 loader来处理，说的更明确点，就是将不同类型的文件转换为 webpack 可识别的模块
   - 本身是一个函数，接受源文件作为参数，返回转换的结果。
 4. Plugins 插件⽤于 bundle ⽂件的优化，资源管理和环境变量注⼊。作⽤于整个构建过程
 5. Mode ⽤来指定当前的构建环境是：production、development 还是 none
