@@ -283,6 +283,12 @@ export default function App() {
 }
 ```
 
+拓展知识useCallback 是「useMemo 的返回值为函数」时的特殊情况，是 React 提供的便捷方式。
+在 React Server Hooks 代码[10] 中，useCallback 就是基于 useMemo 实现的。尽管 React Client Hooks 没有使用同一份代码，但 useCallback[11] 的代码逻辑和 useMemo[12] 的代码逻辑仍是一样的。
+[10]React Server Hooks 代码: https://github.com/facebook/react/blob/ee432635724d5a50301448016caa137ac3c0a7a2/packages/react-dom/src/server/ReactPartialRendererHooks.js#L452
+[11]useCallback: https://github.com/facebook/react/blob/ee432635724d5a50301448016caa137ac3c0a7a2/packages/react-reconciler/src/ReactFiberHooks.new.js#L1590
+[12]useMemo: https://github.com/facebook/react/blob/ee432635724d5a50301448016caa137ac3c0a7a2/packages/react-reconciler/src/ReactFiberHooks.new.js#L1613
+
 ### useCallback  返回缓存的函数 (不是固定的)
 
 用于得到一个固定引用值的函数，通常用它进行性能优化

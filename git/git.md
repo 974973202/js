@@ -128,3 +128,35 @@ git rebase upstream/feature
 // 然后将修改提交到之前到分支，这时候github会自动帮你把提交同步过去的
 git push origin feature-xxx
 
+### 配置禁止提交到develop分支
+1. 进入Git仓库所在的目录，找到.git/hooks文件夹。
+2. 在该文件夹中创建一个名为pre-receive的文件，没有扩展名。
+3. 给该文件添加执行权限，命令为：chmod +x pre-receive。
+4. 编辑pre-receive文件，添加需要执行的脚本代码。
+
+- 编辑pre-receive钩子文件
+```sh
+#!/bin/bash
+while read oldrev newrev refname
+do
+  if [[ "$refname" == "refs/heads/develop" ]]; then
+    echo "Error: Pushing to develop branch is not allowed. Please use merge instead."
+    exit 1
+  fi
+done
+exit 0
+```
+
+<!-- pre-commit -->
+```sh
+#!/bin/sh
+
+current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
+
+if [ "$current_branch" = "develop" ]; then
+    echo "You are not allowed to commit to the develop branch!"
+    exit 1
+fi
+
+exit 0
+```
