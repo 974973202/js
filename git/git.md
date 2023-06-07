@@ -20,7 +20,8 @@
 - 应用最近一次的stash，随后删除该记录  git stash pop
 - 删除最近的一次stash  git stash drop
 
-2. 针对第二种情况已经提交了，这时候可以用 **git reset --soft HEAD^**，撤销上一次提交到暂存区，并重新提交内容；
+2. 撤销 commit
+> 这时候可以用 **git reset --soft HEAD^**，撤销上一次提交到暂存区，并重新提交内容；
 > 注意：该方法一定要在未提交到远程的commit进行操作，千万不要提交到远程之后在执行此命令。
 > HEAD^的意思是上一个版本，也可以写成HEAD~1
 > 如果你进行了2次commit，想都撤回，可以使用HEAD~2
@@ -30,6 +31,9 @@
 > git commit --amend #对最近一次的提交的信息进行修改,此操作会修改 commit 的 hash 值
 > 此时会进入默认vim编辑器，修改注释完毕后保存就好了。
 - 也相当于 git commit --amend --only -m 'xxxxxxx'  用一条命令一次完成次
+
+4. 撤销 push 
+> git push -f origin HEAD^:xxx (分支名)
 
 ### git commit
 feat：新增功能
@@ -84,6 +88,10 @@ git log
 
 ### 添加子模块
 git submodule add https://github.com/chaconinc/DbConnector
+
+### 查看包的信息
+- 查看包的版本号 npm view xxx versions
+- 查看包版本的发布时间 npm view xxx time
 
 ### fork 
 git remote -v 

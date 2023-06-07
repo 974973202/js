@@ -17,7 +17,7 @@
 >  > <p>:last-child	p:last-child	选择所有p元素的最后一个子元素
 >  > <p>:last-of-type	p:last-of-type	选择每个p元素是其母元素的最后一个p元素
 >  > <p>:not(selector)	:not(p)	选择所有p以外的元素
->  > <p>:nth-child(n)	p:nth-child(2)	选择所有 p 元素的父元素的第二个子元素
+>  > <p>:nth-child(n)	p:nth-child(2)	选择所有 p 元素的父元素的第二个子元素   even  odd
 >  > <p>:nth-last-child(n)	p:nth-last-child(2)	选择所有p元素倒数的第二个子元素
 >  > <p>:nth-last-of-type(n)	p:nth-last-of-type(2)	选择所有p元素倒数的第二个为p的子元素
 >  > <p>:nth-of-type(n)	p:nth-of-type(2)	选择所有p元素第二个为p的子元素

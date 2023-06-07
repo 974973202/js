@@ -515,3 +515,46 @@ const { test: { count } } = useStores()
 ### React Hooks
 
 - [ReactHooks 详解]https://juejin.im/post/5dbbdbd5f265da4d4b5fe57d
+
+### useRef、useMemo、useCallback
+useRef 可用来存储一个引用值（不会受 re-render 影响），也可用来获取 dom 节点。
+
+useMemo 用来缓存一个值。当依赖项为空数组时，缓存值永远不会变。当有依赖性时，每次 re-render 如果依赖改变，那么将重新执行函数，将新的函数返回值作为缓存的数据。
+
+useCallback 是 useMemo 的语法糖，相当于返回一个函数。
+```js
+ const fn1 = useCallback(() => {
+    console.log(123);
+  }, [])
+
+  const fn2 = useMemo(() => () => {
+    console.log(123);
+  }, [])
+```
+
+- useMemo、useCallback 对应父组件包裹 数据和函数方法。子组件用memo包裹
+ - memo:返回 true 组件不渲染 ， 返回 false 组件重新渲染。
+ - shouldComponentUpdate: 返回 true 组件渲染 ， 返回 false 组件不渲染。
+
+### 接口数据进行缓存hooks
+```tsx
+interface Cb {
+  (...arg: unknown[]): unknown
+}
+const cacheMap = new Map();
+
+export default (key: string, callback: Cb) => {
+  return async (cache = true) => {
+    const result = cacheMap.get(key)
+
+    if(cache && result) {
+      return result
+    }
+
+    const res = await callback()
+    cacheMap.set(key, res)
+
+    return res
+  }
+}
+```
