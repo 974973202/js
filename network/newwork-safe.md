@@ -83,3 +83,18 @@ ctx.set('X-FRAME-OPTIONS', 'DENY')
 7、 nginx代理跨域
 8、 nodejs中间件代理跨域
 9、 WebSocket协议跨域
+
+### 跨域为何需要 options 请求
+options 请求就是对 CORS 跨域请求之间的一次预检查，检查成功再发起正式请求，是浏览器自行处理的
+
+浏览器同源策略，默认限制跨域请求。跨域的解决方案
+- jsonp
+- CORS
+
+```js
+// CORS 配置允许跨域（服务端）
+response.setHeader("Access-Control-Allow-Origin", "http://localhost:8011") // 或者 '*'
+response.setHeader("Access-Control-Allow-Headers", "X-Requested-With")
+response.setHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS")
+response.setHeader("Access-Control-Allow-Credentials", "true") // 允许跨域接收 cookie
+```
