@@ -612,3 +612,18 @@ window.addEventListener('unhandledrejection', function (event) {
   event.preventDefault()
 });
 ```
+
+### IntersectionObserver
+- IntersectionObserver 可以用于检测元素是否进入视口，可以用于实现无限滚动、懒加载等功能
+```js
+const myObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      console.log(`${entry.target.id} is now visible`);
+      observer.unobserve(entry.target);
+    }
+  });
+});
+const myElement = document.getElementById("myElement");
+myObserver.observe(myElement);
+```
