@@ -322,6 +322,7 @@ console.log(test(arr))
 ### 三 有以下 3 个判断数组的方法，请分别介绍它们之间的区别和优劣Object.prototype.toString.call() 、 instanceof 以及 Array.isArray()
 ```js
 // 1. Object.prototype.toString.call()
+// 识别 Map、GeneratorFunction、Promise、async 调用了内置的toStringTag 标签
 // 每一个继承 Object 的对象都有 toString 方法，如果 toString 方法没有重写的话，会返回 [Object type]，其中 type 为对象的类型。但当除了 Object 类型的对象外，其他类型直接使用 toString 方法时，会直接返回都是内容的字符串，所以我们需要使用call或者apply方法来改变toString方法的执行上下文。
 
 // const an = ['Hello','An'];
@@ -627,3 +628,34 @@ const myObserver = new IntersectionObserver((entries, observer) => {
 const myElement = document.getElementById("myElement");
 myObserver.observe(myElement);
 ```
+
+### a 标签导出二进制文件
+```js
+// res..
+const blob = new Blob([res]);
+const objectURL = URL.createObjectURL(blob);
+const btn = document.createElement('a');
+btn.download = '群组限额维护名单导出.xlsx';
+btn.href = objectURL;
+btn.click();
+URL.revokeObjectURL(objectURL);
+btn.remove();
+```
+
+### node 的内存管理跟垃圾回收机制有了解过吗？
+首先分两种情况：V8 将内存分成 新生代空间 和 老生代空间
+新生代空间: 用于存活较短的对象
+又分成两个空间: from 空间 与 to 空间
+Scavenge GC 算法: 当 from 空间被占满时，启动 GC 算法
+存活的对象从 from space 转移到 to space
+清空 from space
+from space 与 to space 互换
+完成一次新生代 GC
+
+老生代空间: 用于存活时间较长的对象
+从 新生代空间 转移到 老生代空间 的条件（这个过程称为对象晋升）
+经历过一次以上 Scavenge GC 的对象
+当 to space 体积超过 25%
+标记清除算法：标记存活的对象，未被标记的则被释放
+增量标记：小模块标记，在代码执行间隙执，GC 会影响性能
+并发标记：不阻塞 js 执行

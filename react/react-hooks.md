@@ -545,16 +545,17 @@ const cacheMap = new Map();
 
 export default (key: string, callback: Cb) => {
   return async (cache = true) => {
-    const result = cacheMap.get(key)
-
-    if(cache && result) {
-      return result
+    try {
+      if(cache && cacheMap.has(key)) {
+        return cacheMap.get(key)
+      }
+  
+      const res = await callback()
+      cacheMap.set(key, res)
+      return res
+    } catch (error) {
+      console.error(error)
     }
-
-    const res = await callback()
-    cacheMap.set(key, res)
-
-    return res
   }
 }
 ```

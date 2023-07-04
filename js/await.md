@@ -213,3 +213,121 @@ function asyncToGenerator(generatorFunc) {
   }
 }
 ```
+
+### 实现 isAsyncFunction 函数来判断是否是异步函数
+```js
+function isAsyncFunction(func) {
+  return func[Symbol.toStringTag] === 'AsyncFunction'
+}
+```
+
+### processTasks(...task) {}
+```js
+/**
+ * 1. 依次顺产执行一系列任务
+ * 2，所有任务全部完成后可以得到每个任务的执行结果
+ * 3，需要返回两个方法，start 用于启动任务，pause 用于暂停任务
+ * 4，每个任务具有原子性，即不可中断，只能在两个任务之间中断
+ * @param {...Function] tasks 务列表，每个任务无参、异步
+ */
+
+
+/**
+ * 解析：
+ * 1. 我们按顺序执行任务，也就是说必须等待上一个任务完成才能执行下一个任务
+ * 2. 在任务未完成时不可中断，如果在任务进行中进行中断操作并不会立即中断，而会在任务进行完毕后中断。
+ */
+
+import { useEffect } from 'react';
+
+let processor: any;
+function processTasks(tasks: Promise<any>[]) {
+  let isRunning = false; // 判断是否继续执行的状态
+  const result: any[] = []; // 存储执行结果
+  let prom: Promise<unknown> | null = null;
+  let i = 0; // 用于判断执行到第几个，便于继续执行
+
+  return {
+    start() {
+      return new Promise(async (resolve, reject) => {
+        if (prom) {
+          console.log(prom, 'promprom');
+
+          prom.then(resolve, reject);
+          return;
+        }
+        if (isRunning) return;
+        isRunning = true;
+        while (i < tasks.length) {
+          try {
+            console.log(i, '执行中');
+            result.push(await tasks[i]());
+            console.log(i, '执行完成');
+          } catch (error) {
+            isRunning = false;
+            reject(error);
+            prom = Promise.reject(error);
+            return;
+          }
+
+          i++;
+
+          if (!isRunning && i < tasks.length) {
+            console.log('执行中断');
+            return;
+          }
+        }
+        console.log('全部执行完成');
+        isRunning = false;
+        resolve(result);
+        prom = Promise.resolve(result);
+      });
+    },
+    stop() {
+      isRunning = false;
+    },
+  };
+}
+
+function AwaitTest() {
+  useEffect(() => {
+    const tasks = [];
+    // 生成几个异步函数
+    for (let i = 0; i < 5; i++) {
+      tasks.push(
+        () =>
+          new Promise(resolve =>
+            setTimeout(() => {
+              resolve(i);
+            }, 1000)
+          )
+      );
+    }
+    processor = processTasks(tasks);
+  }, []);
+
+  return (
+    <div>
+      <button
+        onClick={async () => {
+          const results = await processor.start();
+          console.log('任务执行完成', results);
+        }}
+      >
+        开始任务
+      </button>
+      <button
+        onClick={() => {
+          console.log('点击暂停');
+          processor.stop();
+        }}
+      >
+        暂停任务
+      </button>
+    </div>
+  );
+}
+
+export default AwaitTest;
+
+```

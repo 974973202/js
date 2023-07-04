@@ -127,16 +127,19 @@ module.exports = {
 - @babel/parser
 ```js
 // API
-import { parse, parseExpression, tokTypes } from '@babel/parser'
+import { parse, parseExpression, tokTypes } from '@babel/parser' // 可以把源码转换成AST
 // parse() parses the provided code as an entire ECMAScript program, while parseExpression() tries to parse a single Expression with performance in mind. When in doubt, use .parse().
 ```
-- @babel/core
-- @babel/generator
+- @babel/core  
+ - Babel 的编译器，核心 API 都在这里面，比如常见的 transform、parse，并实现了插件功能, 里面就包含了@babel/parser、@babel/traverse、@babel/generate、@babel/types等
+
+- @babel/generator   
+ - 可以把AST生成源码，同时生成sourcemap
 ```js
 // Turns an AST into code.
 ```
 - @babel/code-frame
 - @babel/runtime
 - @babel/template
-- @babel/traverse
-- @babel/types
+- @babel/traverse // 用于对 AST 的遍历，维护了整棵树的状态，并且负责替换、移除和添加节点
+- @babel/types  // 用于 AST 节点的 Lodash 式工具库, 它包含了构造、验证以及变换 AST 节点的方法，对编写处理 AST 逻辑非常有用
