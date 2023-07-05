@@ -376,3 +376,7 @@ function func<T>(type: T) {
 }
 func<keyof DataTableModelModel>('123')
 ```
+
+// extends 类型约束
+// infer 出现在extends 上
+// type inferType<T> = T extends (param: infer P) => any ? P : T
