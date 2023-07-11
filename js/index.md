@@ -1,8 +1,5 @@
 - 基本数据类型（原始值）：Number  Boolean  String  undefined  null  **栈内存（stack）**
 - 引⽤类型（引用值）：array  Object  function  data  RegExp...   **堆内存（heap）**
-- 栈和堆的区别
- - 栈：下馆子
- - 堆：自己搞
 
 - 判断布尔值为false的6种情况： undefined  null  NaN  “”  0  false 
 - javascript有8种内置类型：null, undefined, boolean, number, string, object, symbol，bigInt
@@ -24,15 +21,42 @@
 
 ### 操作数组常用的方法：
 - es5：
-concat 、join 、
-push、pop、
-shift、unshift、
-slice、splice、substring和substr 、
-sort、 reverse、
-indexOf和lastIndexOf 、
-every、some、filter、map、forEach、reduce
+- concat 对字符串或数组进行拼接
+- join 将array数据中每个元素都转为字符串，用自定义的连接符分割
+- push 往数组后追加元素
+- pop 删除一个数组中最后一个元素 并返回删除的元素
+- shift 删除一个数组中第一个元素 并返回删除的元素
+- unshift 往数组前追加元素
+- slice(start, end) 拷贝或截取数组，并返回截取后的数组
+- splice(start, deleteCount, items) 从第几位删除几位数组值，删除位可选插入的数据，并返回删除的数据
+- substring(start, end) 从第几位开始到第几位结束，返回截取的字符串
+- substr(start, length) 从第几位开始截取的长度是多少，返回截取的字符串
+- sort 排序
+```js
+var arr = [1,4,2,12,453,22];
+arr.sort() // [1,12,2,22,4,453] 按字母顺序对数组中的元素排序，按字符编码排序
+arr.sort((a, b) => -1); // 倒序 a是arr[1] b是arr[0]  a是b的前一个
+
+// 从小到大排
+arr.sort((a, b) => a-b); // a=b或a>b,返回0或正值则不变。返回负值则交换
+```
+- reverse 翻转数组
+- indexOf 查找数组元素所在索引，没有则返回-1
+- lastIndexOf 同indexOf 只是从后往前找
+- every() 每个条件都满足返回true 否则false
+- some() 有条件能满足返回true 否则false
+- filter() 过滤数组，返回满足条件后的数组
+- map() 对数组值进行处理 返回处理后的数组
+- forEach() 遍历
+- [reduce][reduce](/js/reduce.md)
 
 - es6：find、findIndex、fill、copyWithin、Array.from、Array.of、entries、values、key、includes
+- find 找到第一个符合的数组成员
+- findIndex 找到第一个符合的数组下标
+- fill(value, start, end) 用于填充值，可以传入填充的开始和结束
+- copyWithin 
+- Array.from 类数组转化为数组
+- Array.to 将数值转化为数组
 
 ### 预编译
 - 预编译发生在函数执行的前一刻
