@@ -62,6 +62,20 @@
 - funding 指定项目的资金支持方式和链接
 
 #### 文件配置
+- bin
+  bin 属性用于指定在全局安装时可执行的命令。它是一个对象，其中键是命令的名称，值是命令的路径
+  ```json
+  {
+    "name": "my-package",
+    "version": "1.0.0",
+    "bin": {
+      "my-command": "./bin/my-command.js"
+    }
+  }
+  ```
+  在全局安装时，会创建一个名为 my-command 的可执行命令，它的实际路径是 ./bin/my-command.js。
+  使用 bin 属性可以方便地将项目中的命令行工具安装到全局环境中，使其可以在任何地方使用。
+
 - files
   项目在进行 npm 发布时，可以通过 files 指定需要跟随一起发布的内容来控制 npm 包的大小，避免安装时间太长。
   发布时默认会包括 package.json，license，README 和main 字段里指定的文件。忽略 node_modules，lockfile 等文件。
