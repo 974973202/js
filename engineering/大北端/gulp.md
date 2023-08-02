@@ -75,7 +75,7 @@ const publishAndUpdate = function (cb) {
       for (const projectPath of projects) {
         const installScriptPath = path.join(projectPath, 'node_modules/@credit-risk/components/install/install.js');
         // 抹掉INIT_CWD，install指定projectPath为cwd
-        exec(`cd ${projectPath} & node ${installScriptPath}`, { env: { INIT_CWD: '' } }, (error, stdout, stderr) => {
+        exec(`cd ${projectPath} & node ${installScriptPath}`, { env: { INIT_CWD: '', projectPath } }, (error, stdout, stderr) => {
           console.log(stdout);
           console.log(stderr);
         });

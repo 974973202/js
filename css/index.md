@@ -291,7 +291,7 @@ margin:0 auto;设置块元素（或与之类似的元素）的居中。
 ```
 
 ### 如何实现左侧宽度固定，右侧宽度自适应的布局(两列布局)
-> float + margin实现
+> float + margin实现  position + margin实现
 > 利用calc计算宽度
 > float + overflow实现
 > flex实现

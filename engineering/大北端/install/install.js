@@ -3,14 +3,14 @@ const path = require('path');
 const cpy = require('cpy');
 
 function install() {
-  const projectPath = process.env.INIT_CWD || process.cwd();
+  const PATH = process.env.INIT_CWD || process.cwd();
   if (process.env.INIT_CWD !== process.cwd()) {
-    // const projectPath = process.env.INIT_CWD || process.cwd();
-    // const packageJSON = require(path.join(projectPath, 'package.json'));
+    // const PATH = process.env.INIT_CWD || process.cwd();
+    // const packageJSON = require(path.join(PATH, 'package.json'));
     // if (packageJSON.name === 'credit-risk') {
     //   return;
     // }
-    const targetDir = path.join(projectPath, 'src/.components');
+    const targetDir = path.join(process.env.projectPath || PATH, 'src/.components');
 
     if (!fs.existsSync(targetDir)) {
       try {

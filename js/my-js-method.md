@@ -1,6 +1,6 @@
-1. new  instanceOf
+1. new  
 2. call & apply
-3. bind
+3. bind instanceOf
 4. 防抖 debounce
 5. 节流 throttle
 6. deepClone, real deepCopy
@@ -39,18 +39,6 @@ function New() {
   let result = Con.apply(obj, arguments)
   // 确保 new 出来的是个对象
   return typeof result === 'object' ? result : obj
-}
-
-function instanceOf(father, child) {
-  const fp = father.prototype
-  var cp = child.__proto__
-  while (cp) {
-    if (cp === fp) {
-      return true
-    }
-    cp = cp.__proto__
-  }
-  return false
 }
 
 // 模拟Object.create()

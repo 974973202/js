@@ -78,7 +78,7 @@
 
 ### TOP 子句用于规定要返回的记录的数目
 ```sql
-  SELECT * FROM Websites LIMIT 2;
+  SELECT * FROM Websites LIMIT 2 OFFSET 2;
   SELECT TOP 50 PERCENT * FROM Websites;
 ```
 
