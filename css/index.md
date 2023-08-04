@@ -490,6 +490,15 @@ filters
 Will-change
 ```
 
+### link 加载顺序
+```html
+  <link rel="prefetch" href="style.css" as="style" /> 
+  
+  <link rel="preload" href="main.js" as="script" />
+```
+1. preload 优先级较高，提前加载较晚出现，但对当前页面非常重要的资源
+2. prefetch 优先级较低，提前加载后继路由需要的资源。一般用以加载其它路由资源，如当页面出现 Link，可 prefetch 当前 Link 的路由资源
+
 ### CSS3新特性
 新增各种CSS选择器
 圆角           （border-radius:8px）
