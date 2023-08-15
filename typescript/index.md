@@ -42,6 +42,10 @@ type keyobj = keyof typeof obj; // name age
 
 type keys = keyof IUser; // "name" | "age" | "class" | "sex"
 
+type keysobj = {
+  [key in IUser]: any
+}
+
 // ReadOnly 用于修改类型中属性为只读
 // 源码：type ReadOnly<T> = {readonly [P in keyof T]:T[P]}
 
@@ -219,12 +223,28 @@ Extract：跟Exclude相反，从从一个联合类型中取出属于另一个联
 举一反三，如果Exclude是取差集，那么Extract就是取交集。会返回两个联合类型中相同的部分。
 ### Partial
 Partial是一个将类型转为可选类型的工具，对于不明确的类型来说，需要将所有的属性转化为可选的?.形式，转换成为可选的属性类型
-源码： type Partial<T> = {[P in keyof T]?:T[P]}
+源码： 
+type Partial<T> = {
+  [P in keyof T]?: T[P]
+}
 ```js
 interface Person {
   name: string,
 }
 const a: Partial<Person> = {} // name?: string | undefined
+
+// fenxi
+type keys = keyof Person
+type Test = {
+  [key in keys]: any
+}
+type PersonOpt = {
+  [p in keys]?: Person[p]
+}
+
+type Partial<T> = {
+  [P in keyof T]?: T[P]
+}
 ```
 
 ### Required：将传入的属性变为必选项
@@ -377,6 +397,13 @@ function func<T>(type: T) {
 func<keyof DataTableModelModel>('123')
 ```
 
+```ts
 // extends 类型约束
+约束的类型必须有
+
 // infer 出现在extends 上
 // type inferType<T> = T extends (param: infer P) => any ? P : T
+
+type NonType<T> = T extends null | undefined ? nerver : T
+let demo1:NonType<number> 
+```
