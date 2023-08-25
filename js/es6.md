@@ -1,19 +1,3 @@
-首先声明，js的奇怪之处不叫bug，叫特性
-
-### 新增的数组API
-- find(callback): 用于查找满足条件的第一个元素 返回true or undefined
-```js
-arr.find(item => item.id == 5); 
-```
-- findIndex(callback): 用于查找满足条件的第一个元素的下标
-```js
-arr.findIndex(item => item.id == 5); 
-```
-- fill(data): 用指定数据填充满数组的所有内容
-- copyWithin(target, start?, end?): 在数组内部完成复制
-- includes(data): 判断数组中是否包含某个值
-
-
 ### Set (可迭代对象)
 1. set用于存放不重复的数据
 2. 能对数组，字符串去重
@@ -407,4 +391,122 @@ const UserProxy = ConstructorProxy(User, 'a', 'b', 'c')
 
 const obj = new UserProxy('1', '2', '3')
 console.log(obj)
+```
+
+
+### real Map
+```js
+//Map
+//1.不重复
+//2.字符串 对象 NaN null [] function(){} 10
+//3.set get delete has clear方法
+
+function myMap() {
+  this.bucketLength = 8;
+  this.init();
+}
+
+myMap.prototype.init = function () {
+  // 初始化 桶 8
+  this.bucket = new Array(this.bucketLength);
+  for (var i = 0; i < this.bucket.length; i++) {
+    this.bucket[i] = {
+      type: 'bucket_' + i,
+      next: null
+    }
+  }
+}
+// 
+// 1. [0, 8)
+// 2. 重复算值固定
+myMap.prototype.makeHash = function (key) {
+  let hash = 0;
+  // string   
+  if (typeof key !== 'string') {
+    if (typeof key == 'number') {
+      //number NaN 
+      hash = Object.is(key, NaN) ? 0 : key;
+    } else if (typeof key == 'object') {
+      // null {} []
+      hash = 1;
+    } else if (typeof key == 'boolean') {
+      // true false boolean
+      hash = Number(key);
+    } else {
+      // undefined  function(){}
+      hash = 2;
+    }
+  } else {
+    // string
+    // 'a' 'ab' 'asdasdadasda';
+    // 长度大于等于3 前三个字符 ascii 累加 
+    for (let i = 0; i < 3; i++) {
+      // key[]
+      hash += key[i] ? key[i].charCodeAt(0) : 0;
+    }
+  }
+  return hash % 8;
+}
+
+myMap.prototype.set = function (key, value) {
+  let hash = this.makeHash(key);
+  let oTempBucket = this.bucket[hash];
+  while (oTempBucket.next) {
+    if (oTempBucket.next.key == key) {
+      oTempBucket.next.value = value;
+      return;
+    } else {
+      oTempBucket = oTempBucket.next;
+    }
+  };
+  oTempBucket.next = {
+    key: key,
+    value: value,
+    next: null
+  };
+}
+
+myMap.prototype.get = function (key) {
+  let hash = this.makeHash(key);
+  let oTempBucket = this.bucket[hash];
+  while (oTempBucket) {
+    if (oTempBucket.key == key) {
+      return oTempBucket.value;
+    } else {
+      oTempBucket = oTempBucket.next;
+    }
+  }
+  return undefined;
+}
+
+myMap.prototype.delete = function (key) {
+  let hash = this.makeHash(key);
+  let oTempBucket = this.bucket[hash];
+  while (oTempBucket.next) {
+    if (oTempBucket.next.key == key) {
+      oTempBucket.next = oTempBucket.next.next;
+      return true;
+    } else {
+      oTempBucket = oTempBucket.next;
+    }
+  }
+  return false;
+}
+
+myMap.prototype.has = function (key) {
+  let hash = this.makeHash(key);
+  let oTempBucket = this.bucket[hash];
+  while (oTempBucket) {
+    if (oTempBucket.next && oTempBucket.next.key == key) {
+      return true;
+    } else {
+      oTempBucket = oTempBucket.next;
+    }
+  }
+  return false;
+};
+
+myMap.prototype.clear = function (key) {
+  this.init();
+};
 ```

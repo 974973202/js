@@ -57,6 +57,7 @@ arr.sort((a, b) => a-b); // a=b或a>b,返回0或正值则不变。返回负值�
 - copyWithin 
 - Array.from 类数组转化为数组
 - Array.to 将数值转化为数组
+- includes: 判断数组中是否包含某个值 [].includes(xx)
 
 ### 预编译
 - 预编译发生在函数执行的前一刻
@@ -259,7 +260,7 @@ Child.prototype.constructor = Child
 ### 原生JS中DOM节点相关API合集
 - [原生JS中DOM节点相关API合集]https://microzz.com/2017/04/06/jsdom/
 
-### common.js 和 es6 中模块引入的区别
+### common.js 和 es6 import 中模块引入的区别
 1. CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。
 2. CommonJS 模块是运行时加载，ES6 模块是编译时输出接口。
 3. CommonJs 是单个值导出，ES6 Module可以导出多个
@@ -328,19 +329,6 @@ Object.keys(param).map(key => `${key}=${param[key]}`).join('&');
 // 1. Array.prototype.flat(context)  参数context表示深度Infinity展开任意深度的嵌套数组
 // 2. JSON.stringify(arr).replace(/(\[|\])/g, '').split(',')
 // 3. 递归
-var arr = [1, [2, [3, [4, 5]]], 6];
-let result = [];
-function test(arr) {
-  arr.forEach(ele => {
-    if (Array.isArray(ele)) {
-      test(ele)
-    } else {
-      result.push(ele)
-    }
-  });
-  return result
-}
-console.log(test(arr))
 ```
 
 ### 三 有以下 3 个判断数组的方法，请分别介绍它们之间的区别和优劣Object.prototype.toString.call() 、 instanceof 以及 Array.isArray()
@@ -488,111 +476,6 @@ let addEvent1 = (type, element, fun) => {
 }
 ```
 
-### 实现一个双向绑定
-html: 
-```html
-<span id="span"></span>
-<input type="text" id="input">
-```
-- defineProperty实现
- - Object.defineProperty(obj, prop, descriptor)
- - obj 要在其上定义属性的对象。
- - prop 要定义或修改的属性的名称。
- - descriptor 将被定义或修改的属性描述符
-  * configurable特性表示对象的属性是否可以被删除
-  * enumerable定义了对象的属性是否可以在 for...in 循环和 Object.keys() 中被枚举
-  * writable属性设置为false时，该属性被称为“不可写”。它不能被重新分配
-  * 如果一个描述符同时有(value或writable)和(get或set)关键字，将会产生一个异常
-js:
-```javascript
-// 数据
-const data = {
-  text: 'default'
-};
-const input = document.getElementById('input');
-const span = document.getElementById('span');
-// 数据劫持
-Object.defineProperty(data, 'text', {
-  // 数据变化 --> 修改视图
-  set(newVal) {
-    input.value = newVal;
-    span.innerHTML = newVal;
-  }
-});
-// 视图更改 --> 数据变化
-input.addEventListener('keyup', function(e) {
-  data.text = e.target.value;
-});
-```
-- proxy实现
-js:
-```javascript
-// 数据
-const data = {
-  text: 'default'
-};
-const input = document.getElementById('input');
-const span = document.getElementById('span');
-// 数据劫持
-const handler = {
-  set(target, key, value) {
-    target[key] = value;
-    // 数据变化 --> 修改视图
-    input.value = value;
-    span.innerHTML = value;
-    return value;
-  }
-};
-const proxy = new Proxy(data, handler);
-// 视图更改 --> 数据变化
-input.addEventListener('keyup', function(e) {
-  proxy.text = e.target.value;
-});
-```
-
-### 同步实现等待执行
-```javascript
-  function CodingMan(name) { // 主要考察的是 面向对象以及JS运行机制（同步 异步 任务队列 事件循环）
-    function Man(name) {
-      setTimeout(() => { // 异步
-        console.log(`Hi! This is ${name}`);
-      }, 0);
-    }
-
-    Man.prototype.sleep = function (time) {
-      let curTime = new Date();
-      let delay = time * 1000;
-      setTimeout(() => { // 异步
-        while (new Date() - curTime < delay) { } // 阻塞当前主线程
-        console.log(`Wake up after ${time}`);
-      }, 0);
-      return this;
-    }
-
-    Man.prototype.sleepFirst = function (time) {
-      let curTime = new Date();
-      let delay = time * 1000;
-      while (new Date() - curTime < delay) { } // 阻塞当前主线程
-      console.log(`Wake up after ${time}`);
-      return this;
-    }
-
-    Man.prototype.eat = function (food) {
-      setTimeout(() => { // 异步
-        console.log(`Eat ${food}~~`);
-      }, 0)
-      return this;
-    }
-
-    return new Man(name);
-  }
-
-  // CodingMan('Peter');
-  CodingMan('Peter').sleep(3).eat('dinner');
-  // CodingMan('Peter').eat('dinner').eat('supper');
-  // CodingMan('Peter').sleepFirst(5).eat('supper');
-```
-
 ### AMD CMD
 - AMD 是提前执行，CMD 是延迟执行
 - AMD 推崇依赖前置, CMD 推崇依赖就近
@@ -683,3 +566,24 @@ from space 与 to space 互换
 标记清除算法：标记存活的对象，未被标记的则被释放
 增量标记：小模块标记，在代码执行间隙执，GC 会影响性能
 并发标记：不阻塞 js 执行
+
+### import和require
+1. 语法：import是ES6的模块引入语法，而require是Node.js的模块引入语法。
+2. 功能：import支持静态导入，可以在任何地方使用，而require是动态导入，只能在代码的顶层使用。
+3. 导入方式：import只能导入具名导出的模块，而require可以导入具名导出和默认导出的模块。
+4. 引入时机：import是**编译时**引入，会在代码执行之前进行解析和执行，而require是**运行时**引入，会在代码执行时进行解析和执行。
+5. 作用域：import是块级作用域，只在当前模块中有效，而require是函数级作用域，可以在函数内部使用。
+总的来说，import是ES6的模块引入语法，支持静态导入，适用于浏览器环境；
+而require是Node.js的模块引入语法，支持动态导入，适用于服务器端开发。
+
+### 事件循环，消息队列与宏任务、微任务之间的关系是什么？
+
+- 宏任务入队消息队列，可以将消息队列理解为宏任务队列
+- 每个宏任务内有一个微任务队列，执行过程中微任务入队当前宏任务的微任务队列
+- 宏任务微任务队列为空时才会执行下一个宏任务
+- 事件循环捕获队列出队的宏任务和微任务并执行
+
+- 事件循环会不断地处理消息队列出队的任务，而宏任务指的就是入队到消息队列中的任务，
+- 每个宏任务都有一个微任务队列，宏任务在执行过程中，如果此时产生微任务，那么会将
+- 产生的微任务入队到当前的微任务队列中，在当前宏任务的主要任务完成后，会依次出队
+- 并执行微任务队列中的任务，直到当前微任务队列为空才会进行下一个宏任务。

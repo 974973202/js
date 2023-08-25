@@ -1,5 +1,91 @@
 // await 是求值，对promise求值
 
+// one
+```js
+async function async1() {
+  console.log('async1 start');
+  await async2();
+  console.log('async1 end');
+}
+async function async2() {
+  console.log('async2');
+}
+console.log('script start');
+setTimeout(function () {
+  console.log('setTimeout');
+}, 0)
+async1();
+new Promise(function (resolve) {
+  console.log('promise1');
+  resolve();
+}).then(function () {
+  console.log('promise2');
+});
+console.log('script end');
+
+// script start
+// async1 start
+// async2
+// promise1
+// script end
+// async1 end
+// promise2
+// setTimeout
+
+
+
+// two
+// async function async1() {
+//   console.log('async1 start')  // 2
+//   await async2()
+//   console.log('async1 end')   // 8
+// }
+// async function async2() {
+//   console.log('async2')    // 3
+// }
+// console.log('script start')  // 1
+// setTimeout(function () {
+//   console.log('setTimeout0')  // 10
+// })
+// setTimeout(function () {
+//   console.log('setTimeout3')  // 11
+// }, 3)
+// setImmediate(() => console.log('setImmediate'));  // 12
+// process.nextTick(() => console.log('nextTick'));  // 7
+// async1();
+// new Promise(function (resolve) {
+//   console.log('promise1')    // 4
+//   resolve();
+//   console.log('promise2')    // 5
+// }).then(function () {
+//   console.log('promise3')   // 9
+// })
+// console.log('script end')     // 6
+
+// two  1245367
+const promise = new Promise((resolve, reject) => {
+  console.log(1);
+  resolve(5);
+  console.log(2);
+}).then(val => {
+  console.log('xx');
+});
+
+promise.then(() => {
+  console.log(3);
+  setTimeout(function () {
+    console.log(7);
+  });
+});
+
+console.log(4);
+
+setTimeout(function () {
+  console.log(6);
+});
+```
+
+
 ```js
 // await 只能阻塞promise对象
 async function test() {
@@ -110,16 +196,7 @@ function run(gen) {
 }
 ```
 
-
-// ### await是如何实现暂停执行
-//
-//
-//
-//
-
-
-
-// 手写async await的最简实现（20行搞定）！阿里字节面试必考
+### await是如何实现暂停执行  手写async await的最简实现（20行搞定）
 ```js
 function asyncToGenerator(generatorFunc) {
   return function () {
