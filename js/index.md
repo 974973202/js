@@ -1,9 +1,9 @@
-- 基本数据类型（原始值）：Number  Boolean  String  undefined  null  **栈内存（stack）**
+- 基本数据类型（原始值）(5)：Number  Boolean  String  undefined  null  **栈内存（stack）**
 - 引⽤类型（引用值）：array  Object  function  data  RegExp...   **堆内存（heap）**
 
-- 判断布尔值为false的6种情况： undefined  null  NaN  “”  0  false 
-- javascript有8种内置类型：null, undefined, boolean, number, string, object, symbol，bigInt
-- typeof可判断的类型： 1.string  2.number  3.boolean  4.object  5.undefined  6.function  7. symbol
+- 判断布尔值为false的(6)种情况： undefined  null  NaN  “”  0  false 
+- javascript有(8)种内置类型：null, undefined, boolean, number, string, object, symbol, bigInt
+- typeof可判断的类型(7)： 1.string  2.number  3.boolean  4.object  5.undefined  6.function  7. symbol
 
 ### null和undefined区别
 - undefined 代表的含义是未定义，null 代表的含义是空对象
@@ -260,13 +260,6 @@ Child.prototype.constructor = Child
 ### 原生JS中DOM节点相关API合集
 - [原生JS中DOM节点相关API合集]https://microzz.com/2017/04/06/jsdom/
 
-### common.js 和 es6 import 中模块引入的区别
-1. CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。
-2. CommonJS 模块是运行时加载，ES6 模块是编译时输出接口。
-3. CommonJs 是单个值导出，ES6 Module可以导出多个
-4. CommonJs 是动态语法可以写在判断里，ES6 Module 静态语法只能写在顶层
-5. CommonJs 的 this 是当前模块，ES6 Module的 this 是 undefined
-
 ### JSON.stringify()
 ```js
 const user = {
@@ -322,13 +315,6 @@ Object.keys(param).map(key => `${key}=${param[key]}`).join('&');
 // 2. Array.from()
 // 3. [...arguments]
 // 4. Array.prototype.concat.apply([], arguments)
-```
-
-### 二 数组扁平化
-```js
-// 1. Array.prototype.flat(context)  参数context表示深度Infinity展开任意深度的嵌套数组
-// 2. JSON.stringify(arr).replace(/(\[|\])/g, '').split(',')
-// 3. 递归
 ```
 
 ### 三 有以下 3 个判断数组的方法，请分别介绍它们之间的区别和优劣Object.prototype.toString.call() 、 instanceof 以及 Array.isArray()
@@ -550,22 +536,18 @@ btn.remove();
 ```
 
 ### node 的内存管理跟垃圾回收机制有了解过吗？
-首先分两种情况：V8 将内存分成 新生代空间 和 老生代空间
-新生代空间: 用于存活较短的对象
-又分成两个空间: from 空间 与 to 空间
-Scavenge GC 算法: 当 from 空间被占满时，启动 GC 算法
-存活的对象从 from space 转移到 to space
-清空 from space
-from space 与 to space 互换
-完成一次新生代 GC
+Node.js的内存管理主要包括两个方面：堆内存和栈内存。
+1. 堆内存：Node.js使用堆内存来分配和管理对象。V8引擎的堆内存分为新生代和老生代两个区域。
+  - 新生代：新生代是存放新创建的对象的区域。它又分为From空间和To空间。当新对象被创建时，首先分配在From空间，当From空间满了，就会触发垃圾回收，将还存活的对象复制到To空间，并清空From空间。然后交换From空间和To空间的角色，这样就完成了一次垃圾回收。新生代的垃圾回收使用的是Scavenge算法，它通过复制存活对象来实现垃圾回收。
+  - 老生代：老生代是存放存活时间较长的对象的区域。当新生代经历了一定次数的垃圾回收后，存活的对象会被晋升到老生代。老生代的垃圾回收使用的是标记-清除算法和标记-整理算法的组合。标记-清除算法首先标记所有的存活对象，然后清除未标记的对象。标记-整理算法在清除对象后会将存活对象向一端移动，从而减少内存碎片。
+2. 栈内存：Node.js使用栈内存来存储函数调用时的局部变量、函数参数等。栈内存的分配和释放是由V8引擎自动管理的，不需要开发者手动操作。
 
-老生代空间: 用于存活时间较长的对象
-从 新生代空间 转移到 老生代空间 的条件（这个过程称为对象晋升）
-经历过一次以上 Scavenge GC 的对象
-当 to space 体积超过 25%
-标记清除算法：标记存活的对象，未被标记的则被释放
-增量标记：小模块标记，在代码执行间隙执，GC 会影响性能
-并发标记：不阻塞 js 执行
+垃圾回收机制是Node.js中的一个重要特性，它可以自动回收不再使用的内存，避免内存泄漏和内存溢出的问题。V8引擎中的垃圾回收机制主要包括以下几个步骤：
+1. 标记：垃圾回收器从根对象开始，递归遍历所有的对象，并标记为活动对象。根对象可以是全局变量、活动函数的局部变量等。如果某个对象无法从根对象访问到，则说明该对象已经不再使用。
+2. 清除：垃圾回收器清除所有未标记的对象，释放其占用的内存。
+3. 整理：如果是老生代的垃圾回收，垃圾回收器会对存活的对象进行整理，将它们向一端移动，从而减少内存碎片。
+
+需要注意的是，垃圾回收机制会在程序运行时暂停程序的执行，进行垃圾回收操作。这个暂停时间称为“停顿时间”，长时间的停顿时间会影响程序的性能。为了减少停顿时间，V8引擎采用了**增量标记和并行标记**等技术，将垃圾回收的工作分解成多个阶段，并与程序的执行交替进行，从而减少停顿时间的影响。
 
 ### import和require
 1. 语法：import是ES6的模块引入语法，而require是Node.js的模块引入语法。

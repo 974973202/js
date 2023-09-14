@@ -191,6 +191,11 @@ loggingIdentity(3);  // Error, number doesn't have a .length property
 loggingIdentity({length: 10, value: 3});
 ```
 
+### implements和extends
+1. implements和extends是用来定义类之间关系的关键字
+2. implements关键字用于类实现接口。当一个类实现一个接口时，它必须实现接口中定义的所有属性和方法。这可以确保类具有接口所需的行为
+3. extends关键字用于类继承。一个类可以从另一个类继承属性和方法。子类可以访问父类的公共成员，也可以重写父类的方法。一个类只能继承自一个类，但可以实现多个接口
+
 ### namespace 命名空间
 
 ### never, void 的区别

@@ -270,26 +270,6 @@ JS文件不只是阻塞DOM的构建，它会导致CSSOM也阻塞DOM的构建。
 当 onload 事件触发时,页面上所有的 DOM,样式表,脚本,图片等资源已经加载完毕。
 DOMContentLoaded -> load。
 ### 加载解析渲染
-### defer 和 async 的区别 ?
-当浏览器碰到 script 脚本的时候 :
-1. <script src="script.js">
-没有 defer 或 async,浏览器会立即加载并执行指定的脚本,“立即”指的是在渲染该 script 标签之下的文档元素之前,也就是说不等待后续载入的文档元素,读到就加载并执行。
-2. <script async src="script.js">
-有 async,加载和渲染后续文档元素的过程将和 script.js 的加载与执行并行进行（异步）。
-3. <script defer src="myscript.js">
-有 defer,加载后续文档元素的过程将和 script.js 的**加载**并行进行（异步）,但是 script.js 的**执行**要在所有元素解析完成之后,DOMContentLoaded 事件触发之前完成。
-从实用角度来说,首先把所有脚本都丢到 </body> 之前是最佳实践,因为对于旧浏览器来说这是唯一的优化选择,此法可保证非脚本的其他一切元素能够以最快的速度得到加载和解析。
-
-接着,我们来看一张图:
-![](https://user-gold-cdn.xitu.io/2020/1/7/16f7edfaa3e8c6ee?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
-
-蓝色线代表网络读取,红色线代表执行时间,这俩都是针对脚本的。绿色线代表 HTML 解析。
-因此,我们可以得出结论:
-1. defer 和 async 在网络读取（下载）这块儿是一样的,都是异步的（相较于 HTML 解析）
-2. 它俩的差别在于脚本下载完之后何时执行,显然 defer 是最接近我们对于应用脚本加载和执行的要求的
-3. 关于 defer,此图未尽之处在于它是按照加载顺序执行脚本的,这一点要善加利用
-4. async 则是一个乱序执行的主,反正对它来说脚本的加载和执行是紧紧挨着的,所以不管你声明的顺序如何,只要它加载完了就会立刻执行
-5. 仔细想想,async 对于应用脚本的用处不大,因为它完全不考虑依赖（哪怕是最低级的顺序执行）,不过它对于那些可以不依赖任何脚本或不被任何脚本依赖的脚本来说却是非常合适的
 
 ### JS 什么时候解析？
 
@@ -302,8 +282,12 @@ DOMContentLoaded -> load。
 异步执行引入的 JavaScript，加载完成后就执行 JS，阻塞DOM
 
 <script defer>
-延迟执行。载入 JavaScript 文件时不阻塞 HTML 的解析，执行阶段被放到 HTML 标签解析完成之后。
+延迟执行。载入 JavaScript 文件时不阻塞 HTML 的解析，执行阶段被放到HTML标签解析完成之后。
+{/* defer js和html 并行执行加载，等到html解析完，js才执行 */}
+{/* 设置了defer后 DOMContentLoaded会等到js执行完再触发 */}
 ```
+- defer 属性仅适用于外部脚本，如果 script 脚本没有 src，则会忽略 defer 特性
+- defer 届性对模块脚本 (script type='module') 无效，因为模块脚本就是以 defer 的形式加载的
 
 
 ### 什么是 CRP,即关键渲染路径(Critical Rendering Path)? 如何优化 ?
@@ -327,3 +311,22 @@ DOMContentLoaded -> load。
  - 当我们的脚本不会修改 DOM 或 CSSOM 时,推荐使用 async 。
  - 预加载 —— preload & prefetch 。
  - DNS 预解析 —— dns-prefetch 。
+
+
+### async 和 defer
+- defer
+1. 不阻塞浏览器解析 HTML，等解析完 HTML 之后，才会执行 script。
+2. 会并行下载 JavaScript 资源。
+3. 会按照 HTML 中的相对顺序执行脚本
+4. 会在脚本下载并执行完成之后，才会触发 DOMContentLoaded 事件。
+5. 在脚本执行过程中，一定可以获取到 HTML 中已有的元素
+6. defer 属性对模块脚本无效。
+7. 适用于: 所有外部脚本 (通过 src 引用的 script )。
+
+- async 
+1. 不阻塞浏览器解析 HTML，但是 script 下载完成后，会立即中断浏览器解析 HTML，并执行此 script
+2. 会并行下载 JavaScript 资源。
+3. 互相独立，谁先下载完，谁先执行，没有固定的先后顺序，不可控。
+4. 由于没有确定的执行时机，所以在脚本里面可能会获取不到 HTML 中已有的元素
+5. DOMContentLoaded 事件和 script 脚本无相关性，无法确定他们的先后顺序
+6. 适用于:独立的第三方脚本。
