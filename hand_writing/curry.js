@@ -17,3 +17,10 @@ const currySum = curry(sum);
 console.log(currySum(1)(2)(3)(4)); // 10
 // currySum(1, 2)(3)(4); // 10
 // currySum(1)(2, 3)(4); // 10
+
+
+
+// 练习
+const c = (fn) => (jdg = (...args) => (
+    (args.length >= fn.length) ? fn(...args) : (...rest) => jdg(...args, ...rest)
+))

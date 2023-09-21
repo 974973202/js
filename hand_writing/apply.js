@@ -1,4 +1,10 @@
 
+/**
+ * 版本一
+ * @param {*} context 
+ * @param {*} arr 
+ * @returns 
+ */
 Function.prototype.myApply = function (context, arr) {
   var context = Object(context) || window; // Object(null) -> {}
   context.fn = this;
@@ -17,6 +23,12 @@ Function.prototype.myApply = function (context, arr) {
   delete context.fn
   return result;
 }
+
+/**
+ * 版本二
+ * @param {*} thisArg 
+ * @returns 
+ */
 Function.prototype.myapply = function (thisArg) {
   if (typeof this !== 'function') {
     throw this + ' is not a function';
@@ -66,6 +78,8 @@ const nums = [1, 2, 3, 4, 5];
 console.log(Math.max.apply(null, nums)); // 输出 5
 
 
+
+// 练习
 Function.prototype.applyx = function (ct, arr) {
   // const content = Object(ct) || window;
   // content.fn = this;

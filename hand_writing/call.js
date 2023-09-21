@@ -36,3 +36,38 @@ Function.prototype.mycall = function (thisArg) {
   // 返回函数执行结果
   return result;
 }
+
+
+// ---------------------- call用法
+// 例一:
+const person = {
+  name: 'John',
+  sayHello: function () { console.log('Hello, ' + this.name); }
+};
+const anotherPerson = { name: 'Alice' };
+
+person.sayHello.call(anotherPerson); // 输出: Hello, Alice
+
+// 例二：
+function sayGreeting(greeting) {
+  console.log(greeting + ', ' + this.name);
+}
+const person1 = { name: 'John' };
+
+sayGreeting.call(person1, 'Hello'); // 输出: Hello, John
+
+
+// 练习
+Function.prototype.myc = function (context) {
+  const ctx = context || window;
+  ctx.fn = this;
+
+  const args = [];
+  for (let i = 1; i < arguments.length; i++) {
+    args.push(arguments[i])
+  }
+
+  const result = eval(`ctx.fn(${args})`)
+  delete ctx.fn
+  return result;
+}

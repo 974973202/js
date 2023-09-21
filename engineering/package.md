@@ -97,6 +97,11 @@
   这样所有 .js 后缀的文件，node 都会用 ES 模块解释。
   如果还要使用 CommonJS 模块规范，那么需要将 CommonJS 脚本的后缀名都改成.cjs，不过两种模块规范最好不要混用，会产生异常报错。
 
+
+> main 主入口 取决于环境  require?
+> module es import 
+> unpkg script
+
 - main
   项目发布时，默认会包括 package.json，license，README 和main 字段里指定的文件，因为 main 字段里指定的是项目的入口文件，在 browser 和 Node 环境中都可以使用。
   如果不设置 main 字段，那么入口文件就是根目录下的 index.js。

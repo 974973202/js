@@ -55,24 +55,24 @@ class EventBus {
   }
 
   // 订阅事件
-  subscribe(eventName, callback) {
-    this.events[eventName] = this.events[eventName] || []; // 如果事件不存在，创建一个空的回调函数列表 (空数组)
-    this.events[eventName].push(callback); // 将回调函数添加到事件的回调函数列表中
+  subscribe(name, _cb) {
+    this.events[name] = this.events[name] || []; // 如果事件不存在，创建一个空的回调函数列表 (空数组)
+    this.events[name].push(_cb); // 将回调函数添加到事件的回调函数列表中
   }
 
   // 发布事件
-  publish(eventName, data) {
-    if (this.events[eventName]) {
-      this.events[eventName].forEach(callback => {
-        callback(data); // 执行回调函数，并传递数据作为参数
+  publish(name, data) {
+    if (this.events[name]) {
+      this.events[name].forEach(cb => {
+        cb(data); // 执行回调函数，并传递数据作为参数
       });
     }
   }
 
   // 取消订阅事件
-  unsubscribe(eventName, callback) {
-    if (this.events[eventName]) {
-      this.events[eventName] = this.events[eventName].filter(cb => cb !== callback); // 过滤掉要取消的回调函数
+  unsubscribe(name, _cb) {
+    if (this.events[name]) {
+      this.events[name] = this.events[name].filter(cb => cb !== _cb); // 过滤掉要取消的回调函数
     }
   }
 }

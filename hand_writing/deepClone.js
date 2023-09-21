@@ -53,35 +53,34 @@ function deepCopy(ori) {
     let copy;
     switch (type) {
         case 'array': // 递归
-            return copyArray(ori, type, copy);
+            return copyArray(ori, copy);
         case 'object': // 递归
-            return copyObject(ori, type, copy);
+            return copyObject(ori, copy);
         case 'function': // eval
-            return copyFunction(ori, type, copy);
+            return copyFunction(ori);
         default:
             return ori;
     }
 }
 
-function copyArray(ori, type, copy = []) {
+function copyArray(ori, copy = []) {
     for (const [index, value] of ori.entries()) {
         copy[index] = deepCopy(value);
     }
     return copy;
 }
 
-function copyObject(ori, type, copy = {}) {
+function copyObject(ori, copy = {}) {
     for (const [key, value] of Object.entries(ori)) {
         copy[key] = deepCopy(value);
     }
     return copy;
 }
 
-function copyFunction(ori, type, copy = () => { }) {
-    // const fun = eval(ori.toString()); // Function statements require a function name
-    const fun = eval("(" + ori.toString() + ")");
-    fun.prototype = ori.prototype
-    return fun
+function copyFunction(ori) {
+    const func = eval(`(${ori.toString()})`)
+    func.prototype = d.prototype;
+    return func
 }
 const newobj = deepCopy({
     'a': 1,

@@ -6,7 +6,7 @@
 // 通俗来说 无论你触发多少次 我只在规定时间内给你执行一次
 
 /**
- * 时间戳版
+ * 时间戳版 - 时间戳版的函数触发是在时间段内开始的时候执行
  * @param {Function} func 传入执行函数
  * @param {Number} wait 等待执行时间
  */
@@ -24,7 +24,7 @@ function throttle(func, wait) {
 }
 
 /**
- * 定时器版
+ * 定时器版 - 定时器版的函数触发是在时间段内结束的时候
  * @param {Function} func 传入执行函数
  * @param {Number} wait 等待执行时间
  */
