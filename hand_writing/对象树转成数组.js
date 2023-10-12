@@ -1,5 +1,6 @@
 // 1. 常规循环
 function convertToArray(obj) {
+    // let
     let result = [];
     result.push({ id: obj.id, name: obj.name });
     if (obj.children) {
@@ -10,7 +11,9 @@ function convertToArray(obj) {
     return result;
 }
 // 2. 广度优先
-// 我们使用一个队列来存储待处理的节点，从根节点开始将其加入队列中。然后，我们从队列中取出第一个节点并将其转换为包含_id_、_name_和_depth_属性的新对象，其中_depth_属性表示当前节点的深度。然后，我们将新对象添加到结果数组中。
+// 我们使用一个队列来存储待处理的节点，从根节点开始将其加入队列中。
+// 然后，我们从队列中取出第一个节点并将其转换为包含_id_、_name_和_depth_属性的新对象，
+// 其中_depth_属性表示当前节点的深度。然后，我们将新对象添加到结果数组中。
 
 // 接下来，我们检查该节点是否有_children_属性，如果有，则遍历每个_child_并将其添加到队列中，其中_depth_属性是当前节点的_depth_属性加1。
 

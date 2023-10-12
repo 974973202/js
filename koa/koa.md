@@ -4,18 +4,18 @@
 加入减少一个功能，不影响原来的功能 
 
 ```js
-async function fn1(next) {
+async function fn1(ctx, next) {
   console.log("fn1");
   await next(true);
   console.log("fn11");
 }
-async function fn2(next) {
+async function fn2(ctx, next) {
   console.log("fn2");
   await delay(3000);
   await next(false);
   console.log("fn22");
 }
-async function fn3(next) {
+async function fn3(ctx, next) {
   console.log("fn3");
 }
 
@@ -31,7 +31,7 @@ function delay(wait) {
  * 递归加函数组合compose
  */
 function compose(middlewares) {
-  return function (...args) {
+  return function (args) {
     // 执行第一个next
     return dispatch(0);
 
@@ -41,17 +41,8 @@ function compose(middlewares) {
         return Promise.resolve();
       }
       return Promise.resolve(
-        fn(function next(bool) {
-          // console.log(bool)
+        fn(args, function next() {
           return dispatch(i + 1);
-
-          // if(bool) {
-          //   return dispatch(i+1)
-          // } else {
-          //   setTimeout(() => {
-          //     return dispatch(i+1)
-          //   })
-          // }
         })
       );
     }
@@ -60,7 +51,7 @@ function compose(middlewares) {
 
 // const middlewares = [fn1, fn2, fn3];
 const finalFn = compose([fn1, fn2, fn3]);
-finalFn();
+finalFn('cpdd');
 ```
 
 koa常用插件

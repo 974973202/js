@@ -82,24 +82,25 @@ function shellSort(arr) {
 
 ```js
 // 冒泡排序 两两交换
+// 总结
+// 1、外层 for 循环控制循环次数
+// 2、内层 for 循环进行两数交换，找每次的最大数，排到最后
 const arr = [9, 7, 4, 9, 7, 3, 2, 0, 2];
 function bubbleSort(arr) {
-  for (var i = 0; i < arr.length - 1; i++) {
-    for (var j = 0; j < arr.length - i - 1; j++) {
+  for (var i = 0; i < arr.length - 1; i++) { // 第一个for是遍历
+    for (var j = 0; j < arr.length - i - 1; j++) { // 第二个for是比较
       // 每完成一次排序完成必然选出最大的一位放后面，所以减i是最后面的数据不需要再次比较。减1是数组下标从0开始
       if (arr[j] > arr[j + 1]) {
-        var temp = arr[j];
-        arr[j] = arr[j + 1];
-        arr[j + 1] = temp;
-        // [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]
+        // var temp = arr[j];
+        // arr[j] = arr[j + 1];
+        // arr[j + 1] = temp;
+        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]
       }
     }
   }
   return arr;
 }
-// 总结
-// 1、外层 for 循环控制循环次数
-// 2、内层 for 循环进行两数交换，找每次的最大数，排到最后
+
 
 // 快速排序1 递归 选取中间元素做比较
 const arr = [9, 7, 4, 9, 7, 3, 2, 0, 2];

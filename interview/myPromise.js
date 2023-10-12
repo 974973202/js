@@ -82,7 +82,7 @@ function _resolvePromise(bridgePromise, x, resolve, reject) {
   }
 }
 
-/** Promise的then方法实现链式调用的原理是：返回一个新的Promise */ 
+/** Promise的then方法实现链式调用的原理是：返回一个新的Promise */
 MyPromise.prototype.then = function (onFulfilled, onRejected) {
 
   // 不支持串行异步任务
@@ -202,9 +202,68 @@ MyPromise.reject = function (cb) {
   return this.then((value) => {
     return MyPromise.resolve(cb()).then(value => value)
   }, (error) => {
-    return MyPromise.resolve(cb()).then(error => {throw error})
+    return MyPromise.resolve(cb()).then(error => { throw error })
   })
 }
+
+/**
+ * 首先了解Promise.allSettled什么作用和用法
+ * 相对于 Promise.all 需要所有promise都成功时才 resolve或者有一个失败时进行reject
+ * Promise.allSettled则不区分这些promise是resolve还是reject了，只要都执行完毕了，那Promise.allSettled就会返回
+ * 返回数据格式如下[{status:"fulfilled", value:result},{status:"rejected", reason:error} ]
+ */
+MyPromise.allSettled = function (promises) {
+  // 用一个Promise封装，以便于在全部待执行promise执行完后，统一进行结果处理
+  return new MyPromise((resolve, reject) => {
+    // 简单的入参校验
+    if (!Array.isArray(promises)) {
+      reject(new TypeError("arguments must be an array"))
+    }
+
+    const promiseLen = promises.length;
+    const res = [];
+    // 记录执行完的Promise数量
+    let count = 0;
+    for (let i = 0; i < promiseLen; i++) {
+      //熟悉的Promise.resolve ，这里Promise.resolve()的入参是promiseArr[i]，它是个Promise对象
+      // Promise.resolve(Promise对象)则会把入参Promise对象原样返回 具体看这里https://www.cnblogs.com/polk6/p/14781550.html
+      MyPromise.resolve(promises[i])
+        .then((value) => {
+          res[i] = {
+            status: 'fulfilled',
+            value
+          }
+        })
+        .catch((reason) => {
+          res[i] = {
+            status: 'rejected',
+            reason
+          }
+        })
+        .finally(() => {
+          // 利用finally在Promise执行完之后无论resolve还是reject都会执行的特性，做全部Promise执行统计
+          count++;
+          // 判断执行完了就调用最外层包装的Promise的resolve，进行统一的结果返回
+          if (count == promiseLen) {
+            resolve(res)
+          }
+        })
+    }
+  })
+}
+
+MyPromise.finally = function (callback) {
+  return this.then(
+    value => {
+      callback();
+      return value;
+    },
+    reason => {
+      callback();
+      throw reason;
+    }
+  );
+};
 
 
 module.exports = MyPromise;

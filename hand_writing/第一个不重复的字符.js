@@ -14,10 +14,17 @@ function findOneStr(str) {
         map[item] = val ? val + 1 : 1;
     });
     // 再遍历一遍找到出现1次的下标
-    for (let i = 0; i < arr.length; i++) {
-        if (map[arr[i]] == 1) {
-            return i;
+    // for (let i = 0; i < arr.length; i++) {
+    //     if (map[arr[i]] == 1) {
+    //         return i;
+    //     }
+    // }
+    for (const [key, value] of Object.entries(map)) {
+        if (value === 1) {
+            return arr.findIndex(value => value === key)
         }
     }
     return -1;
 }
+
+console.log(findOneStr('abcabcde'))

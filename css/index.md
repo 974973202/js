@@ -381,6 +381,10 @@ margin:0 auto;设置块元素（或与之类似的元素）的居中。
 - flex 是flex-grow、flex-shrink和flex-basis的简写，默认值为 0 1 auto
 ```
 flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]
+flex: 1 只是flex-grow属性的简写形式，它的完整写法是flex: 1 1 0%。
+其中flex-grow为1，表示元素可以伸展；
+flex-shrink为1，表示元素可以收缩；
+flex-basis为0%，表示元素的基准宽度为0
 
 该属性有两个快捷值: auto(1 1 auto) 和 none(0 0 auto)
 
@@ -544,6 +548,5 @@ transform:\scale(0.85,0.90)\ translate(0px,-30px)\ skew(-9deg,0deg)\Animation:
 [CSS速查总表]https://www.html.cn/book/css/properties/background/index.htm
 [CSS参考手册]https://css.doyoe.com/
 
-[你未必知道的CSS知识点]https://juejin.im/post/5d9ec8b0518825651b1dffa3#heading-32
 [css特效]https://juejin.im/post/5e070cd9f265da33f8653f00
 [巧用CSS实现酷炫的充电动画]https://juejin.im/post/5e00240ee51d45583c1cc9a7

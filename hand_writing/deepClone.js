@@ -64,8 +64,8 @@ function deepCopy(ori) {
 }
 
 function copyArray(ori, copy = []) {
-    for (const [index, value] of ori.entries()) {
-        copy[index] = deepCopy(value);
+    for (const [key, value] of ori.entries()) {
+        copy[key] = deepCopy(value);
     }
     return copy;
 }
@@ -79,7 +79,7 @@ function copyObject(ori, copy = {}) {
 
 function copyFunction(ori) {
     const func = eval(`(${ori.toString()})`)
-    func.prototype = d.prototype;
+    func.prototype = ori.prototype;
     return func
 }
 const newobj = deepCopy({
