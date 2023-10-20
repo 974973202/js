@@ -1,5 +1,6 @@
 ### Babel 是一个 JavaScript 编译器
 - Babel 是一个工具链，主要用于将采用 ECMAScript 2015+ 语法编写的代码转换为向后兼容的 JavaScript 语法，以便能够运行在当前和旧版本的浏览器或其他环境中
+- Babel 本身不具备转化功能，而是将转化功能分解到插件中，如果不配置任何插件，经过babel的代码和输入是相同的
 
 ### 基本使用
 - npm install --save-dev @babel/core @babel/cli @babel/preset-env
