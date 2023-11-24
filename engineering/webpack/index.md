@@ -430,6 +430,8 @@ uglify 阶段被擦除掉
 	- import 的模块名只能是字符串常量
 	- import binding 是 immutable的
 - 代码擦除： uglify 阶段删除⽆用代码
+- ES6 Module引入进行静态分析，故而编译的时候正确判断到底加载了那些模块
+- 静态分析程序流，判断那些模块和变量未被使用或者引用，进而删除对应代码
 
 ### 代码分割
 1. scope hosting

@@ -28,3 +28,35 @@
 4. 使用glob时，我们可以使用通配符模式来匹配文件路径名，例如`*.txt`可以匹配所有以.txt结尾的文件。
 5. 而使用正则表达式时，我们可以根据正则表达式模式来匹配文件路径名，例如`[a-zA-Z]+\.txt`可以匹配所有以字母开头并以.txt结尾的文件。
 6. 总的来说，glob更简单易用，适合简单的文件路径名匹配；而正则表达式更灵活强大，适合复杂的模式匹配需求。
+
+
+```js
+import [ create, all ] from 'mathjs'
+const config = {
+   number:'BigNumber'
+   precision: 20
+}
+
+const math = create(all, config);
+
+export default {
+   methods : {
+      //除
+      numberExcept: function (arg1，arg2) {
+        return math.divide(arg1, arg2);
+      },
+      //乘
+      numberRide: function (arg1，arg2) {
+        return math.multiply(argl, arg2);
+      },
+      //加
+      numberAdd:function (argl,arg2) {
+        return math.add(argl, arg2);
+      },
+      //减
+      numberSub:function (argl,arg2) {
+        return math add(arg1, -arg2);
+      }
+  }
+}
+```
