@@ -1,6 +1,7 @@
 ### Babel 是一个 JavaScript 编译器
 - Babel 是一个工具链，主要用于将采用 ECMAScript 2015+ 语法编写的代码转换为向后兼容的 JavaScript 语法，以便能够运行在当前和旧版本的浏览器或其他环境中
 - Babel 本身不具备转化功能，而是将转化功能分解到插件中，如果不配置任何插件，经过babel的代码和输入是相同的
+- 先应用 plugin，再应用 preset
 
 ### 基本使用
 - npm install --save-dev @babel/core @babel/cli @babel/preset-env
@@ -125,7 +126,8 @@ module.exports = {
   > @babel/standalone provides a standalone build of Babel for use in browsers and other non-Node.js environments.
 
 ### 工具
-- @babel/parser
+- @babel/parser 
+  - 对源码进行 parse，可以通过 plugins、sourceType 等来指定 parse 语法 
 ```js
 // API
 import { parse, parseExpression, tokTypes } from '@babel/parser' // 可以把源码转换成AST
@@ -139,10 +141,11 @@ import { parse, parseExpression, tokTypes } from '@babel/parser' // 可以把源
 ```js
 // Turns an AST into code.
 ```
-- @babel/code-frame
+- @babel/code-frame  // 可以创建友好的报错信息
 - @babel/runtime
-- @babel/template
+- @babel/template  // 用于批量创建节点
 - @babel/traverse // 用于对 AST 的遍历，维护了整棵树的状态，并且负责替换、移除和添加节点
+  - 通过 visitor 函数对遍历到的 ast 进行处理，分为 enter 和 exit 两个阶段，具体操作 AST 使用 path 的 api，还可以通过 state 来在遍历过程中传递一些数据
 - @babel/types  // 用于 AST 节点的 Lodash 式工具库, 它包含了构造、验证以及变换 AST 节点的方法，对编写处理 AST 逻辑非常有用
 
 ### babel原理
