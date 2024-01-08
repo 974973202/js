@@ -250,16 +250,16 @@ display属性为none的元素上进行的DOM操作不会引发回流和重绘
 从上面我们可以推理出,由于 GUI 渲染线程与 JavaScript 执行线程是互斥的关系,
 当浏览器在执行 JavaScript 程序的时候,GUI 渲染线程会被保存在一个队列中,直到 JS 程序执行完成,才会接着执行。
 因此如果 JS 执行的时间过长,这样就会造成页面的渲染不连贯,导致页面渲染加载阻塞的感觉。
-- js的加载会阻塞DOM树的解析
+- `js的加载会阻塞DOM树的解析`
 
 ### 渲染过程中遇到JS文件怎么处理？
 JavaScript的加载、解析与执行会阻塞DOM的构建，也就是说，在构建DOM时，HTML解析器若遇到了JavaScript，那么它会暂停构建DOM，将控制权移交给JavaScript引擎，等JavaScript引擎运行完毕，浏览器再从中断的地方恢复DOM构建。
 
 也就是说，如果你想首屏渲染的越快，就越不应该在首屏就加载 JS 文件，这也是都建议将 script 标签放在 body 标签底部的原因。当然在当下，并不是说 script 标签必须放在底部，因为你可以给 script 标签添加 defer 或者 async 属性（下文会介绍这两者的区别）。
 
-JS文件不只是阻塞DOM的构建，它会导致CSSOM也阻塞DOM的构建。
+`JS文件不只是阻塞DOM的构建，它会导致CSSOM也阻塞DOM的构建。`
 
-原本DOM和CSSOM的构建是互不影响，井水不犯河水，但是一旦引入了JavaScript，CSSOM也开始阻塞DOM的构建，只有CSSOM构建完毕后，DOM再恢复DOM构建。
+`原本DOM和CSSOM的构建是互不影响，井水不犯河水，但是一旦引入了JavaScript，CSSOM也开始阻塞DOM的构建，只有CSSOM构建完毕后，DOM再恢复DOM构建。`
 
 - 这是什么情况？
 
@@ -314,7 +314,7 @@ DOMContentLoaded -> load。
 
 
 ### async 和 defer
-- defer
+- defer `加载完等html解析完执行`
 1. 不阻塞浏览器解析 HTML，等解析完 HTML 之后，才会执行 script。
 2. 会并行下载 JavaScript 资源。
 3. 会按照 HTML 中的相对顺序执行脚本
@@ -323,7 +323,7 @@ DOMContentLoaded -> load。
 6. defer 属性对模块脚本无效。
 7. 适用于: 所有外部脚本 (通过 src 引用的 script )。
 
-- async 
+- async `加载完就执行`
 1. 不阻塞浏览器解析 HTML，但是 script 下载完成后，会立即中断浏览器解析 HTML，并执行此 script
 2. 会并行下载 JavaScript 资源。
 3. 互相独立，谁先下载完，谁先执行，没有固定的先后顺序，不可控。

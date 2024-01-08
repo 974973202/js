@@ -58,6 +58,7 @@ arr.sort((a, b) => a-b); // a=b或a>b,返回0或正值则不变。返回负值�
 - Array.from 类数组转化为数组
 - Array.to 将数值转化为数组
 - includes: 判断数组中是否包含某个值 [].includes(xx)
+- repeat  'x'.repeat(3) 重复3次   实现：String.prototype._repeat = function(times) {return new Array(times + 1).join(this)}
 
 ### 预编译
 - 预编译发生在函数执行的前一刻

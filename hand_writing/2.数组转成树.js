@@ -6,7 +6,17 @@ const data = [
   { id: 4, title: "child1_2", parentId: 1 },
   { id: 5, title: "child2_1", parentId: 2 }
 ];
-// 1. listToTree
+
+// 1. convert
+function convert(arr, parentId = 0) {
+  return arr
+    .filter((item) => item.parentId === parentId)
+    .map((item) => ({ ...item, children: convert(arr, item.id) }));
+}
+
+console.log(convert(data))
+
+// 2. listToTree
 function listToTree(data) {
   // 使用对象重新存储数据, 空间换时间
   let map = {};
@@ -33,7 +43,7 @@ function listToTree(data) {
   return treeData;
 }
 
-// 2. convert
+// 3. convert
 function convert(arr, parentId = 0) {
   const result = []
   for (let i = 0; i < arr.length; i++) {
@@ -47,15 +57,8 @@ function convert(arr, parentId = 0) {
   }
   return result
 }
-// 3. convert
-function convert(arr, parentId = 0) {
-  return arr
-    .filter((item) => item.parentId === parentId)
-    .map((item) => ({ ...item, children: convert(arr, item.id) }));
-}
 
 console.log(listToTree(data))
-console.log(convert(arr))
 
 // 广度优先遍历
 function rangeTree(tree) {

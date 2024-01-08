@@ -12,6 +12,24 @@ arr.reduce(callback, [initialValue])
   当设置了initialValue参数时，callback 第一个参数 初始值将默认是 initialValue。
 
 ```js
+// 实现Array.prototype.reduce
+Array.prototype.reduce = function (callback, initialValue) {
+  if (this === null) {
+    throw new TypeError('Array.prototype.reduce called on null or undefined');
+  }
+  if (typeof callback !== 'function') {
+    throw new TypeError(callback + ' is not a function');
+  }
+  let accumulator = initialValue === undefined ? this[0] : initialValue;
+  let startIndex = initialValue === undefined ? 1 : 0;
+  for (let i = startIndex; i < this.length; i++) {
+    accumulator = callback(accumulator, this[i], i, this);
+  }
+  return accumulator;
+};
+```
+
+```js
 var arr = [1, 2, 3, 4];
 var sum = arr.reduce(function(prev, cur, index, arr) {
     console.log(prev, cur, index);

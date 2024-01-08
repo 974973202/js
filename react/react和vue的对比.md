@@ -159,7 +159,7 @@ useEffect 被设计成了在 dom 操作前异步调用，useLayoutEffect 是在 
 为什么这样呢？
 因为都要操作 dom 了，这时候如果来了个 effect 同步执行，计算量很大，那不是把 fiber 架构带来的优势有毁了么？
 所以 effect 是异步的，不会阻塞渲染。
-而 useLayoutEffect，顾名思义是想在这个阶段拿到一些布局信息的，dom 操作完以后就可以了，而且都渲染完了，自然也就可以同步调用了。
+而 useLayoutEffect，因为它会在 DOM 更新之前同步调用 effect 函数，以确保在浏览器绘制之前进行任何必要的 DOM 计算
 
 react 把 commit 阶段也分成了 3 个小阶段。
 before mutation、mutation、layout。

@@ -95,8 +95,27 @@ function FiberNode(
 - Reconciler根据JSX描述的组件内容生成组件对应的Fiber节点。
 - JSX是一种描述当前组件内容的数据结构，不包含组件schedule、reconcile、render所需的相关信息
 
+### React的合成事件
+React合成事件的优势：
+抹平不同浏览器直接的差异，提供统一的API使用体验
+通过事件委托的方式统一绑定和分发事件，有利于提升性能，减少内存消耗
 
+之后详细说了一下合成事件的绑定及分发流程：
+1. React应用启动时，会在页面渲染的根元素上绑定原生的DOM事件，将该根元素作为委托对象
+2. 在组件渲染时，会通过JSX解析出元素上绑定的事件，并将这些事件与原生事件进行一一映射
+3. 当用户点击页面元素时，事件会冒泡到根元素，之后根元素监听的事件通过dispatchEvent方法进行事件派发
+4. dispatchEvent会根据事件的映射关系以及DOM元素找到React中与之对应的fiber节点
+5. 找到fiber节点后，将其绑定的合成事件函数加到一个函数执行队列中
+6. 最后则依次执行队列中的函数完成事件的触发流程
 
+### React的patch流程(批处理)
+1. React新版架构新增了一个Scheduler调度器主要用于调度Fiber节点的生成和更新任务
+2. 当组件更新时，Reconciler协调器执行组件的render方法生成一个Fiber节点之后再递归的去生成Fiber节点的子节点
+3. 每一个Fiber节点的生成都是一个单独的任务，会以回调的形式交给Scheduler进行调度处理，在Scheduler里会根据任务的优先级去执行任务
+4. 任务的优先级的指定是根据车道模型，将任务进行分类，每一类拥有不同的优先级，所有的分类和优先级都在React中进行了枚举
+5. Scheduler按照优先级执行任务时，会异步的执行，同时每一个任务执行完成之后，都会通过requestIdleCallBack去判断下一个任务是否能在当前渲染帧的剩余时间内完成
+6. 如果不能完成就发生中断，把线程的控制权交给浏览器，剩下的任务则在下一个渲染帧内执行
+7. 整个Reconciler和Scheduler的任务执行完成之后，会生成一个新的workInProgressFiber的新的节点树，之后Reconciler触发Commit阶段通知Render渲染器去进行diff操作，也就是我们说的patch流程
 
 
 
@@ -412,15 +431,11 @@ React事件绑定发生在reconcile阶段 会在原生事件绑定前执行
 进行了浏览器兼容。顶层事件代理，能保证冒泡一致性(混合使用会出现混乱)
 默认批量更新
 避免事件对象频繁创建和回收，react引入事件池，在事件池中获取和释放对象（react17中废弃） react17事件绑定在容器上了
-我们写的事件是绑定在dom上么，如果不是绑定在哪里？ 答：v16绑定在document上，v17绑定在container上
-为什么我们的事件手动绑定this(不是箭头函数的情况) 答：合成事件监听函数在执行的时候会丢失上下文
-为什么不能用 return false来阻止事件的默认行为？ 答：说到底还是合成事件和原生事件触发时机不一样
-react怎么通过dom元素，找到与之对应的 fiber对象的？ 答：通过internalInstanceKey对应
 
-17. 我们写的事件是绑定在dom上么，如果不是绑定在哪里？
-18. 为什么我们的事件手动绑定this(不是箭头函数的情况)
-19. 为什么不能用 return false 来阻止事件的默认行为？
-20. react怎么通过dom元素，找到与之对应的 fiber对象的？
+17. 我们写的事件是绑定在dom上么，如果不是绑定在哪里？ 答：v16绑定在document上，v17绑定在container上
+18. 为什么我们的事件手动绑定this(不是箭头函数的情况) 答：合成事件监听函数在执行的时候会丢失上下文
+19. 为什么不能用 return false来阻止事件的默认行为？ 答：说到底还是合成事件和原生事件触发时机不一样
+20. react怎么通过dom元素，找到与之对应的 fiber对象的？ 答：通过internalInstanceKey对应
 
 解释结果和现象
 21. 点击Father组件的div，Child会打印Child吗
@@ -452,6 +467,8 @@ function App() {
     
 const rootEl = document.querySelector("#root");
 ReactDOM.render(<App/>, rootEl);
+
+// 不会，源码中是否命中bailoutOnAlreadyFinishedWork
 ```
 22. 打印顺序是什么
 ```js
@@ -477,6 +494,7 @@ function App() {
     
   return <Father/>;
 }
+// Child ，Father ，App ，render阶段mount时深度优先遍历，commit阶段useEffect执行时机
 ```
 23. useLayoutEffect/componentDidMount和useEffect的区别是什么
 ```js
@@ -489,4 +507,6 @@ class App extends React.Component {
 useEffect(() => {
   console.log('useEffect');
 }, [])
+
+// 他们在commit阶段不同时机执行，useEffect在commit阶段结尾异步调用，useLayout/componentDidMount同步调用
 ```
