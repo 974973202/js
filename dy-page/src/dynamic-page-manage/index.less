@@ -1,0 +1,41 @@
+/*
+ * @Author: liangzx liangzx@chinacscs.com
+ * @Date: 2022-11-23 16:11:20
+ * @LastEditors: liangzx liangzx@chinacscs.com
+ * @LastEditTime: 2023-04-20 17:19:30
+ * @FilePath: \cscs-fe\packages\components\src\sys-config\dynamic-page-manage\index.less
+ * @Description: 动态页面管理样式文件
+ *
+ */
+.tableOptions {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  margin: 0;
+  padding: 4px 0;
+  list-style-type: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border-radius: 2px;
+  outline: none;
+  box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014, 0 9px 28px 8px #0000000d;
+  button[type='button']:hover {
+    background-color: #eaf8fd;
+  }
+}
+
+.exportBtn {
+  color: rgba(37, 45, 62, 0.85);
+}
+
+[data-theme='dark'] {
+  .tableOptions {
+    background-color: #3a3d4d;
+    button[type='button']:hover {
+      background-color: rgba(102, 167, 255, 0.1);
+    }
+  }
+  .exportBtn {
+    color: #fff;
+  }
+}

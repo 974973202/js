@@ -4,7 +4,7 @@
 4. ts
 5. 正则
 6. koa
-7. 构建工具 webpack
+7. 构建工具 webpack http  browser  network
 8. promise compose 冒泡 快速
 9. 设计模式 发布订阅 观察者
 10. react

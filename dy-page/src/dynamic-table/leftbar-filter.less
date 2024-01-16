@@ -1,0 +1,43 @@
+.tabs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  border-bottom: 1px solid #d9d9d9;
+
+  .tab {
+    flex: 1;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    border-right: 1px solid #d9d9d9;
+    cursor: pointer;
+  }
+
+  .tab:last-child {
+    border: none;
+  }
+}
+
+.filters {
+  padding: 16px 24px 16px 24px;
+  overflow: auto;
+}
+
+.select-radio-wrapper {
+  margin: 0 -24px;
+}
+
+.select-checkable-wrapper {
+  margin: 0 -24px;
+}
+
+[data-theme='dark'] {
+  .tabs {
+    border-bottom-color: #6b6d79;
+
+    .tab {
+      border-right-color: #6b6d79;
+    }
+  }
+}

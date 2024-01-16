@@ -216,7 +216,7 @@ loggingIdentity({length: 10, value: 3});
 
 ### 非空断言操作符 !
 - ! 用于排除 null undefined ，即告诉编译器：xx 变量肯定不是 null 或 undefined
-- 非空断言操作符 ! 在 TypeScript 中用于告诉编译器某个变量一定不为 null 或 undefined。它可以在变量后面加上 ! 来使用
+- 非空断言操作符 ! 在 TypeScript 中用于告诉编译器某个变量一定不为 null 或 undefined。`它可以在变量后面加上 ! 来使用`
 
 ### Readonly
 ```ts

@@ -1,0 +1,6 @@
+# production
+/dist
+/docs-dist
+/lib
+/es
+

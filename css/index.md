@@ -385,7 +385,7 @@ margin:0 auto;设置块元素（或与之类似的元素）的居中。
 - flex-basis 定义了在分配多余空间之前，项目占据的主轴空间。默认值为auto（项目本来大小）
 - flex 是flex-grow、flex-shrink和flex-basis的简写，默认值为 0 1 auto
 ```
-flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]
+flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]  伸缩准
 flex: 1 只是flex-grow属性的简写形式，它的完整写法是flex: 1 1 0%。
 其中flex-grow为1，表示元素可以伸展；
 flex-shrink为1，表示元素可以收缩；
@@ -482,7 +482,7 @@ backface-visibility: visible / hidden;
 > 内容和样式分离，易于管理和维护
 > 减少页面体积
 > css文件可以被缓存、重用，维护成本降低
-- 不使用@import，因为@import引用的css会等到页面被加载完再加载
+- `不使用@import，因为@import引用的css会等到页面被加载完再加载`
 - 避免使用复杂的选择器，层级越少越好 建议选择器的嵌套最好不要超过三层，比如：
 - 精简页面的样式文件，去掉不用的样式
 - 利用CSS继承减少代码量

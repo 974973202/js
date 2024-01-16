@@ -35,3 +35,23 @@ e.stopPropagation(); // 阻止冒泡
 
 ## scrollTop scrollLeft
 DOM 内部元素滚动的距离
+
+```js
+function isElementInViewport(el) {
+  var rect = el.getBoundingClientRect();
+  return (
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+  );
+}
+
+// 使用示例
+var element = document.getElementById('myElement');
+if (isElementInViewport(element)) {
+  console.log('元素完全出现在屏幕中');
+} else {
+  console.log('元素未完全出现在屏幕中');
+}
+```
