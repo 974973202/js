@@ -69,10 +69,9 @@
 > <p>弹性盒（flex或inline-flex）
 > <p>display: flow-root
 > <p>column-span: all
-```
-但其中，最常见的就是overflow:hidden、float:left/right、position:absolute。
+但其中，最常见的就是`overflow:hidden、float:left/right、position:absolute`。
 也就是说，每次看到这些属性的时候，就代表了该元素以及创建了一个BFC了
-```
+
 * BFC的效果
 > <p> 内部的盒会在垂直方向一个接一个排列（可以看作BFC中有一个的常规流）
 > <p> 处于同一个BFC中的元素相互影响，可能会发生外边距重叠
@@ -332,7 +331,7 @@ margin:0 auto;设置块元素（或与之类似的元素）的居中。
 
 ### 伪元素和伪类的区别
 - 伪类的操作对象是文档树中已有的元素，而伪元素则创建了一个文档树外的元素。
-因此，伪类与伪元素的区别在于：有没有创建一个文档树之外的元素
+因此，伪类与伪元素的区别在于：`有没有创建一个文档树之外的元素`
 > 双冒号(::)表示伪元素
 > 单冒号(:)表示伪类
 

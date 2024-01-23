@@ -81,31 +81,23 @@ console.log(Math.max.apply(null, nums)); // 输出 5
 
 // 练习
 Function.prototype.applyx = function (ct, arr) {
-  // const content = Object(ct) || window;
-  // content.fn = this;
-
-  // let result;
-  // if(!arr) {
-  //   result = content.fn()
-  // }
-
-  // delete content.fn
-  // return result
-
-  const content = Object(ct) || window;
-  content.fn = this;
+  const context = Object(ct) || window;
+  context.fn = this;
 
   let result;
+
   if (!arr) {
-    result = content.fn()
+    context.fn();
   } else {
-    const arg = [];
+    const args = []
     for (let i = 0; i < arr.length; i++) {
-      arg.push('arr[' + i + ']')
+      args.push(`arr[${i}]`)
     }
-    result = eval(`content.fn(${arg})`)
+    result = eval(`context.fn(${args})`)
+
   }
 
-  delete content.fn
-  return result
+  delete context.fn;
+  return result;
+
 }

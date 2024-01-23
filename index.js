@@ -65,7 +65,7 @@
 
 function curry(fn) {
   return function other(arg) {
-    if(arg.length >= fn.lenght) {
+    if (arg.length >= fn.lenght) {
       fn(...arg)
     } else {
       return (...arg) => other(...arg, ...rest)
@@ -78,14 +78,14 @@ function create() {
   let Con = [].shift.call(arguments);
   obj.__proto__ = Con.prototype;
   let result = Con.apply(obj, arguments)
-  return typeof result === 'object'? result : obj
+  return typeof result === 'object' ? result : obj
 }
 
 // 1
 function unique(arr) {
   const result = [];
   for (let i = 0; i < arr.length; i++) {
-    if(arr.indexOf(arr[i]) === -1) {
+    if (arr.indexOf(arr[i]) === -1) {
       result.push(arr[i])
     }
   }
@@ -94,8 +94,8 @@ function unique(arr) {
 
 function unique(arr) {
   const result = [];
-  for(let i = 0; i < arr.length; i++) {
-    if(arr.indexOf(arr[i]) === -1) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr.indexOf(arr[i]) === -1) {
       result.push(arr[i])
     }
   }
@@ -104,14 +104,14 @@ function unique(arr) {
 
 // 2
 function fn(n) {
-  if(n==1 &&n==2) {
+  if (n == 1 && n == 2) {
     return 1
   }
-  return fn(n-1)+fn(n-2)
+  return fn(n - 1) + fn(n - 2)
 }
 // 3
 function flat(arr) {
-  while(arr.some(item => Array.isArray(item))) {
+  while (arr.some(item => Array.isArray(item))) {
     arr = [].concat(...arr)
   }
   return arr
@@ -124,11 +124,11 @@ function throttle(func, wait) {
   return function () {
     let context = this;
     let args = arguments;
-    if(!timeout) {
-      timeout = setTimeout(()=> {
+    if (!timeout) {
+      timeout = setTimeout(() => {
         timeout = null
         func.apply(context, args);
-      },wait)
+      }, wait)
     }
   }
 }
@@ -139,10 +139,10 @@ function debounce(func, wait) {
   return function () {
     let args = arguments;
     let context = this;
-    if(timeout) clearTimeout(timeout)
-    timeout = setTimeout(()=> {
+    if (timeout) clearTimeout(timeout)
+    timeout = setTimeout(() => {
       func.apply(context, args)
-    },wait)
+    }, wait)
   }
 }
 
@@ -163,21 +163,21 @@ listener.listen = function (fn) {
 listener.trigger = function () {
   for (let i = 0; i < listener.List.length; i++) {
     const fn = listener.List[i];
-    fn.apply(this,arguments);
+    fn.apply(this, arguments);
   }
 }
 
-listener.listen((a,b) => console.log(a,b));
+listener.listen((a, b) => console.log(a, b));
 
 listener.trigger(1, 2)
 
 // 观察者模式
-class Subject() {
+class Subject {
   constructor() {
     this.observers = [];
-  }
+  };
   ob(fn) {
-    if(fn && fn.update) {
+    if (fn && fn.update) {
       this.observers.push(fn)
     }
   }
@@ -189,7 +189,7 @@ class Subject() {
   }
 }
 
-class Ob{
+class Ob {
   update() {
     console.log(12)
   }
@@ -203,10 +203,10 @@ suject.notify()
 
 // 广
 function scopeSearch(root, target) {
-  if(root == null) return false;
+  if (root == null) return false;
   let childRoot = []; // 当前层所有子节点的节点
-  for(let i = 0; i < root.length; i ++) {
-    if(root[i].value == target) {
+  for (let i = 0; i < root.length; i++) {
+    if (root[i].value == target) {
       return true
     } else {
       childRoot.push(root[i].left)
@@ -226,12 +226,12 @@ function deepSearch(root, target) {
 }
 
 function bubbleSort(arr) {
-  for(let i = 0; i < arr.length - 1; i++) {
-    for(let j = 0; j < arr.length - i-1; j++) {
-      if(arr[j]> arr[j+1]) {
+  for (let i = 0; i < arr.length - 1; i++) {
+    for (let j = 0; j < arr.length - i - 1; j++) {
+      if (arr[j] > arr[j + 1]) {
         let temp = arr[j];
-        arr[j] = arr[j+1];
-        arr[j+1] = temp;
+        arr[j] = arr[j + 1];
+        arr[j + 1] = temp;
       }
     }
   }
@@ -239,12 +239,12 @@ function bubbleSort(arr) {
 }
 
 function quickSort(arr) {
-  let midIndex = Math.floor(arr.length/2);
+  let midIndex = Math.floor(arr.length / 2);
   let mid = arr.splice(midIndex, 1)[0];
   let right = []
   let left = []
-  for(let i = 0; i < arr.length; i ++) {
-    if(arr[i] > mid) { // 前比后大，去右边
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] > mid) { // 前比后大，去右边
       right.push(arr[i])
     } else {
       left.push(arr[i])
@@ -255,7 +255,7 @@ function quickSort(arr) {
 
 // 圣杯模式继承
 function extend(Target, Origin) {
-  function F() {};
+  function F() { };
   F.prototype = Origin.prototype;
   Target.prototype = new F();
 
@@ -269,16 +269,16 @@ function extend(Target, Origin) {
 // DOMcontentLoaded
 
 function Clone(obj) {
-  if(!obj) return obj
-    let target = Array.isArray(obj) ? [] : {};
-    for(let key in obj) {
-      if(obj.hasOwnProperty(key)) {
-        if(typeof obj[key] == 'object' && obj != null){
-          target[key] =  Clone(obj[key])
-        } else {
-          target[key] =obj[key]
-        }
+  if (!obj) return obj
+  let target = Array.isArray(obj) ? [] : {};
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      if (typeof obj[key] == 'object' && obj != null) {
+        target[key] = Clone(obj[key])
+      } else {
+        target[key] = obj[key]
       }
     }
-    return target;
+  }
+  return target;
 }

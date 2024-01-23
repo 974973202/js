@@ -12,3 +12,7 @@
 [中国色]http://zhongguose.com/#
 
 [学习文档]https://wangdoc.com/
+
+[简历]https://juejin.cn/post/7292948455550238732?searchId=20231121152938B1B48A1B3519EE919934
+[面试网站]https://fe.ecool.fun/
+[next]https://juejin.cn/post/7269424598260498488?searchId=202401101509219DD960E7BEC2500A8A84

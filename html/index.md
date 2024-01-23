@@ -146,7 +146,8 @@ this.wxinvoke(()=>{
     clearInterval(timer)
     this.$refs.videoEle.play()
   }
-},200)
+   })
+})
 ...
 
 wxinvoke(cb) {

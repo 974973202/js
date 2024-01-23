@@ -129,13 +129,12 @@ function quickSort(arr) {
 // 其中一部分记录的关键字均比另外一部分记录的关键字小，
 // 则可分别对着两部分记录继续进行排序，以达到整个序列有序的目的
 const quickSort = (array) => {
-  const sort = (arr, left = 0, right = arr.length - 1) => {
-    if (left >= right) {
-      //如果左边的索引大于等于右边的索引说明整理完毕
-      return;
-    }
-    let L = left;
-    let R = right;
+  const sort = (arr, leftIndex = 0, rightIndex = arr.length - 1) => {
+    //如果左边的索引大于等于右边的索引说明整理完毕
+    if (leftIndex >= rightIndex) return;
+    let L = leftIndex;
+    let R = rightIndex;
+    
     // 1
     const baseVal = arr[R]; // 取无序数组最后一个数为基准值
     while (L < R) {
