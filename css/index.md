@@ -107,6 +107,12 @@ text-align:center;设置文本或img标签等一些内联对象（或与之类�
 margin:0 auto;设置块元素（或与之类似的元素）的居中。
 ```
 
+### width:100% 和 width:auto 区别
+- width:100% : 子元素的 content 撑满父元素的content，如果子元素还有 padding、border等属性，或者是在父元素上设置了边距和填充，都有可能会造成子元素区域溢出显示;
+- width:auto :  是子元素的 content+padding+border+margin 等撑满父元素的 content 区域。
+- 所以，在开发中尽量还是选择 width:auto ,因为当从边距、填充或边框添加额外空间时，它将尽可能努力保持元素与其父容器的宽度相同。而width：100%将使元素与父容器一样宽。额外的间距将添加到元素的大小，而不考虑父元素。这通常会导致问题。
+
+
 ### 三列布局
 - 定位元素
 ```html
