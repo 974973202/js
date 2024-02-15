@@ -81,6 +81,10 @@ git rm --cached <file>
 git log
 查看提交信息
 
+### git命令绑定远程链接
+1. git remote add origin xxx
+2. git remove -v
+
 ### 合并分支中rebase和merge的区别
 - merge会保留分支记录，rebase则不会
 - git merge 会让2个分支的提交按照提交时间进行排序，并且会把最新的2个commit合并成一个commit。最后的分支树呈现非线性的结构

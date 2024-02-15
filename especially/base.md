@@ -21,6 +21,34 @@
       }
   }
 ```
+### 栈（后进先出）的应用场景
+- 十进制转二进制
+- 判断字符串的括号是否有效
+```js
+// 输入 '()'  '(){}[]' 为 true
+// 输入 '({}]'  为 false
+function isValid(s) {
+  const stack = [];
+  for(let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if(c === '(' || c === '{' || c === '['){
+      stack.push(c);
+    } else {
+      const t = stack[stack.length - 1];
+      if (
+        (t === '(' && c === ')') ||
+        (t === '{' && c === '}') ||
+        (t === '[' && c === ']')
+      ) {
+        stack.pop();
+      } else { return false }
+    }
+  }
+
+  return stack.length === 0;
+}
+```
+- 函数调用堆栈
 
 ```js  链表
 // 节点类

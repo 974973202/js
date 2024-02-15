@@ -510,3 +510,11 @@ useEffect(() => {
 
 // 他们在commit阶段不同时机执行，useEffect在commit阶段结尾异步调用，useLayout/componentDidMount同步调用
 ```
+
+
+JSX本质是什么
+React 的合成事件机制 
+React的batchUpdate机制
+React事务机制
+React组件渲染和更新的过程
+React-fiber如何优化性能

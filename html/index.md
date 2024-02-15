@@ -8,6 +8,10 @@
 - Chromium/Blink：Chrome
 - Blink：opera
 
+块级元素：独占一行，默认宽度撑满父元素。可以设置宽高内外边距。div  p
+行内元素：不独占一行，宽度取决于内容大小，只能设置外边距。 a span
+行内块元素：不独占一行，宽度取决于内容大小，可以设置宽高内外边距 img 
+
 ### 请描述一下 cookies，sessionStorage 和 localStorage 的区别？
 - cookie的设置
 ```javascript
@@ -331,3 +335,13 @@ DOMContentLoaded -> load。
 4. 由于没有确定的执行时机，所以在脚本里面可能会获取不到 HTML 中已有的元素
 5. DOMContentLoaded 事件和 script 脚本无相关性，无法确定他们的先后顺序
 6. 适用于:独立的第三方脚本。
+
+### 各种获得宽高的方式
+```
+获取屏幕的高度和宽度（屏幕分辨率）：window.screen.height/width
+获取屏幕工作区域的高度和宽度（去掉状态栏）：window.screen.availHeight/availWidth
+网页全文的高度和宽度：document.body.scrollHeight/Width
+滚动条卷上去的高度和向右卷的宽度：document.body.scrollTop/scrollLeft
+网页可见区域的高度和宽度（不加边线）：document.body.clientHeight/clientWidth
+网页可见区域的高度和宽度（加边线）：document.body.offsetHeight/offsetWidth
+```

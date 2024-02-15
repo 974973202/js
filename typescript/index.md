@@ -66,7 +66,7 @@ type keysobj = {
 // }
 ```
 
-### infer
+### infer   ->  extends
 - 可以用 infer 声明一个类型变量并且对它进行使用
 - infer是一个关键字，用于在条件类型中推断类型变量。它通常与extends关键字一起使用
 - infer 出现在extends 上

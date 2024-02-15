@@ -19,5 +19,19 @@ function twoNumAdd(nums, target) {
     return [];
 }
 
+function twoNumAdd1(nums, target) {
+    const map = new Map();
+    for (let i = 0; i < nums.length; i++) {
+        const n = nums[i];
+        const n2 = target - n;
+        if(map.has(n2)) {
+            return [map.get(n2), i];
+        } else {
+            map.set(n, i);
+        }
+        
+    }
+}
+
 
 console.log(twoNumAdd([8, 2, 6, 5, 4, 1, 3], 7))
