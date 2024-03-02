@@ -1,5 +1,9 @@
 ### Rollup 
 - 默认只支持 ES 模块
+- webpack构建App应用，rollup适用于类库或纯js项目
+- import只能作为顶层的语句出现，不能出现在function里面或是if里面。
+- ES import的模块名只能是字符串常量。
+- 不管import的语句出现的位置在哪里，在模块初始化的时候所有的import都必须导入完成。
 
 ### Rollup 常用插件介绍
 1. @rollup/plugin-commonjs 将CommonJS模块进行es转换

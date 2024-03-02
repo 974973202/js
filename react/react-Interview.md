@@ -222,11 +222,14 @@ batchedUpdates
 ReactDOM.createPortal 创建根节点外的弹窗
 
 ### react 性能优化
-1. shouldComponentUpdata  pureComponent
+1. shouldComponentUpdate  pureComponent(内部实现了shouldComponentUpdate)
 2. react.memo useMemo useCallback 
 3. key
-4. 按需加载 lazy Suspense
+4. 按需加载 lazy Suspense  
+  - React.lazy(() => import('./SomeComponent'))
 5. 合并多个setState
+
+PureComponent适用于类组件，React.memo适用于函数组件
 
 ### Fiber架构  react的渲染过程
 <!-- 两个阶段 调度阶段（调度器，协调器，渲染器），提交阶段
@@ -249,7 +252,7 @@ Fiber可以在reconcile的时候进行相应的diff更新，让最后的更新�
 // 调度阶段
 componentWillMount
 componentWillReceiveProps
-shouldComponentUpdata
+shouldComponentUpdate
 componentWillUpdate
 // 提交阶段
 componentDidMount

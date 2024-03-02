@@ -203,7 +203,7 @@ wxinvoke(cb) {
 - Service Worker缓存文件处理
 - 使用link标签的rel属性设置   prefetch（这段资源将会在未来某个导航或者功
 能要用到，但是本资源的下载顺序权重比较低，prefetch通常用于加速下一次导
-航）、preload（preload将会把资源得下载顺序权重提高，使得关键数据提前下载
+航）、preload（preload将会把资源得`下载顺序权重提高`，使得关键数据提前下载
 好，优化页面打开速度）
 
 ### 何时触发回流和重绘
@@ -234,6 +234,17 @@ display属性为none的元素上进行的DOM操作不会引发回流和重绘
 存起来
 > 对具有复杂动画的元素使用绝对定位，使它脱离文档流，否则会引起父元素及后续
 元素频繁回流
+
+
+
+
+
+
+
+
+
+
+
 
 ### CSS加载会造成阻塞吗
 - css加载不会阻塞DOM树的**解析**
@@ -291,9 +302,25 @@ DOMContentLoaded -> load。
 {/* defer js和html 并行执行加载，等到html解析完，js才执行 */}
 {/* 设置了defer后 DOMContentLoaded会等到js执行完再触发 */}
 ```
-- defer 属性仅适用于外部脚本，如果 script 脚本没有 src，则会忽略 defer 特性
-- defer 届性对模块脚本 (script type='module') 无效，因为模块脚本就是以 defer 的形式加载的
 
+### async 和 defer
+- defer `加载完等html解析完执行`
+1. 不阻塞浏览器解析 HTML，等解析完 HTML 之后，才会执行 script。
+2. 会并行下载 JavaScript 资源。
+3. 会按照 HTML 中的相对顺序执行脚本
+4. 会在脚本下载并执行完成之后，才会触发 DOMContentLoaded 事件。
+5. 在脚本执行过程中，一定可以获取到 HTML 中已有的元素
+6. defer 属性对模块脚本无效。
+7. 适用于: 所有外部脚本 (通过 src 引用的 script, 没有 src，则会忽略 defer 特性)。
+8. 届性对模块脚本 (script type='module') 无效，因为模块脚本就是以 defer 的形式加载的
+
+- async `加载完就执行`
+1. 不阻塞浏览器解析 HTML，但是 script 下载完成后，会立即中断浏览器解析 HTML，并执行此 script
+2. 会并行下载 JavaScript 资源。
+3. 互相独立，谁先下载完，谁先执行，没有固定的先后顺序，不可控。
+4. 由于没有确定的执行时机，所以在脚本里面可能会获取不到 HTML 中已有的元素
+5. DOMContentLoaded 事件和 script 脚本无相关性，无法确定他们的先后顺序
+6. 适用于:独立的第三方脚本。
 
 ### 什么是 CRP,即关键渲染路径(Critical Rendering Path)? 如何优化 ?
 关键渲染路径是浏览器将 HTML CSS JavaScript 转换为在屏幕上呈现的像素内容所经历的一系列步骤。也就是我们上面说的浏览器渲染流程。
@@ -316,25 +343,6 @@ DOMContentLoaded -> load。
  - 当我们的脚本不会修改 DOM 或 CSSOM 时,推荐使用 async 。
  - 预加载 —— preload & prefetch 。
  - DNS 预解析 —— dns-prefetch 。
-
-
-### async 和 defer
-- defer `加载完等html解析完执行`
-1. 不阻塞浏览器解析 HTML，等解析完 HTML 之后，才会执行 script。
-2. 会并行下载 JavaScript 资源。
-3. 会按照 HTML 中的相对顺序执行脚本
-4. 会在脚本下载并执行完成之后，才会触发 DOMContentLoaded 事件。
-5. 在脚本执行过程中，一定可以获取到 HTML 中已有的元素
-6. defer 属性对模块脚本无效。
-7. 适用于: 所有外部脚本 (通过 src 引用的 script )。
-
-- async `加载完就执行`
-1. 不阻塞浏览器解析 HTML，但是 script 下载完成后，会立即中断浏览器解析 HTML，并执行此 script
-2. 会并行下载 JavaScript 资源。
-3. 互相独立，谁先下载完，谁先执行，没有固定的先后顺序，不可控。
-4. 由于没有确定的执行时机，所以在脚本里面可能会获取不到 HTML 中已有的元素
-5. DOMContentLoaded 事件和 script 脚本无相关性，无法确定他们的先后顺序
-6. 适用于:独立的第三方脚本。
 
 ### 各种获得宽高的方式
 ```
