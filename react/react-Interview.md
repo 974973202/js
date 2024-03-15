@@ -101,9 +101,9 @@ React合成事件的优势：
 通过事件委托的方式统一绑定和分发事件，有利于提升性能，减少内存消耗
 
 之后详细说了一下合成事件的绑定及分发流程：
-1. React应用启动时，会在页面渲染的根元素上绑定原生的DOM事件，将该根元素作为委托对象
-2. 在组件渲染时，会通过JSX解析出元素上绑定的事件，并将这些事件与原生事件进行一一映射
-3. 当用户点击页面元素时，事件会冒泡到根元素，之后根元素监听的事件通过dispatchEvent方法进行事件派发
+1. React应用启动时，会在页面渲染的根元素上绑定原生的DOM事件，将该`根元素作为委托对象`
+2. 在组件渲染时，会通过JSX解析出元素上`绑定`的事件，并将这些事件与原生事件进行一一映射
+3. 当用户点击页面元素时，事件会冒泡到根元素，之后根元素监听的事件通过`dispatchEvent方法`进行事件派发
 4. dispatchEvent会根据事件的映射关系以及DOM元素找到React中与之对应的fiber节点
 5. 找到fiber节点后，将其绑定的合成事件函数加到一个函数执行队列中
 6. 最后则依次执行队列中的函数完成事件的触发流程
@@ -111,9 +111,9 @@ React合成事件的优势：
 ### React的patch流程(批处理)
 1. React新版架构新增了一个Scheduler调度器主要用于调度Fiber节点的生成和更新任务
 2. 当组件更新时，Reconciler协调器执行组件的render方法生成一个Fiber节点之后再递归的去生成Fiber节点的子节点
-3. 每一个Fiber节点的生成都是一个单独的任务，会以回调的形式交给Scheduler进行调度处理，在Scheduler里会根据任务的优先级去执行任务
-4. 任务的优先级的指定是根据车道模型，将任务进行分类，每一类拥有不同的优先级，所有的分类和优先级都在React中进行了枚举
-5. Scheduler按照优先级执行任务时，会异步的执行，同时每一个任务执行完成之后，都会通过requestIdleCallBack去判断下一个任务是否能在当前渲染帧的剩余时间内完成
+3. `每一个Fiber节点`的生成都是一个单独的任务，会以回调的形式交给Scheduler进行调度处理，在Scheduler里会根据任务的优先级去执行任务
+4. 任务的优先级的指定是根据`车道模型`，将任务进行分类，每一类拥有不同的优先级，所有的分类和优先级都在React中进行了枚举
+5. Scheduler按照优先级执行任务时，会异步的执行，同时每一个任务执行完成之后，都会`通过requestIdleCallBack去判断下一个任务是否能在当前渲染帧的剩余时间内完成`
 6. 如果不能完成就发生中断，把线程的控制权交给浏览器，剩下的任务则在下一个渲染帧内执行
 7. 整个Reconciler和Scheduler的任务执行完成之后，会生成一个新的workInProgressFiber的新的节点树，之后Reconciler触发Commit阶段通知Render渲染器去进行diff操作，也就是我们说的patch流程
 
@@ -128,17 +128,7 @@ React合成事件的优势：
 ### React.Fiber 原理
 - [React.Fiber原理]https://www.youtube.com/watch?v=ZCuYPiUIONs
 
-### react和vue的区别  
-1.状态管理
-    vue响应式 Object.defineProperty Proxy 通过对状态做代理，get 的时候收集以来，然后修改状态的时候就可以触发对应组件的 render
-    
-    react setState Api触发状态更新的，更新以后就重新渲染整个 vdom。
-2.编写语法
-    Vue推荐的做法是webpack+vue-loader的单文件组件格式，vue保留了html、css、js分离的写法
-    
-    React的开发者可能知道，react是没有模板的，直接就是一个渲染函数，它中间返回的就是一个虚拟DOM树，
-    React推荐的做法是  JSX + inline style, 也就是把HTML和CSS全都写进JavaScript了,即'all in  js'。
-3.diff算法
+### react和vue的diff算法
   vue中diff算法实现流程：
       1.在内存中构建虚拟dom树
       2.将内存中虚拟dom树渲染成真实dom结构
@@ -154,8 +144,7 @@ React合成事件的优势：
       (其实这个key的存在与否只会影响diff算法的复杂度,换言之,你不加key的情况下,
       diff算法就会以暴力的方式去根据一二的策略更新,但是你加了key,diff算法会引入一些另外的操作)
 
-### React 事件机制  React 组件中怎么做事件代理？它的原理是什么？ 事件委托（事件代理）
-React并不是将click事件绑定到了div的真实DOM上，而是在document处监听了所有的事件，当事件发生并且冒泡到document处的时候，React将事件内容封装并交由真正的处理函数运行。
+
 ### React的事件和普通的HTML事件有什么不同
 对于事件名称命名方式，原生事件为全小写，react 事件采用小驼峰；
 对于事件函数处理语法，原生事件为字符串，react 事件为函数；
@@ -169,11 +158,6 @@ VUE在渲染过程中，会跟踪每⼀个组件的依赖关系，不需要重�
 可以在不编写 class 的情况下使用 state 以及其他的 React 特性
 
 ### 2. react diff 原理
-- 把树形结构按照层级分解，只比较同级元素。
-- 给列表结构的每个单元添加唯一的 key 属性，方便比较。
-- React 只会匹配相同 class 的 component（这里面的 class 指的是组件的名字）
-- 合并操作，调用 component 的 setState 方法的时候, React 将其标记为 dirty.到每一个事件循环结束, React 检查所有标记 dirty 的 component 重新绘制.
-- 选择性子树渲染。开发人员可以重写 shouldComponentUpdate 提高 diff 的性能
 
 ### 3. 调用 super(props) 的目的是什么
 - 传递 props 给 super() 的原因则是为了能在 constructor 访问 this.props
@@ -201,11 +185,7 @@ VUE在渲染过程中，会跟踪每⼀个组件的依赖关系，不需要重�
 ```
 
 ### 5. setState什么时候同步什么时候异步?  setState(partialState, callback) 中的callback拿到更新后的结果。
-- React控制之外的事件中调用setState是同步更新的。比如原生js绑定的事件，setTimeout/setInterval等。
-- 所以就能理解大部分开发中用到的都是React封装的事件，比如onChange、onClick、onTouchMove等，这些事件处理程序中的setState都是异步处理的
-
-在 合成事件 和 生命周期钩子(除 componentDidUpdate) 中，setState是"异步"的
-在 原生事件 和 setTimeout 中，setState是同步的，可以马上获取更新后的值
+在 原生事件 和 setTimeout 中，setState是同步的
 
 ### 6. React是怎样控制异步和同步的呢？
 在 React 的 setState 函数实现中，会根据一个变量 isBatchingUpdates 判断是直接更新 this.state 还是放到队列中延时更新，而 isBatchingUpdates 默认是 false，表示 setState 会同步更新 this.state；但是，有一个函数 batchedUpdates，该函数会把 isBatchingUpdates 修改为 true，而当 React 在调用事件处理函数之前就会先调用这个 batchedUpdates将isBatchingUpdates修改为true，这样由 React 控制的事件处理过程 setState 不会同步更新 this.state
@@ -435,10 +415,14 @@ React事件绑定发生在reconcile阶段 会在原生事件绑定前执行
 默认批量更新
 避免事件对象频繁创建和回收，react引入事件池，在事件池中获取和释放对象（react17中废弃） react17事件绑定在容器上了
 
-17. 我们写的事件是绑定在dom上么，如果不是绑定在哪里？ 答：v16绑定在document上，v17绑定在container上
-18. 为什么我们的事件手动绑定this(不是箭头函数的情况) 答：合成事件监听函数在执行的时候会丢失上下文
-19. 为什么不能用 return false来阻止事件的默认行为？ 答：说到底还是合成事件和原生事件触发时机不一样
-20. react怎么通过dom元素，找到与之对应的 fiber对象的？ 答：通过internalInstanceKey对应
+17. 我们写的事件是绑定在dom上么，如果不是绑定在哪里？ 
+答：v16绑定在document上，v17绑定在container上
+18. 为什么我们的事件手动绑定this(不是箭头函数的情况) 
+答：合成事件监听函数在执行的时候会丢失上下文
+19. 为什么不能用 return false来阻止事件的默认行为？ 
+答：说到底还是合成事件和原生事件触发时机不一样
+20. react怎么通过dom元素，找到与之对应的 fiber对象的？ 
+答：通过internalInstanceKey对应
 
 解释结果和现象
 21. 点击Father组件的div，Child会打印Child吗
@@ -515,9 +499,60 @@ useEffect(() => {
 ```
 
 
-JSX本质是什么
-React 的合成事件机制 
-React的batchUpdate机制
-React事务机制
-React组件渲染和更新的过程
-React-fiber如何优化性能
+1. JSX本质是什么
+JSX本质上是JavaScript的语法扩展，用于在React中编写UI组件。它允许开发者使用类似HTML的语法结构来描述UI组件的结构，使得代码更加易读和易写。在编译时，JSX会被转换成普通的JavaScript对象，然后由React进行处理和渲染。因此，JSX并不是一种新的语言或模板语言，而是一种在JavaScript中嵌入XML结构的语法糖。
+
+
+2. React 的合成事件机制 
+React 的合成事件机制是指 React 在处理 DOM 事件时，会将所有的事件统一封装成合成事件对象，然后通过事件委托的方式将事件绑定在 document（17版本在root上） 上，然后根据事件冒泡的机制来处理事件。
+
+这种机制的好处是可以提高性能，因为只需要绑定一个事件监听器，而不是为每个元素都绑定一个事件监听器。此外，合成事件对象也提供了一些额外的功能，比如可以通过 stopPropagation() 方法来阻止事件冒泡，还可以通过 preventDefault() 方法来阻止事件的默认行为
+
+
+3. React的setState和batchUpdate机制
+在React中，setState是用于更新组件的状态的方法，它接受一个包含新状态值的对象作为参数。当调用setState时，React会将新状态合并到当前状态中，并触发组件的重新渲染。
+
+React还提供了一种批量更新状态的机制，即batchUpdate。当需要连续多次调用setState时，可以使用batchUpdate来确保性能的最佳表现。在batchUpdate中，React会将所有的setState调用合并成一个更新，并只触发一次重新渲染。
+
+使用batchUpdate可以减少不必要的重新渲染次数，提高性能。可以通过React的ReactDOM.unstable_batchedUpdates方法来手动触发batchUpdate，或者通过在事件处理函数中使用React的合成事件来自动启用batchUpdate
+
+
+4. React事务机制
+React事务机制是React框架中用于管理组件更新过程的一种机制。在React中，所有的组件更新操作都是通过事务来管理的，事务机制可以确保组件更新的一致性和可靠性。
+
+React事务机制包含以下几个关键步骤：
+- 开启事务：当需要进行组件更新时，React会开启一个新的事务。
+- 执行更新操作：在事务中，React会执行所有需要更新的组件操作，包括调用组件的生命周期方法、更新组件的状态和属性等。
+- 执行更新队列：React会将所有需要更新的操作放入更新队列中，然后按照一定的顺序执行这些操作。
+- 提交事务：当所有更新操作执行完毕时，React会提交事务，将更新的结果同步到DOM中。
+
+React事务机制的优点包括：
+- 保证更新的一致性：通过事务机制，React可以确保组件更新的顺序和一致性，避免出现更新操作的冲突和不一致。
+- 提高性能：事务机制可以将多个更新操作合并成一个批处理操作，减少不必要的重复渲染，提高页面性能和用户体验。
+- 简化代码逻辑：通过事务机制，开发者可以更方便地管理组件更新过程，简化代码逻辑，提高开发效率。
+
+总的来说，React事务机制是React框架中非常重要的一部分，它可以确保组件更新的一致性和可靠性，提高页面性能和开发效率。
+
+
+5. React组件渲染和更新的过程
+React组件的渲染和更新过程主要包括以下几个步骤：
+
+- 初始化阶段：当React应用程序启动时，React会首先初始化根组件并将其渲染到DOM中。这个过程包括创建组件的实例、调用组件的构造函数和生命周期方法等。
+- 渲染阶段：在初始化阶段之后，React会根据组件的props和state来确定组件的UI展示内容，并将其渲染到DOM中。这个过程包括调用组件的render方法生成虚拟DOM树、对比新旧虚拟DOM树找出差异等。
+- 更新阶段：当组件的props或state发生变化时，React会触发组件的更新。更新过程包括重新调用render方法生成新的虚拟DOM树、对比新旧虚拟DOM树找出差异、更新DOM元素等。
+- 组件生命周期方法：在组件的生命周期中，React提供了一系列的生命周期方法，如componentDidMount、componentDidUpdate等，可以在这些方法中进行组件的初始化、更新等操作。
+
+总的来说，React组件的渲染和更新过程是通过虚拟DOM来实现的，React会根据组件的props和state来生成虚拟DOM树，并通过比对新旧虚拟DOM树找出差异，最终更新到DOM中，从而实现组件的渲染和更新。
+
+
+6. React-fiber如何优化性能
+React Fiber 是 React 的新的核心算法，旨在提高 React 应用的性能。它采用了增量渲染的方式来优化性能，具体来说，React Fiber 通过将渲染工作分成多个小单元的任务，然后在每个任务之间执行优先级排序，以便更好地控制渲染的优先级和中断。
+
+React Fiber 的一些性能优化策略包括：
+
+- 异步渲染：React Fiber 支持异步渲染，可以将渲染工作分成多个小任务，并根据任务的优先级来调度执行，从而提高页面的响应速度。
+- 可中断渲染：React Fiber 支持中断渲染，可以在渲染过程中暂停并恢复工作，以便更好地响应用户的交互。
+- 优先级调度：React Fiber 支持任务的优先级调度，可以根据任务的优先级来决定执行的顺序，从而更好地控制渲染的优先级。
+- 增量更新：React Fiber 支持增量更新，可以只更新需要更新的部分，而不是重新渲染整个页面，从而减少不必要的渲染。
+
+总的来说，React Fiber 通过引入异步渲染、可中断渲染、优先级调度和增量更新等策略，来优化 React 应用的性能，提高页面的响应速度和用户体验。

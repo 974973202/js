@@ -204,7 +204,7 @@ module.exports = {
 ### 热更新的原理分析
  1. webpack Compile(编译器)：将js原代码编译成打包好输出的文件（Bundle）
  2. HMR Server：将热更新文件传输给HMR Runtime
- 3. Bundle Server： 提供文件中在浏览器的访问（正常在浏览器上访问是通过文件路径访问，通过webpack热更新可以通过服务器访问，比如localhost：8080/bundle.js）
+ 3. Bundle Server： 提供文件中在浏览器的访问（正常在浏览器上访问是`通过文件路径访问`，通过webpack热更新可以通过服务器访问，比如localhost：8080/bundle.js）
  4. HMR Runtime ： 会注入到浏览器与服务器建立连接，更新为文件变化
 
 ### ⽂件指纹
