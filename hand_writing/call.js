@@ -3,7 +3,7 @@
 
 Function.prototype.myCall = function (context) {
   // 若 context为null 指向window 而window下挂载着fn方法  可使用 Symbol()
-  var context = context || window;
+  var context = Object(context) || window;
   context.fn = this;
 
   var args = [];

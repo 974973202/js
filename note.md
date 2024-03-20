@@ -18,29 +18,29 @@ const listener = {
 listener.listen((a,b) => console.log(a, b))
 listener.notify(2,3)
 
-class Subject {
-  constructor() {
-    this.observers = [];
-  };
-  ob(fn) {
-    if (fn && fn.update) {
-      this.observers.push(fn)
+class subject {
+    constructor() {
+        this.observers = [];
     }
-  }
+    ob(fn) {
+        if (fn && fn.update) {
+            this.observers.push(fn);
+        }
+    }
 
-  notify() {
-    this.observers.forEach(ele => {
-      ele.update()
-    })
-  }
+    notify() {
+        this.observers.forEach(fn => fn.update(...arguments))
+    }
 }
+
 class Ob {
-  update() {
-    console.log(12)
-  }
+    update(...args) {
+        console.log(...args);
+    }
 }
-suject = new Subject()
-suject.ob(new Ob())
-suject.notify()
+
+const s = new subject();
+s.ob(new Ob());
+s.notify('hello');
 
 ```

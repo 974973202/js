@@ -1,16 +1,16 @@
-
-0. 优化方向
+react和vue的区别
+1. 优化方向
 vue: 编译时优化 模板语法在预编译层面做更多的预判，让 Vue 在运行时有更好的性能
 react: 纯js写法，编译时很难做太多事，主要优化方向在运行时。运行时的主要瓶颈就是 CPU（16.6 ms）、IO
-1. vdom
-vue 的 template compiler 是自己实现的，而 react 的 jsx 的编译器是 babel 实现的.
+2. 在虚拟dom上
+vue 的 template compiler 是自己实现的
+react 的 jsx 的编译器是 babel 实现的
 编译成 render function 后再执行就是我们需要的 vdom。
+
 那渲染器怎么渲染 vdom 的呢？
-2. 渲染 vdom
 渲染 vdom 也就是通过 dom api 增删改 dom。
 比如一个 div，那就要 document.createElement 创建元素，然后 setAttribute 设置属性，addEventListener 设置事件监听器。如果是文本，那就要 document.createTextNode 来创建。
 组件怎么渲染呢？
-3. 组件
 添加标识，封装对应的处理方法
 如何把 state 和 jsx 关联起来呢？
 封装成 function、class 或者 option 对象的形式。
@@ -29,19 +29,21 @@ switch (vdom.tag) {
      //...
 } 
 ```
-基于 vdom 的前端框架渲染流程都差不多，vue 和 react 很多方面是一样的。但是管理状态的方式不一样，vue 有响应式，而 react 则是 setState 的 api 的方式
-4. 状态管理
+基于 vdom 的前端框架渲染流程都差不多，vue 和 react 很多方面是一样的。
+3. 状态管理的方式上
+vue 有响应式，而 react 则是 setState 的 api 的方式
 react 是通过 setState 的 api 触发状态更新的，更新以后就重新渲染整个 vdom。
-而 vue 是通过对状态做代理，get 的时候收集以来，然后修改状态的时候就可以触发对应组件的 render 了
-为什么 react 不直接渲染对应组件呢？
+而 vue 是通过对状态做代理，get 的时候收集以来，然后修改状态的时候就可以触发对应组件的 render
+
+#### 为什么 react 不直接渲染对应组件呢？
 - 想象一下这个场景：
 父组件把它的 setState 函数传递给子组件，子组件调用了它。
 这时候更新是子组件触发的，但是要渲染的就只有那个组件么？
 明显不是，还有它的父组件。
 同理，某个组件更新实际上可能触发任意位置的其他组件更新的。
-所以必须重新渲染整个 vdom 才行。
+当某个组件的状态发生变化时，React 会重新渲染该组件及其所有子组件，以确保整个组件树的状态保持一致。
 那 vue 为啥可以做到精准的更新变化的组件呢？
-因为响应式的代理呀，不管是子组件、父组件、还是其他位置的组件，只要用到了对应的状态，那就会被作为依赖收集起来，状态变化的时候就可以触发它们的 render，不管是组件是在哪里的。
+因为响应式的代理呀，不管是子组件、父组件、还是其他位置的组件，只要用到了对应的状态，那就会被作为`依赖收集`起来，状态变化的时候就可以触发它们的 render，不管是组件是在哪里的。
 这就是为什么 react 需要重新渲染整个 vdom，而 vue 不用。
 这个问题也导致了后来两者架构上逐渐有了差异。
 5. react 架构的演变

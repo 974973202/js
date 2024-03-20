@@ -31,10 +31,7 @@ console.log(unique(array));
 // filter实现
 var array = [1, 2, 1, 1, '1'];
 function unique(array) {
-  var res = array.filter(function (item, index, array) {
-    return array.indexOf(item) === index;
-  })
-  return res;
+  return array.filter((item, index, array) => array.indexOf(item) === index)
 }
 console.log(unique(array));
 

@@ -1,14 +1,3 @@
-首屏： 1. 服务端渲染， 2.路由懒加载 CDN加速 ui库按需加载 service worker  预渲染prefetch
-
-html是超文本标记语言
-
-常见的浏览器内核，webkit,blink,gecko,trident
-
-cookies, seess..., local..
-1. 存储大小
-2. 有效时间
-3. 服务端交互
-
 css 选择器优先级
 important > style > id > class = [] = : > p = :: > *
 
@@ -57,11 +46,6 @@ css实现的是补间动画
 
 补间动画一般只经过合成线程compositor thread,
 而帧动画要先经过main thread的处理然后经过compositor thread合成线程
-
-dns解析
-dns - host - 本地dns服务器 - 根服务器 - 域服务器 - 找到域名和ip地址的对应关系 - 存入host缓存
-
-回流会引起重绘，重绘不一定会引起回流
 
 DOMContentLoaded
 如果页面存在css和js并且js在css后面，则DOMContentLoaded会在css加载完后执行
@@ -112,8 +96,6 @@ Cache-control指定指令来实现缓存机制
   - 为了解决上面的那个问题， **http1.1** 加了这组标记
   1. ETag：服务器根据内容生成唯一的字符串标识
   2. If-None-Match：发起协商，把本地记录的 hash 标识传给服务器，服务器进行判断比较
-
-三次握手 - 四次挥手
 
 session和cookie
 - cookie客户端， 容易被盗取
@@ -227,61 +209,6 @@ function deepClone (obj) {
   return target;
 }
 ```
-
-### react和vue的区别  
-1.设计思想
-    vue的官网中说它是一款渐进式框架，采用自底向上增量开发的设计。
-    
-    react主张函数式编程，所以推崇纯组件，数据不可变，单向数据流，当然需要双向的地方也可以手动实现，
-    比如借助 onChange 和 setState 来实现一个双向的数据流。
-2.编写语法
-    Vue推荐的做法是webpack+vue-loader的单文件组件格式，vue保留了html、css、js分离的写法
-    
-    React的开发者可能知道，react是没有模板的，直接就是一个渲染函数，它中间返回的就是一个虚拟DOM树，
-    React推荐的做法是  JSX + inline style, 也就是把HTML和CSS全都写进JavaScript了,即'all in  js'。
-3.构建工具
-    vue提供了CLI 脚手架，可以帮助你非常容易地构建项目。
-    
-    React 在这方面也提供了 create-react-app，但是现在还存在一些局限性，不能配置等等
-4.数据绑定
-    vue是实现了双向数据绑定的mvvm框架，当视图改变更新模型层，当模型层改变更新视图层。
-    在vue中，使用了双向绑定技术，就是View的变化能实时让Model发生变化，而Model的变化也能实时更新到View。
-    (这里我们可以继续深入讲解一下双向数据绑定的原理，我之前的文章手写Vue源码可参考)
-    
-    react是单向数据流，react中属性是不允许更改的，状态是允许更改的。
-    react中组件不允许通过this.state这种方式直接更改组件的状态。自身设置的状态，可以通过setState来进行更改。
-    (注意：React中setState是异步的，导致获取dom可能拿的还是之前的内容，
-    所以我们需要在setState第二个参数（回调函数）中获取更新后的新的内容。)
-    
-    【这里如果你了解深入的话可以尝试描述一下React中setState的异步操作是怎么实现的，Vue中的更新是通过微任务等】
-5.diff算法
-  vue中diff算法实现流程：
-      1.在内存中构建虚拟dom树
-      2.将内存中虚拟dom树渲染成真实dom结构
-      3.数据改变的时候，将之前的虚拟dom树结合新的数据生成新的虚拟dom树
-      4.将此次生成好的虚拟dom树和上一次的虚拟dom树进行一次比对(diff算法进行比对)，来更新只需要被替换的DOM，
-      而不是全部重绘。在Diff算法中，只平层的比较前后两棵DOM树的节点，没有进行深度的遍历。
-      5.会将对比出来的差异进行重新渲染
-      
-  react中diff算法实现流程:
-      DOM结构发生改变-----直接卸载并重新create
-      DOM结构一样-----不会卸载,但是会update变化的内容
-      所有同一层级的子节点.他们都可以通过key来区分-----同时遵循1.2两点
-      (其实这个key的存在与否只会影响diff算法的复杂度,换言之,你不加key的情况下,
-      diff算法就会以暴力的方式去根据一二的策略更新,但是你加了key,diff算法会引入一些另外的操作)
-
-# react
-### 1. 什么是 Hooks
-可以在不编写 class 的情况下使用 state 以及其他的 React 特性
-### 2. Hooks 解决的问题
-- 状态逻辑难复用(HOC)
-- 趋向复杂难以维护(生命周期)
-- this 指向问题
-
-# VUE
-### 全局路由钩子  beforeEach  beforeResolve  afterEach
-### 路由独享钩子 beforeEnter  afterEnter  beforeLeave
-### 组件内导航钩子 beforeRouteEnter  beforeRouteUpdate beforeRouteLeave
 
 # 网络安全
 

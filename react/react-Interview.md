@@ -91,14 +91,41 @@ function FiberNode(
 - update阶段
 - workInProgress Fiber 树在render阶段完成构建后进入commit阶段渲染到页面上。渲染完毕后，workInProgress Fiber 树变为current Fiber 树
 
+#### React-fiber如何优化性能
+React Fiber 是 React 的新的核心算法，旨在提高 React 应用的性能。它采用了增量渲染的方式来优化性能，具体来说，React Fiber 通过将渲染工作分成多个小单元的任务，然后在每个任务之间执行优先级排序，以便更好地控制渲染的优先级和中断。
+
+React Fiber 的一些性能优化策略包括：
+
+- 异步渲染：React Fiber 支持异步渲染，可以将渲染工作分成多个小任务，并根据任务的优先级来调度执行，从而提高页面的响应速度。
+- 可中断渲染：React Fiber 支持中断渲染，可以在渲染过程中暂停并恢复工作，以便更好地响应用户的交互。
+- 优先级调度：React Fiber 支持任务的优先级调度，可以根据任务的优先级来决定执行的顺序，从而更好地控制渲染的优先级。
+- 增量更新：React Fiber 支持增量更新，可以只更新需要更新的部分，而不是重新渲染整个页面，从而减少不必要的渲染。
+
+总的来说，React Fiber 通过引入异步渲染、可中断渲染、优先级调度和增量更新等策略，来优化 React 应用的性能，提高页面的响应速度和用户体验。
+
 ### Fiber 与 jsx
 - Reconciler根据JSX描述的组件内容生成组件对应的Fiber节点。
 - JSX是一种描述当前组件内容的数据结构，不包含组件schedule、reconcile、render所需的相关信息
 
+### JSX本质是什么
+JSX本质上是JavaScript的语法扩展，用于在React中编写UI组件。它允许开发者使用类似HTML的语法结构来描述UI组件的结构，使得代码更加易读和易写。在编译时，JSX会被转换成普通的JavaScript对象，然后由React进行处理和渲染。因此，JSX并不是一种新的语言或模板语言，而是一种在JavaScript中嵌入XML结构的语法糖。
+
+### react为什么引入jsx
+解释概念：jsx是js语法的扩展 可以很好的描述ui jsx是React.createElement的语法糖
+想实现什么目的：声明式 代码结构简洁 可读性强 结构样式和事件可以实现高内聚 低耦合 、复用和组合 不需要引入新的概念和语法 只写js， 虚拟dom跨平台
+有哪些可选方案：模版语法 vue ag引入了控制器 作用域 服务等概念
+jsx原理：babel抽象语法树 classic是老的转换 automatic新的转换
+
 ### React的合成事件
+合成事件机制：
+  react 16绑定到document
+  react 17绑定到root
 React合成事件的优势：
 抹平不同浏览器直接的差异，提供统一的API使用体验
 通过事件委托的方式统一绑定和分发事件，有利于提升性能，减少内存消耗
+React 的合成事件机制是指 React 在处理 DOM 事件时，会将所有的事件统一封装成合成事件对象，
+然后通过事件委托的方式将事件绑定在 document（17版本在root上） 上，
+然后根据事件冒泡的机制来处理事件。
 
 之后详细说了一下合成事件的绑定及分发流程：
 1. React应用启动时，会在页面渲染的根元素上绑定原生的DOM事件，将该`根元素作为委托对象`
@@ -162,40 +189,18 @@ VUE在渲染过程中，会跟踪每⼀个组件的依赖关系，不需要重�
 ### 3. 调用 super(props) 的目的是什么
 - 传递 props 给 super() 的原因则是为了能在 constructor 访问 this.props
 
-### 4. createElement 和 cloneElement 有什么区别？
-- React.createElement():JSX 语法就是用 React.createElement()来构建 React 元素的。它接受三个参数，第一个参数可以是一个标签名。如 div、span，或者 React 组件。第二个参数为传入的属性。第三个以及之后的参数，皆作为组件的子组件。
-```js
-  React.createElement(
-    type,
-    [props],
-    [...children]
-  )
-
-  <div id="box" key="index">555</div>
-  React.createElement('div', { id: "box", key: "index" }, '555')
-  jsx -> createElement -> ReactElement
-```
-- React.cloneElement()与 React.createElement()相似，不同的是它传入的第一个参数是一个 React 元素，而不是标签名或组件。新添加的属性会并入原有的属性，传入到返回的新元素中，而就的子元素奖杯替换。
-```js
-  React.cloneElement(
-    element,
-    [props],
-    [...children]
-  )
-```
-
 ### 5. setState什么时候同步什么时候异步?  setState(partialState, callback) 中的callback拿到更新后的结果。
 在 原生事件 和 setTimeout 中，setState是同步的
 
-### 6. React是怎样控制异步和同步的呢？
+### 6. React是怎样控制异步和同步  isBatchingUpdates
 在 React 的 setState 函数实现中，会根据一个变量 isBatchingUpdates 判断是直接更新 this.state 还是放到队列中延时更新，而 isBatchingUpdates 默认是 false，表示 setState 会同步更新 this.state；但是，有一个函数 batchedUpdates，该函数会把 isBatchingUpdates 修改为 true，而当 React 在调用事件处理函数之前就会先调用这个 batchedUpdates将isBatchingUpdates修改为true，这样由 React 控制的事件处理过程 setState 不会同步更新 this.state
 
 batchedUpdates
 
 ### 7.父子组件传值
 1 props
-2 const Context = React.createContext();  Provider  Consumer
-3 ref
+2 ref
+3 const Context = React.createContext();  Provider  Consumer
 4 ctx = createContext(0)    ctx.Provider     子 useContext(ctx)
 
 
@@ -241,9 +246,7 @@ componentWillUnmount
 ```
 提交阶段：
 
-合成事件机制
-  react 16绑定到document
-  react 17绑定到root
+
 
 ### react-dom-render
 1. 创建ReactRoot
@@ -283,14 +286,6 @@ lane模型：二进制掩码（”用一串二进制数字（掩码）去操作�
 1. task任务怎么获取优先级的：从高优先级的lanes往下找，没有则换到稍微低一点优先级的lans里继续找
 2. 高优先级怎么插队：低优先级已经构建了一部分fiber树，将其还原
 3. 怎么解决饥饿问题：（低优先级的任务也要被执行），优先级调度过程中，遍历【未执行的任务包含的lane】，计算过期时间，加入root.expiredLanes，下次调用时优先返回expiredLanes（到期lane）
-
-### fiber双缓存
-1. fiber是在内存中的dom，包含节点的属性、类型、dom。
-2. 通过child、sibling、return（返回父节点）构成fiber树
-3. 还保存了updateQueue（链表结构），用来计算state，updateQueue有多个未计算的update，update（一种数据结构）保存了更新的数据、优先级（过期时间）
-4. fiberRoot：指整个应用的根节点，只存在一个
-5. rootFiber：应用的节点，可以存在多个
-6. 当前的fiber树和更新的fiber树切换的时候：fiberRoot的current指向更新的fiber树（即指向rootFiber）
 
 ### render阶段
 1. 捕获阶段：beginWork，从应用的根结点rootfiber开始到叶子结点，主要工作是创建或复用子fiber节点
@@ -364,16 +359,6 @@ Class组件prototype上有isReactComponent属性
 跳过更新：shouldComponentUpdate PureComponent，React.memo
 发展未来：函数组件将成为主流，屏蔽this、规范、复用，适合时间分片和渲染
 
-开放性问题
-10. 说说你对react的理解/请说一下react的渲染过程
-是什么：react是构建用户界面的js库
-能干什么：可以用组件化的方式构建快速响应的web应用程序
-如何干：声明式（jsx） 组件化（方便拆分和复用 高内聚 低耦合） 一次学习随处编写
-做的怎么样： 优缺（社区繁荣 一次学习随处编写 api简介）缺点（没有系统解决方案 选型成本高 过于灵活）
-设计理念：跨平台（虚拟dom） 快速响应（异步可中断 增量更新）
-性能瓶颈：cpu io fiber时间片 concurrent mode
-渲染过程：scheduler render commit Fiber架构
-
 11. 聊聊react生命周期
 render阶段：
 mount时：组件首先会经历constructor、getDerivedStateFromProps、componnetWillMount、render
@@ -385,35 +370,10 @@ update时：组件会调用getSnapshotBeforeUpdate、componnetDidUpdate
 unMount时：调用componnetWillUnmount
 error时：调用componnetDidCatch
 
-
-12. 简述diff算法
-13. react有哪些优化手段
-shouldComponentUpdate、不可变数据结构、列表key、pureComponent、react.memo、useEffect依赖项、useCallback、useMemo、bailoutOnAlreadyFinishedWork
-
-14. react为什么引入jsx
-解释概念：jsx是js语法的扩展 可以很好的描述ui jsx是React.createElement的语法糖
-想实现什么目的：声明式 代码结构简洁 可读性强 结构样式和事件可以实现高内聚 低耦合 、复用和组合 不需要引入新的概念和语法 只写js， 虚拟dom跨平台
-有哪些可选方案：模版语法 vue ag引入了控制器 作用域 服务等概念
-jsx原理：babel抽象语法树 classic是老的转换 automatic新的转换
-
 15. 说说virtual Dom的理解
 是什么：React.createElement函数返回的就是虚拟dom，用js对象描述真实dom的js对象
 优点：处理了浏览器的兼容性 防范xss攻击 跨平台 差异化更新 减少更新的dom操作
 缺点：额外的内存 初次渲染不一定快
-
-16. 你对合成事件的理解
-原生事件：全小写、事件处理函数（字符串）、阻止默认行为（返回false）
-合成事件：小驼峰、事件处理函数（函数对象）、阻止默认行为（event.preventDefault()）
-
-理解：
-React把事件委托到document上（v17是container节点上）
-先处理原生事件 冒泡到document上在处理react事件
-React事件绑定发生在reconcile阶段 会在原生事件绑定前执行
-
-优势：
-进行了浏览器兼容。顶层事件代理，能保证冒泡一致性(混合使用会出现混乱)
-默认批量更新
-避免事件对象频繁创建和回收，react引入事件池，在事件池中获取和释放对象（react17中废弃） react17事件绑定在容器上了
 
 17. 我们写的事件是绑定在dom上么，如果不是绑定在哪里？ 
 答：v16绑定在document上，v17绑定在container上
@@ -499,24 +459,6 @@ useEffect(() => {
 ```
 
 
-1. JSX本质是什么
-JSX本质上是JavaScript的语法扩展，用于在React中编写UI组件。它允许开发者使用类似HTML的语法结构来描述UI组件的结构，使得代码更加易读和易写。在编译时，JSX会被转换成普通的JavaScript对象，然后由React进行处理和渲染。因此，JSX并不是一种新的语言或模板语言，而是一种在JavaScript中嵌入XML结构的语法糖。
-
-
-2. React 的合成事件机制 
-React 的合成事件机制是指 React 在处理 DOM 事件时，会将所有的事件统一封装成合成事件对象，然后通过事件委托的方式将事件绑定在 document（17版本在root上） 上，然后根据事件冒泡的机制来处理事件。
-
-这种机制的好处是可以提高性能，因为只需要绑定一个事件监听器，而不是为每个元素都绑定一个事件监听器。此外，合成事件对象也提供了一些额外的功能，比如可以通过 stopPropagation() 方法来阻止事件冒泡，还可以通过 preventDefault() 方法来阻止事件的默认行为
-
-
-3. React的setState和batchUpdate机制
-在React中，setState是用于更新组件的状态的方法，它接受一个包含新状态值的对象作为参数。当调用setState时，React会将新状态合并到当前状态中，并触发组件的重新渲染。
-
-React还提供了一种批量更新状态的机制，即batchUpdate。当需要连续多次调用setState时，可以使用batchUpdate来确保性能的最佳表现。在batchUpdate中，React会将所有的setState调用合并成一个更新，并只触发一次重新渲染。
-
-使用batchUpdate可以减少不必要的重新渲染次数，提高性能。可以通过React的ReactDOM.unstable_batchedUpdates方法来手动触发batchUpdate，或者通过在事件处理函数中使用React的合成事件来自动启用batchUpdate
-
-
 4. React事务机制
 React事务机制是React框架中用于管理组件更新过程的一种机制。在React中，所有的组件更新操作都是通过事务来管理的，事务机制可以确保组件更新的一致性和可靠性。
 
@@ -534,7 +476,7 @@ React事务机制的优点包括：
 总的来说，React事务机制是React框架中非常重要的一部分，它可以确保组件更新的一致性和可靠性，提高页面性能和开发效率。
 
 
-5. React组件渲染和更新的过程
+### React组件渲染和更新的过程
 React组件的渲染和更新过程主要包括以下几个步骤：
 
 - 初始化阶段：当React应用程序启动时，React会首先初始化根组件并将其渲染到DOM中。这个过程包括创建组件的实例、调用组件的构造函数和生命周期方法等。
@@ -544,15 +486,11 @@ React组件的渲染和更新过程主要包括以下几个步骤：
 
 总的来说，React组件的渲染和更新过程是通过虚拟DOM来实现的，React会根据组件的props和state来生成虚拟DOM树，并通过比对新旧虚拟DOM树找出差异，最终更新到DOM中，从而实现组件的渲染和更新。
 
-
-6. React-fiber如何优化性能
-React Fiber 是 React 的新的核心算法，旨在提高 React 应用的性能。它采用了增量渲染的方式来优化性能，具体来说，React Fiber 通过将渲染工作分成多个小单元的任务，然后在每个任务之间执行优先级排序，以便更好地控制渲染的优先级和中断。
-
-React Fiber 的一些性能优化策略包括：
-
-- 异步渲染：React Fiber 支持异步渲染，可以将渲染工作分成多个小任务，并根据任务的优先级来调度执行，从而提高页面的响应速度。
-- 可中断渲染：React Fiber 支持中断渲染，可以在渲染过程中暂停并恢复工作，以便更好地响应用户的交互。
-- 优先级调度：React Fiber 支持任务的优先级调度，可以根据任务的优先级来决定执行的顺序，从而更好地控制渲染的优先级。
-- 增量更新：React Fiber 支持增量更新，可以只更新需要更新的部分，而不是重新渲染整个页面，从而减少不必要的渲染。
-
-总的来说，React Fiber 通过引入异步渲染、可中断渲染、优先级调度和增量更新等策略，来优化 React 应用的性能，提高页面的响应速度和用户体验。
+### 说说你对react的理解/请说一下react的渲染过程
+是什么：react是构建用户界面的js库
+能干什么：可以用组件化的方式构建快速响应的web应用程序
+如何干：声明式（jsx） 组件化（方便拆分和复用 高内聚 低耦合） 一次学习随处编写
+做的怎么样： 优缺（社区繁荣 一次学习随处编写 api简介）缺点（没有系统解决方案 选型成本高 过于灵活）
+设计理念：跨平台（虚拟dom） 快速响应（异步可中断 增量更新）
+性能瓶颈：cpu io fiber时间片 concurrent mode
+渲染过程：scheduler render commit Fiber架构
