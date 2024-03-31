@@ -106,3 +106,12 @@ export { default as Button } from './components/Button'
 export { default as Button } from './components/Button'
 export { default as Button } from './components/Button'
 ```
+
+### redux和vuex原理对比
+Redux和Vuex都是用于管理应用程序状态的JavaScript库，但它们的原理和设计有一些区别。
+
+Redux的原理是基于Flux架构的，它包含三个核心概念：store、action和reducer。Store是应用程序的状态存储，其中包含了所有的数据。Action是一个包含描述应用程序状态变化的信息的对象，通过dispatch方法触发。Reducer是一个纯函数，根据当前的状态和接收到的action来计算新的状态。Redux使用单一的store来管理整个应用程序的状态，通过使用纯函数来修改状态，保证了状态的可预测性和可维护性。
+
+Vuex的原理是基于Flux和Vue.js的响应式系统的，它也包含三个核心概念：state、mutation和action。State是应用程序的状态存储，类似于Redux中的store。Mutation是一个包含描述状态变化的方法的对象，通过commit方法触发。Action是一个包含描述异步操作和提交mutation的方法的对象，通过dispatch方法触发。Vuex使用Vue.js的响应式系统来实现状态的自动更新，通过mutation来修改状态，保证了状态的一致性和可维护性。
+
+总结来说，Redux和Vuex都是用于管理应用程序状态的库，但Redux更加简单和可预测，适用于大型应用程序；而Vuex更加灵活和便捷，适用于Vue.js应用程序。

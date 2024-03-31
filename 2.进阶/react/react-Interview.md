@@ -1,27 +1,81 @@
-### react理念
-- 将同步的更新变为可中断的异步更新
+### react和vue的区别
+1. 优化方向
+vue: 编译时优化 模板语法在预编译层面做更多的预判，让 Vue 在运行时有更好的性能
+react: 纯js写法，编译时很难做太多事，主要优化方向在运行时。运行时的主要瓶颈就是 CPU（16.6 ms）、IO
 
-### react15 的架构
-- 分为两层： 
- - Reconciler（协调器）—— 负责找出变化的组件
- - Renderer（渲染器）—— 负责将变化的组件渲染到页面上
+2. 在虚拟dom上
+vue 的 template compiler 是自己实现的
+  - VUE在渲染过程中，会跟踪每⼀个组件的依赖关系，不需要重新渲染整个组件树。
+react 的 jsx 的编译器是 babel 实现的
+  - React⽽⾔，每当 应⽤的状态被改变时，全部⼦组件都会重新渲染
+  - 使⽤ PureComponent，或是⼿动实现shouldComponentUpdate ⽅法
+  - useMemo useCallback 进行优化
+编译成 render function 后再执行就是我们需要的 vdom。
 
-- 缺点：在Reconciler中，mount的组件会调用mountComponent (opens new window)，update的组件会调用updateComponent (opens new window)。这两个方法都会递归更新子组件，而递归一旦开始就无法中断
+3. 状态管理的方式上
+vue 有响应式，而 react 则是 setState 的 api 的方式
+react 是通过 setState 的 api 触发状态更新的，更新以后就重新渲染整个 vdom。
+而 vue 是通过对状态做代理，get 的时候收集以来，然后修改状态的时候就可以触发对应组件的 render
 
-### React16 架构
-- 三层：
- - Scheduler（调度器）—— 调度任务的优先级，高优任务优先进入Reconciler
-    - 由于requestIdleCallback兼容性问题，React放弃使用
-    - React实现了功能更完备的requestIdleCallback polyfill，这就是Scheduler
+4. diff
+vue和react的diff算法都是进行同层次的比较，主要有以下两点不同：
+vue对比节点，如果节点元素类型相同，但是className不同，认为是不同类型的元素，会进行删除重建，但是react则会认为是同类型的节点，只会修改节点属性。
+vue的列表比对采用的是首尾指针法，而react采用的是从左到右依次比对的方式，当一个集合只是把最后一个节点移动到了第一个，react会把前面的节点依次移动，
+而vue只会把最后一个节点移动到最后一个，从这点上来说vue的对比方式更加高效。
 
- - Reconciler（协调器）—— 负责找出变化的组件
-    - Reconciler内部采用了Fiber的架构
-    - Reconciler与Renderer不再是交替工作。当Scheduler将任务交给Reconciler后，Reconciler会为变化的虚拟DOM打上代表增/删/更新的标记
 
- - Renderer（渲染器）—— 负责将变化的组件渲染到页面上
-    - 整个Scheduler与Reconciler的工作都在内存中进行。只有当所有组件都完成Reconciler的工作，才会统一交给Renderer。
+#### 为什么 react 不直接渲染对应组件呢？
+- 想象一下这个场景：
+父组件把它的 setState 函数传递给子组件，子组件调用了它。
+这时候更新是子组件触发的，但是要渲染的就只有那个组件么？
+明显不是，还有它的父组件。
+同理，某个组件更新实际上可能触发任意位置的其他组件更新的。
+当某个组件的状态发生变化时，React 会重新渲染该组件及其所有子组件，`以确保整个组件树的状态保持一致`。
+
+- 那 vue 为啥可以做到精准的更新变化的组件呢？
+因为响应式的代理，通过defineProperty，proxy `依赖收集`起来，状态变化的时候就可以触发它们的 render，不管是组件是在哪里的只更新对应render部分。
+这就是为什么 react 需要重新渲染整个 vdom，而 vue 不用。
+
+这个问题也导致了后来两者架构上逐渐有了差异。
+5. react 架构的演变
+react15 的时候，和 vue 的渲染流程还是很像的，都是递归渲染 vdom，增删改 dom 就行。
+react 的 setState 会渲染整个 vdom，而一个应用的所有 vdom 可能是很庞大的，计算量就可能很大。
+浏览器里 js 计算时间太长是会阻塞渲染的，会占用每一帧的动画、重绘重排的时间，这样动画就会卡顿。
+react 就改造为了 fiber 架构。
+6. fiber 架构
+优化的目标是打断计算，分多次进行，但现在递归的渲染是不能打断的，有两个方面的原因导致的：
+- 渲染的时候直接就操作了 dom 了，这时候打断了，那已经更新到 dom 的那部分怎么办？
+
+第一个问题的解决：
+渲染的时候不直接更新到 dom，只找到变化的部分，打个增删改的标记，等全部计算完一次性更新到 dom
+
+react 把渲染流程分为了两部分： render 和 commit
+```js
+// render 阶段会找到 vdom 中变化的部分，创建 dom，打上增删改的标记，这个叫做 reconcile，调和。
+// reconcile 是可以打断的，由 schedule 调度
+
+// 之后全部计算完了，就一次性更新到 dom，叫做 commit。
+// 改造成了 render（reconcile + schdule） + commit 两个阶段的渲染。
+
+// react 15架构
+// Reconciler（协调器）—— 负责调用 render 生成虚拟 Dom 进行 Diff，找出变化后的虚拟 Dom
+// Renderer（渲染器）—— 负责接到 Reconciler 通知，将变化的组件渲染在当前宿主环境，比如浏览器，不同的宿主环境会有不同的 Renderer。
+
+// react 16架构  -- Concurrent Mode
+// Scheduler（调度器）—— 调度任务的优先级，高优任务优先进入 Reconciler
+// Reconciler（协调器）—— 负责找出变化的组件（使用 Fiber 重构）为变化的虚拟DOM打上代表增/删/更新的标记
+// Renderer（渲染器）—— 负责将变化的组件渲染到页面上, 整个Scheduler与Reconciler的工作都在内存中进行。只有当所有组件都完成Reconciler的工作，才会统一交给Renderer。
+
+// React 17 - 稳定 Concurrent Mode 的过渡版本
+// 新的优先级算法 - lanes
+
+// React 18 - 更灵活 Concurrent Renderring
+```
+
+### react理念: 将同步的更新变为可中断的异步更新
 
 ### Fiber
+- Fiber是一个js对象，能承载节点信息、优先级、updateQueue，同时它还是一个工作单元。
 - 每个Fiber节点对应一个React element保存了该组件的类型（函数组件/类组件/原生组件...）、对应的DOM节点等信息。
 - 每个Fiber节点保存了本次更新中该组件改变的状态、要执行的工作（需要被删除/被插入页面中/被更新...）
 ```js
@@ -80,8 +134,33 @@ function FiberNode(
 ```
 - Fiber节点构成的Fiber树就对应DOM树
 
+### Fiber架构  react的渲染过程
+
+1. 初始化阶段（Initialization）：创建根组件并渲染到DOM中，构建Virtual DOM树
+
+2. 更新阶段（Update）：
+通过setState或props的改变触发重新渲染，进行协调阶段，对比新旧Virtual DOM树，找出差异。
+
+3. 协调阶段（Reconciler）：
+使用Fiber架构进行协调，即Fiber Reconciler。
+通过Diff算法找出需要更新的部分。根据差异生成更新任务（Update）。
+
+4. 提交阶段（Commit）：
+将更新任务应用到真实DOM上。执行DOM操作，完成页面的更新。
+触发生命周期方法和副作用（如useEffect）。
+
+在React的渲染过程中，Virtual DOM扮演着重要的角色，通过比较新旧Virtual DOM树的差异，React能够高效地更新真实DOM，从而实现页面的动态渲染。通过Fiber架构和Diff算法的优化，React能够在更新过程中进行灵活的控制和优化，提高页面的性能和用户体验。
+<!-- 两个阶段 调度阶段（调度器，协调器，渲染器），提交阶段
+
+jsx会被babel经过ast解析成React.createElement，
+而React.createElement函数执行之后就是virtual-dom（jsx对象）（ReactElement）
+virtual-dom -》 Fiber -> Fiber[] -> DOM
+在mount的时候，render阶段会根据jsx对象生成新的Fiber节点
+在update的时候，render阶段会根据最新的jsx和老的Fiber进行对比，生成新的Fiber  新旧dom -->
+
 #### 如何更新DOM --> Fiber “双缓存” 
-- 当前**屏幕**上显示内容对应的Fiber树称为**current Fiber**树，正在**内存**中构建的Fiber树称为**workInProgress Fiber**树
+- 当前**屏幕**上显示内容对应的Fiber树称为**current Fiber**树
+- 正在**内存**中构建的Fiber树称为**workInProgress Fiber**树
 - 当workInProgress Fiber树构建完成交给**Renderer**渲染在页面上后，应用根节点的current指针指向workInProgress Fiber树，此时workInProgress Fiber树就变为current Fiber树
 
 - mount阶段
@@ -103,18 +182,7 @@ React Fiber 的一些性能优化策略包括：
 
 总的来说，React Fiber 通过引入异步渲染、可中断渲染、优先级调度和增量更新等策略，来优化 React 应用的性能，提高页面的响应速度和用户体验。
 
-### Fiber 与 jsx
-- Reconciler根据JSX描述的组件内容生成组件对应的Fiber节点。
-- JSX是一种描述当前组件内容的数据结构，不包含组件schedule、reconcile、render所需的相关信息
 
-### JSX本质是什么
-JSX本质上是JavaScript的语法扩展，用于在React中编写UI组件。它允许开发者使用类似HTML的语法结构来描述UI组件的结构，使得代码更加易读和易写。在编译时，JSX会被转换成普通的JavaScript对象，然后由React进行处理和渲染。因此，JSX并不是一种新的语言或模板语言，而是一种在JavaScript中嵌入XML结构的语法糖。
-
-### react为什么引入jsx
-解释概念：jsx是js语法的扩展 可以很好的描述ui jsx是React.createElement的语法糖
-想实现什么目的：声明式 代码结构简洁 可读性强 结构样式和事件可以实现高内聚 低耦合 、复用和组合 不需要引入新的概念和语法 只写js， 虚拟dom跨平台
-有哪些可选方案：模版语法 vue ag引入了控制器 作用域 服务等概念
-jsx原理：babel抽象语法树 classic是老的转换 automatic新的转换
 
 ### React的合成事件
 合成事件机制：
@@ -144,42 +212,22 @@ React 的合成事件机制是指 React 在处理 DOM 事件时，会将所有�
 6. 如果不能完成就发生中断，把线程的控制权交给浏览器，剩下的任务则在下一个渲染帧内执行
 7. 整个Reconciler和Scheduler的任务执行完成之后，会生成一个新的workInProgressFiber的新的节点树，之后Reconciler触发Commit阶段通知Render渲染器去进行diff操作，也就是我们说的patch流程
 
+### React事务机制
+React事务机制是React框架中用于管理组件更新过程的一种机制。在React中，所有的组件更新操作都是通过事务来管理的，事务机制可以确保组件更新的一致性和可靠性。
 
+React事务机制包含以下几个关键步骤：
+- 开启事务：当需要进行组件更新时，React会开启一个新的事务。
+- 执行更新操作：在事务中，React会执行所有需要更新的组件操作，包括调用组件的生命周期方法、更新组件的状态和属性等。
+- 执行更新队列：React会将所有需要更新的操作放入更新队列中，然后按照一定的顺序执行这些操作。
+- 提交事务：当所有更新操作执行完毕时，React会提交事务，将更新的结果同步到DOM中。
 
+React事务机制的优点包括：
+- 保证更新的一致性：通过事务机制，React可以确保组件更新的顺序和一致性，避免出现更新操作的冲突和不一致。
+- 提高性能：事务机制可以将多个更新操作合并成一个批处理操作，减少不必要的重复渲染，提高页面性能和用户体验。
+- 简化代码逻辑：通过事务机制，开发者可以更方便地管理组件更新过程，简化代码逻辑，提高开发效率。
 
+总的来说，React事务机制是React框架中非常重要的一部分，它可以确保组件更新的一致性和可靠性，提高页面性能和开发效率。
 
-
-
-
-
-### React.Fiber 原理
-- [React.Fiber原理]https://www.youtube.com/watch?v=ZCuYPiUIONs
-
-### react和vue的diff算法
-  vue中diff算法实现流程：
-      1.在内存中构建虚拟dom树
-      2.将内存中虚拟dom树渲染成真实dom结构
-      3.数据改变的时候，将之前的虚拟dom树结合新的数据生成新的虚拟dom树
-      4.将此次生成好的虚拟dom树和上一次的虚拟dom树进行一次比对(diff算法进行比对)，来更新只需要被替换的DOM，
-      而不是全部重绘。在Diff算法中，只平层的比较前后两棵DOM树的节点，没有进行深度的遍历。
-      5.会将对比出来的差异进行重新渲染
-      
-  react中diff算法实现流程:
-      DOM结构发生改变-----直接卸载并重新create
-      DOM结构一样-----不会卸载,但是会update变化的内容
-      所有同一层级的子节点.他们都可以通过key来区分-----同时遵循1.2两点
-      (其实这个key的存在与否只会影响diff算法的复杂度,换言之,你不加key的情况下,
-      diff算法就会以暴力的方式去根据一二的策略更新,但是你加了key,diff算法会引入一些另外的操作)
-
-
-### React的事件和普通的HTML事件有什么不同
-对于事件名称命名方式，原生事件为全小写，react 事件采用小驼峰；
-对于事件函数处理语法，原生事件为字符串，react 事件为函数；
-react 事件不能采用 return false 的方式来阻止浏览器的默认行为，而必须要地明确地调用preventDefault()来阻止默认行为
-
-### 2.vue 虚拟DOM和react 虚拟DOM的区别 
-VUE在渲染过程中，会跟踪每⼀个组件的依赖关系，不需要重新渲染整个组件树。
-⽽对于React⽽⾔，每当 应⽤的状态被改变时，全部⼦组件都会重新渲染。 在 React 应⽤中，当某个组件的状态发⽣变化时， 它会以该组件为根，重新渲染整个组件⼦树。 如要避免不必要的⼦组件的重新渲染，你需要在所有可 能的地⽅使⽤ PureComponent，或是⼿动实现shouldComponentUpdate ⽅法 在React中，数据流是⾃上⽽下单向的从⽗节点传递到⼦节点，所以组件是简单且容易把握的，⼦组件 只需要从⽗节点提供的props中获取数据并渲染即可。如果顶层组件的某个prop改变了，React会递归 地向下遍历整棵组件树，重新渲染所有使⽤这个属性的组件。
 
 ### 1. 什么是 Hooks
 可以在不编写 class 的情况下使用 state 以及其他的 React 特性
@@ -188,6 +236,12 @@ VUE在渲染过程中，会跟踪每⼀个组件的依赖关系，不需要重�
 
 ### 3. 调用 super(props) 的目的是什么
 - 传递 props 给 super() 的原因则是为了能在 constructor 访问 this.props
+
+### 4. react为什么引入jsx
+解释概念：jsx是js语法的扩展 可以很好的描述ui jsx是React.createElement的语法糖
+想实现什么目的：声明式 代码结构简洁 可读性强 结构样式和事件可以实现高内聚 低耦合 、复用和组合 不需要引入新的概念和语法 只写js， 虚拟dom跨平台
+有哪些可选方案：模版语法 vue ag引入了控制器 作用域 服务等概念
+jsx原理：babel抽象语法树 classic是老的转换 automatic新的转换
 
 ### 5. setState什么时候同步什么时候异步?  setState(partialState, callback) 中的callback拿到更新后的结果。
 在 原生事件 和 setTimeout 中，setState是同步的
@@ -203,7 +257,6 @@ batchedUpdates
 3 const Context = React.createContext();  Provider  Consumer
 4 ctx = createContext(0)    ctx.Provider     子 useContext(ctx)
 
-
 ReactDOM.createPortal 创建根节点外的弹窗
 
 ### react 性能优化
@@ -215,22 +268,6 @@ ReactDOM.createPortal 创建根节点外的弹窗
 5. 合并多个setState
 
 PureComponent适用于类组件，React.memo适用于函数组件
-
-### Fiber架构  react的渲染过程
-<!-- 两个阶段 调度阶段（调度器，协调器，渲染器），提交阶段
-
-jsx会被babel经过ast解析成React.createElement，
-而React.createElement函数执行之后就是virtual-dom（jsx对象）（ReactElement）
-virtual-dom -》 Fiber -> Fiber[] -> DOM
-在mount的时候，render阶段会根据jsx对象生成新的Fiber节点
-在update的时候，render阶段会根据最新的jsx和老的Fiber进行对比，生成新的Fiber -->
-
-### Fiber是什么，它为什么能提高性能
-Fiber是一个js对象，能承载节点信息、优先级、updateQueue，同时它还是一个工作单元。
-
-Fiber双缓存可以在构建好wip Fiber树之后切换成current Fiber，内存中直接一次性切换，提高了性能
-Fiber的存在使异步可中断的更新成为了可能，作为工作单元，可以在时间片内执行工作，没时间了交还执行权给浏览器，下次时间片继续执行之前暂停之后返回的Fiber
-Fiber可以在reconcile的时候进行相应的diff更新，让最后的更新应用在真实节点上
 
 调度阶段：调度帧
 ```js
@@ -245,13 +282,6 @@ componentDidUpdate
 componentWillUnmount
 ```
 提交阶段：
-
-
-
-### react-dom-render
-1. 创建ReactRoot
-2. 创建FiberRoot和RootFiber
-3. 创建更新
 
 ### react源码使用数据结构
 scheduler：小顶堆
@@ -281,21 +311,11 @@ lane模型：二进制掩码（”用一串二进制数字（掩码）去操作�
 - 3. 暂停后恢复执行： 在performConcurrentWorkOnRoot函数的结尾有这样一个判断，如果callbackNode等于originalCallbackNode那就恢复任务的执行
 
 
-### Lane
+### Lane 车道模型
 - 每个优先级是一个31位的二进制数字，1表示位置可用，0表示位置不可用（转换为10进制，数值越小，优先级越高），Lane的优先级粒度更细，ps：二进制计算性能更高
 1. task任务怎么获取优先级的：从高优先级的lanes往下找，没有则换到稍微低一点优先级的lans里继续找
 2. 高优先级怎么插队：低优先级已经构建了一部分fiber树，将其还原
 3. 怎么解决饥饿问题：（低优先级的任务也要被执行），优先级调度过程中，遍历【未执行的任务包含的lane】，计算过期时间，加入root.expiredLanes，下次调用时优先返回expiredLanes（到期lane）
-
-### render阶段
-1. 捕获阶段：beginWork，从应用的根结点rootfiber开始到叶子结点，主要工作是创建或复用子fiber节点
-2. 冒泡阶段：completeWork，主要工作是处理fiber的props、创建dom（创建的dom节点赋值给fiber.stateNode）、创建effectList
-3. render阶段，当遍历到只有一个子节点的Fiber时，该Fiber节点的子节点不会执行beginWork和completeWork，这是react的一种优化手段
-4. 在render阶段的末尾会调用commitRoot(fiberRoot)，进入commit阶段
-
-### commit阶段
-遍历render阶段生成的effectList（fiber节点保存着props变化）
-遍历effectList对应的dom操作、生命周期、hook回调、销毁函数
 
 ### diff算法（单节点diff、双节点diff）
 diff算法三个前提
@@ -345,20 +365,6 @@ concurrent模式下：都是异步的
 8. react怎么区分Class组件和Function组件
 Class组件prototype上有isReactComponent属性
 
-9. 函数组件和类组件的相同点和不同点
-相同点：都可以接收props返回react元素
-
-不同点：
-编程思想：类组件需要创建实例，面向对象，函数组件不需要创建实例，接收输入，返回输出，函数式编程
-内存占用：类组建需要创建并保存实例，占用一定的内存
-值捕获特性：函数组件具有值捕获的特性
-可测试性：函数组件方便测试
-状态：类组件有自己的状态，函数组件没有只能通过useState
-生命周期：类组件有完整生命周期，函数组件没有可以使用useEffect实现类似的生命周期
-逻辑复用：类组件继承 Hoc（逻辑混乱 嵌套），组合优于继承，函数组件hook逻辑复用
-跳过更新：shouldComponentUpdate PureComponent，React.memo
-发展未来：函数组件将成为主流，屏蔽this、规范、复用，适合时间分片和渲染
-
 11. 聊聊react生命周期
 render阶段：
 mount时：组件首先会经历constructor、getDerivedStateFromProps、componnetWillMount、render
@@ -384,113 +390,8 @@ error时：调用componnetDidCatch
 20. react怎么通过dom元素，找到与之对应的 fiber对象的？ 
 答：通过internalInstanceKey对应
 
-解释结果和现象
-21. 点击Father组件的div，Child会打印Child吗
-```js
-function Child() {
-  console.log('Child');
-  return <div>Child</div>;
-}
-    
-    
-function Father(props) {
-  const [num, setNum] = React.useState(0);
-  return (
-    <div onClick={() => {setNum(num + 1)}}>
-      {num}
-      {props.children}
-    </div>
-  );
-}
-    
-    
-function App() {
-  return (
-    <Father>
-      <Child/>
-    </Father>
-  );
-}
-    
-const rootEl = document.querySelector("#root");
-ReactDOM.render(<App/>, rootEl);
 
-// 不会，源码中是否命中bailoutOnAlreadyFinishedWork
-```
-22. 打印顺序是什么
-```js
-function Child() {
-  useEffect(() => {
-    console.log('Child');
-  }, [])
-  return <h1>child</h1>;
-}
-    
-function Father() {
-  useEffect(() => {
-    console.log('Father');
-  }, [])
-      
-  return <Child/>;
-}
-    
-function App() {
-  useEffect(() => {
-    console.log('App');
-  }, [])
-    
-  return <Father/>;
-}
-// Child ，Father ，App ，render阶段mount时深度优先遍历，commit阶段useEffect执行时机
-```
-23. useLayoutEffect/componentDidMount和useEffect的区别是什么
-```js
-class App extends React.Component {
-  componentDidMount() {
-    console.log('mount');
-  }
-}
-    
-useEffect(() => {
-  console.log('useEffect');
-}, [])
-
-// 他们在commit阶段不同时机执行，useEffect在commit阶段结尾异步调用，useLayout/componentDidMount同步调用
-```
-
-
-4. React事务机制
-React事务机制是React框架中用于管理组件更新过程的一种机制。在React中，所有的组件更新操作都是通过事务来管理的，事务机制可以确保组件更新的一致性和可靠性。
-
-React事务机制包含以下几个关键步骤：
-- 开启事务：当需要进行组件更新时，React会开启一个新的事务。
-- 执行更新操作：在事务中，React会执行所有需要更新的组件操作，包括调用组件的生命周期方法、更新组件的状态和属性等。
-- 执行更新队列：React会将所有需要更新的操作放入更新队列中，然后按照一定的顺序执行这些操作。
-- 提交事务：当所有更新操作执行完毕时，React会提交事务，将更新的结果同步到DOM中。
-
-React事务机制的优点包括：
-- 保证更新的一致性：通过事务机制，React可以确保组件更新的顺序和一致性，避免出现更新操作的冲突和不一致。
-- 提高性能：事务机制可以将多个更新操作合并成一个批处理操作，减少不必要的重复渲染，提高页面性能和用户体验。
-- 简化代码逻辑：通过事务机制，开发者可以更方便地管理组件更新过程，简化代码逻辑，提高开发效率。
-
-总的来说，React事务机制是React框架中非常重要的一部分，它可以确保组件更新的一致性和可靠性，提高页面性能和开发效率。
-
-
-### React组件渲染和更新的过程
-React组件的渲染和更新过程主要包括以下几个步骤：
-
-- 初始化阶段：当React应用程序启动时，React会首先初始化根组件并将其渲染到DOM中。这个过程包括创建组件的实例、调用组件的构造函数和生命周期方法等。
-- 渲染阶段：在初始化阶段之后，React会根据组件的props和state来确定组件的UI展示内容，并将其渲染到DOM中。这个过程包括调用组件的render方法生成虚拟DOM树、对比新旧虚拟DOM树找出差异等。
-- 更新阶段：当组件的props或state发生变化时，React会触发组件的更新。更新过程包括重新调用render方法生成新的虚拟DOM树、对比新旧虚拟DOM树找出差异、更新DOM元素等。
-- 组件生命周期方法：在组件的生命周期中，React提供了一系列的生命周期方法，如componentDidMount、componentDidUpdate等，可以在这些方法中进行组件的初始化、更新等操作。
-
-总的来说，React组件的渲染和更新过程是通过虚拟DOM来实现的，React会根据组件的props和state来生成虚拟DOM树，并通过比对新旧虚拟DOM树找出差异，最终更新到DOM中，从而实现组件的渲染和更新。
-
-### 说说你对react的理解/请说一下react的渲染过程
-是什么：react是构建用户界面的js库
-能干什么：可以用组件化的方式构建快速响应的web应用程序
-如何干：声明式（jsx） 组件化（方便拆分和复用 高内聚 低耦合） 一次学习随处编写
-做的怎么样： 优缺（社区繁荣 一次学习随处编写 api简介）缺点（没有系统解决方案 选型成本高 过于灵活）
-设计理念：跨平台（虚拟dom） 快速响应（异步可中断 增量更新）
-性能瓶颈：cpu io fiber时间片 concurrent mode
-渲染过程：scheduler render commit Fiber架构
+### React的事件和普通的HTML事件有什么不同
+对于事件名称命名方式，原生事件为全小写，react 事件采用小驼峰；
+对于事件函数处理语法，原生事件为字符串，react 事件为函数；
+react 事件不能采用 return false 的方式来阻止浏览器的默认行为，而必须要地明确地调用preventDefault()来阻止默认行为

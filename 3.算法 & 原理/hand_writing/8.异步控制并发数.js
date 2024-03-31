@@ -1,6 +1,5 @@
 function limitRequest(urls = [], limit = 3) {
   return new Promise((resolve, reject) => {
-    const len = urls.length
     let count = 0
 
     // 同时启动limit个任务
@@ -17,7 +16,7 @@ function limitRequest(urls = [], limit = 3) {
         }).catch(err => {
           // todo
         }).finally(() => {
-          if (count == len - 1) {
+          if (count == urls.length - 1) {
             // 最后一个任务完成
             resolve()
           } else {

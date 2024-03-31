@@ -27,7 +27,7 @@ callback 参数，直接当 html 解析了，就是一个赤裸裸的 XSS 了。
 > 黑名单
 > 白名单  response.addHeader("Set-Cookie", "uid=112; path=/; HttpOnly")
 
-### CSRF 验证码 token Referer
+### CSRF跨站请求伪造  验证码 token Referer
 > 是跨站请求伪造，既攻击者借助受害者的 Cookie 骗取服务器的信任，可以在受害者毫不知情的情况下以受害者名义伪造请求发送给受攻击服务器
 - CSRF攻击的危害
 1. 利用用户登录态
@@ -58,10 +58,14 @@ ctx.set('X-FRAME-OPTIONS', 'DENY')
 ```
 
 ### SQL注入
+1. 使用参数化查询
+2. 输入验证
+3. 使用ORM框架
+4. 最小权限原则
 
 ### OS命令注入
 
-### 请求劫持
+### 请求劫持 升级HTTPS
 > 是DNS服务器(DNS解析各个步骤)被篡改，修改了域名解析的结果，使得访问到的不是预期的ip
 - 请求劫持的防范
 > HTTP劫持运营商劫持，此时⼤概只能升级HTTPS了

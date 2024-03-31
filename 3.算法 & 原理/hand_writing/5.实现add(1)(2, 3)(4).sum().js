@@ -1,3 +1,5 @@
+
+// 实现 add(1)(2, 3)(4).sum()  输出10
 function add(num) {
   let numbers = [num];
 

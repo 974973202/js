@@ -31,7 +31,7 @@ function delay(wait) {
  * 递归加函数组合compose
  */
 function compose(middlewares) {
-  return function (args) {
+  return function (ctx) {
     // 执行第一个next
     return dispatch(0);
 
@@ -41,7 +41,7 @@ function compose(middlewares) {
         return Promise.resolve();
       }
       return Promise.resolve(
-        fn(args, function next() {
+        fn(ctx, function next() {
           return dispatch(i + 1);
         })
       );

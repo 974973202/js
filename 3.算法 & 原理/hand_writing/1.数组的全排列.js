@@ -1,8 +1,8 @@
 // 一个数组的全排列
 var arr = [1, 2, 3];
 //swap用来交换数组a中的两个元素
-function swap(arr, p, q) {
-  [arr[p], arr[q]] = [arr[q], arr[p]]
+function swap(arr, i, j) {
+  [arr[i], arr[j]] = [arr[j], arr[i]]
 }
 
 //全排列函数pai，在数组arr中，对p位置到q位置之间的元素进行全排列

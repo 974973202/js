@@ -384,7 +384,7 @@ margin:0 auto;设置块元素（或与之类似的元素）的居中。
 - flex-grow 定义项目的放大比例，默认为0（即如果存在剩余空间，也不放大）
 - flex-shrink 定义项目的缩小比例，默认为1（即如果空间不足，该项目将缩小）
 - flex-basis 定义了在分配多余空间之前，项目占据的主轴空间。默认值为auto（项目本来大小）
-- flex 是flex-grow、flex-shrink和flex-basis的简写，默认值为 0 1 auto
+- `flex 是flex-grow、flex-shrink和flex-basis`的简写，默认值为 0 1 auto
 ```
 flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]  伸缩准
 flex: 1 只是flex-grow属性的简写形式，它的完整写法是flex: 1 1 0%。

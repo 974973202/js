@@ -22,12 +22,11 @@ function twoNumAdd(nums, target) {
 function twoNumAdd1(nums, target) {
     const map = new Map();
     for (let i = 0; i < nums.length; i++) {
-        const n = nums[i];
-        const n2 = target - n;
+        const n2 = target - nums[i];
         if(map.has(n2)) {
             return [map.get(n2), i];
         } else {
-            map.set(n, i);
+            map.set(nums[i], i);
         }
         
     }

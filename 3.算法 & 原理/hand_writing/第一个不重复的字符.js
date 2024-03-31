@@ -9,9 +9,7 @@ function findOneStr(str) {
     let map = {};
     let arr = str.split("");
     arr.forEach(item => {
-        let val = map[item];
-        // val为undefined时，表示未存储，map[item] = 1；否则map[item] = val + 1
-        map[item] = val ? val + 1 : 1;
+        map[item] = map[item] ? map[item] + 1 : 1;
     });
     // 再遍历一遍找到出现1次的下标
     // for (let i = 0; i < arr.length; i++) {
