@@ -1,3 +1,6 @@
+### Gulp
+自动化工具
+
 ```js
 gulpfile.js
 const gulp = require('gulp')
@@ -26,3 +29,20 @@ src -> pipe -> dest // 来源 管道 目标
 
 ### parallel()
 - 将任务功能和/或组合操作组合成同时执行的较大操作。对于使用 series() 和 parallel() 进行嵌套组合的深度没有强制限制。
+
+```js
+const { src, dest } = require('gulp');
+const babel = require('gulp-babel');
+const terser = require('gulp-terser');
+
+const jsTask = () => {
+  return src("./src/**/*.js")
+    .pipe(babel({ presets: ["@babel/preset-env"] }))
+    .pipe(terser({ toplevel: true }))
+    .pipe(dest("./dist"))
+}
+
+module.exports = {
+  jsTask
+}
+```

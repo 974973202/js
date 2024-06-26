@@ -414,7 +414,6 @@ function Test(props, testRef) {
     return <h1>Test Component</h1>
 }
 
-// 函数组件包裹成类组件
 const TestWrapper = React.forwardRef(Test)
 
 export default function App() {

@@ -60,8 +60,8 @@ yarn 和 npm 都是使用 hash加密算法 确保包的完整性。
     - 解析用户输入的指令
     - 初始化共用实例，初始化config配置项、reporter日志。config会在init时，逐步向父级递归查询 
      package.json是否配置了workspace字段。如果当前是workspace项目则yarn.lock是以workspace根目录 的yarn.lock为准
-    - 执行 add 指令，读取yarn.lock文件，根据package.json中的生命周期执行对应script脚本 -- `preinstall`，`install`，`postinstall`，`prepublish`，`prepare`
     - 获取项目依赖 -- package.json的dependencies、devDependencies、optionalDependencies内所有依赖包名+版本号
+    - 执行 add 指令，读取yarn.lock文件，根据package.json中的生命周期执行对应script脚本 -- `preinstall`，`install`，`postinstall`，`prepublish`，`prepare`
 
   - resolveStep：通过解析项目package.json的依赖形成一颗依赖树，并且会解析出整个依赖树上所有包的具体版本信息
 

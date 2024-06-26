@@ -297,7 +297,8 @@ margin:0 auto;设置块元素（或与之类似的元素）的居中。
 ```
 
 ### 如何实现左侧宽度固定，右侧宽度自适应的布局(两列布局)
-> float + margin实现  position + margin实现
+> float + margin实现
+> position + margin实现
 > 利用calc计算宽度
 > float + overflow实现
 > flex实现
@@ -334,7 +335,7 @@ margin:0 auto;设置块元素（或与之类似的元素）的居中。
 ### 伪元素和伪类的区别
 - 伪类的操作对象是文档树中已有的元素，而伪元素则创建了一个文档树外的元素。
 因此，伪类与伪元素的区别在于：`有没有创建一个文档树之外的元素`
-> 双冒号(::)表示伪元素
+> 双冒号(::)表示伪元素 ::after  ::before
 > 单冒号(:)表示伪类
 
 ### 绝对定位
@@ -349,35 +350,17 @@ margin:0 auto;设置块元素（或与之类似的元素）的居中。
 
 ### flex 布局（display: flex）
 - 容器属性
-- flex-direction 决定主轴方向（容器排列方向）
-```
-  flex-direction: row | row-reverse | column | column-reverse;
-```
+1. flex-direction 决定主轴方向（容器排列方向）: row | row-reverse | column | column-reverse;
 
-- flex-wrap 如果一条轴线排不下，定义换行规则
-```
-  flex-wrap: nowrap | wrap | wrap-reverse;
-```
+2. flex-wrap 如果一条轴线排不下，定义换行规则: nowrap | wrap | wrap-reverse;
 
-- flex-flow flex-direction和flex-wrap的简写形式
-```
-  flex-flow: <flex-direction> || <flex-wrap>;
-```
+3. flex-flow flex-direction和flex-wrap的简写形式: <flex-direction> || <flex-wrap>;
 
-- justify-content 定义容器在主轴上的对齐方式
-```
-  justify-content: flex-start | flex-end | center | space-between | space-around | space-evenly;
-```
+4. justify-content 定义容器在主轴上的对齐方式: flex-start | flex-end | center | space-between | space-around | space-evenly;
 
-- align-items 定义容器在交叉轴上的对齐方式
-```
-  align-items: flex-start | flex-end | center | baseline | stretch;
-```
+5. align-items 定义容器在交叉轴上的对齐方式: flex-start | flex-end | center | baseline | stretch;
 
-- align-content 定义多根轴线的对齐方式，如果容器只有一根轴线，该属性不起作用
-```
-  align-content: flex-start | flex-end | center | space-between | space-around | stretch;
-```
+6. align-content 定义多根轴线的对齐方式，如果容器只有一根轴线，该属性不起作用: flex-start | flex-end | center | space-between | space-around | stretch;
 
 - 项目属性
 - order 定义项目的排列顺序，数值越小，排列越靠前，默认为0
@@ -385,6 +368,7 @@ margin:0 auto;设置块元素（或与之类似的元素）的居中。
 - flex-shrink 定义项目的缩小比例，默认为1（即如果空间不足，该项目将缩小）
 - flex-basis 定义了在分配多余空间之前，项目占据的主轴空间。默认值为auto（项目本来大小）
 - `flex 是flex-grow、flex-shrink和flex-basis`的简写，默认值为 0 1 auto
+
 ```
 flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]  伸缩准
 flex: 1 只是flex-grow属性的简写形式，它的完整写法是flex: 1 1 0%。

@@ -1,4 +1,4 @@
-### XSS漏洞 用户的输入检查 请求设置Content-Type: application/json
+### XSS漏洞(跨站脚本攻击Cross-Site Scripting) 用户的输入检查 请求设置Content-Type: application/json
 ```
 不严谨的 content-type导致的 XSS 漏洞，想象一下 JSONP 就是你请求 http://youdomain.com?
 callback=douniwan, 然后返回 douniwan({ data })，那假如请求 http://youdomain.com?
@@ -83,7 +83,7 @@ ctx.set('X-FRAME-OPTIONS', 'DENY')
 3、 location.hash + iframe
 4、 window.name + iframe跨域
 5、 postMessage跨域
-6、 跨域资源共享（CORS）
+6、 跨域资源共享（CORS）   Access-Control-Allow-Origin
 7、 nginx代理跨域
 8、 nodejs中间件代理跨域
 9、 WebSocket协议跨域

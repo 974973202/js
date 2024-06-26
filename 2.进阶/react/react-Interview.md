@@ -1,3 +1,11 @@
+### react 性能优化
+1. shouldComponentUpdate  pureComponent(内部实现了shouldComponentUpdate)
+2. react.memo useMemo useCallback 
+3. key
+4. 按需加载 lazy Suspense  
+  - React.lazy(() => import('./SomeComponent'))
+5. 合并多个setState
+
 ### react和vue的区别
 1. 优化方向
 vue: 编译时优化 模板语法在预编译层面做更多的预判，让 Vue 在运行时有更好的性能
@@ -22,6 +30,30 @@ vue和react的diff算法都是进行同层次的比较，主要有以下两点�
 vue对比节点，如果节点元素类型相同，但是className不同，认为是不同类型的元素，会进行删除重建，但是react则会认为是同类型的节点，只会修改节点属性。
 vue的列表比对采用的是首尾指针法，而react采用的是从左到右依次比对的方式，当一个集合只是把最后一个节点移动到了第一个，react会把前面的节点依次移动，
 而vue只会把最后一个节点移动到最后一个，从这点上来说vue的对比方式更加高效。
+
+### react diff算法
+diff算法三个前提
+- 同级dom比较
+- type不同，则销毁当前节点和子孙节点，并新建节点
+- 同一层级的节点，使用唯一key值来区分
+
+1. 单节点diff（Element、Portal、string、number）
+  - key、type都相同，复用
+  - key不同，删除节点并创建新的
+  - key同、type不同，删除当前节点、以及与兄弟节点的标记，创建新节点
+2. 多节点diff（Array、Iterator）
+会经历三次遍历（而newChildren存在于jsx当中）
+  第一次：处理节点更新（props更新，type更新、删除）
+    1、key不同，结束第一次遍历
+    2、newChildren或oldFiber遍历完，结束第一次遍历（newChildren遍历完但oldFiber存在，则剩余的全都打deletion标签）
+    3、key同，type不同，打deletion标签
+    4、key、type都同，复用
+  第二次：处理节点新增
+    1、newChildren和oldFiber都遍历完，多节点diff结束
+    2、newChildren、oldFiber都没遍历完，进入节点移动逻辑
+    3、newChildren没遍历完，oldFiber遍历完，newChildren剩余值打【插入】的tag
+  第三次：处理节点位置改变
+    1、对比newChildren和oldFiber的各个节点，newChildren[i]能和oldFiber[j]位置对比的上，则i++，j++；否则oldFiber值移动到最后，j++，在与i进行比较
 
 
 #### 为什么 react 不直接渲染对应组件呢？
@@ -78,76 +110,10 @@ react 把渲染流程分为了两部分： render 和 commit
 - Fiber是一个js对象，能承载节点信息、优先级、updateQueue，同时它还是一个工作单元。
 - 每个Fiber节点对应一个React element保存了该组件的类型（函数组件/类组件/原生组件...）、对应的DOM节点等信息。
 - 每个Fiber节点保存了本次更新中该组件改变的状态、要执行的工作（需要被删除/被插入页面中/被更新...）
-```js
-// Fiber结构
-function FiberNode(
-  tag: WorkTag,
-  pendingProps: mixed,
-  key: null | string,
-  mode: TypeOfMode,
-) {
-  // 作为静态数据结构的属性
-  // Fiber对应组件的类型 Function/Class/Host...
-  this.tag = tag;
-  // key属性
-  this.key = key;
-  // 大部分情况同type，某些情况不同，比如FunctionComponent使用React.memo包裹
-  this.elementType = null;
-  // 对于 FunctionComponent，指函数本身，对于ClassComponent，指class，对于HostComponent，指DOM节点tagName
-  this.type = null;
-  // Fiber对应的真实DOM节点
-  this.stateNode = null;
 
-  // 用于连接其他Fiber节点形成Fiber树
-  // 指向父级Fiber节点
-  this.return = null;
-  // 指向子Fiber节点
-  this.child = null;
-  // 指向右边第一个兄弟Fiber节点
-  this.sibling = null;
-  this.index = 0;
-
-  this.ref = null;
-
-  // 作为动态的工作单元的属性
-  this.pendingProps = pendingProps;
-  this.memoizedProps = null;
-  this.updateQueue = null;
-  this.memoizedState = null;
-  this.dependencies = null;
-
-  this.mode = mode;
-
-  this.effectTag = NoEffect;
-  this.nextEffect = null;
-
-  this.firstEffect = null;
-  this.lastEffect = null;
-
-  // 调度优先级相关
-  this.lanes = NoLanes;
-  this.childLanes = NoLanes;
-
-  // 指向该fiber在另一次更新时对应的fiber
-  this.alternate = null;
-}
-```
 - Fiber节点构成的Fiber树就对应DOM树
 
 ### Fiber架构  react的渲染过程
-
-1. 初始化阶段（Initialization）：创建根组件并渲染到DOM中，构建Virtual DOM树
-
-2. 更新阶段（Update）：
-通过setState或props的改变触发重新渲染，进行协调阶段，对比新旧Virtual DOM树，找出差异。
-
-3. 协调阶段（Reconciler）：
-使用Fiber架构进行协调，即Fiber Reconciler。
-通过Diff算法找出需要更新的部分。根据差异生成更新任务（Update）。
-
-4. 提交阶段（Commit）：
-将更新任务应用到真实DOM上。执行DOM操作，完成页面的更新。
-触发生命周期方法和副作用（如useEffect）。
 
 在React的渲染过程中，Virtual DOM扮演着重要的角色，通过比较新旧Virtual DOM树的差异，React能够高效地更新真实DOM，从而实现页面的动态渲染。通过Fiber架构和Diff算法的优化，React能够在更新过程中进行灵活的控制和优化，提高页面的性能和用户体验。
 <!-- 两个阶段 调度阶段（调度器，协调器，渲染器），提交阶段
@@ -174,14 +140,10 @@ virtual-dom -》 Fiber -> Fiber[] -> DOM
 React Fiber 是 React 的新的核心算法，旨在提高 React 应用的性能。它采用了增量渲染的方式来优化性能，具体来说，React Fiber 通过将渲染工作分成多个小单元的任务，然后在每个任务之间执行优先级排序，以便更好地控制渲染的优先级和中断。
 
 React Fiber 的一些性能优化策略包括：
-
 - 异步渲染：React Fiber 支持异步渲染，可以将渲染工作分成多个小任务，并根据任务的优先级来调度执行，从而提高页面的响应速度。
 - 可中断渲染：React Fiber 支持中断渲染，可以在渲染过程中暂停并恢复工作，以便更好地响应用户的交互。
 - 优先级调度：React Fiber 支持任务的优先级调度，可以根据任务的优先级来决定执行的顺序，从而更好地控制渲染的优先级。
 - 增量更新：React Fiber 支持增量更新，可以只更新需要更新的部分，而不是重新渲染整个页面，从而减少不必要的渲染。
-
-总的来说，React Fiber 通过引入异步渲染、可中断渲染、优先级调度和增量更新等策略，来优化 React 应用的性能，提高页面的响应速度和用户体验。
-
 
 
 ### React的合成事件
@@ -189,11 +151,8 @@ React Fiber 的一些性能优化策略包括：
   react 16绑定到document
   react 17绑定到root
 React合成事件的优势：
-抹平不同浏览器直接的差异，提供统一的API使用体验
-通过事件委托的方式统一绑定和分发事件，有利于提升性能，减少内存消耗
-React 的合成事件机制是指 React 在处理 DOM 事件时，会将所有的事件统一封装成合成事件对象，
-然后通过事件委托的方式将事件绑定在 document（17版本在root上） 上，
-然后根据事件冒泡的机制来处理事件。
+1. 抹平不同浏览器直接的差异，提供统一的API使用体验
+2. 通过事件委托的方式统一绑定和分发事件，有利于提升性能，减少内存消耗
 
 之后详细说了一下合成事件的绑定及分发流程：
 1. React应用启动时，会在页面渲染的根元素上绑定原生的DOM事件，将该`根元素作为委托对象`
@@ -203,11 +162,11 @@ React 的合成事件机制是指 React 在处理 DOM 事件时，会将所有�
 5. 找到fiber节点后，将其绑定的合成事件函数加到一个函数执行队列中
 6. 最后则依次执行队列中的函数完成事件的触发流程
 
-### React的patch流程(批处理)
-1. React新版架构新增了一个Scheduler调度器主要用于调度Fiber节点的生成和更新任务
-2. 当组件更新时，Reconciler协调器执行组件的render方法生成一个Fiber节点之后再递归的去生成Fiber节点的子节点
-3. `每一个Fiber节点`的生成都是一个单独的任务，会以回调的形式交给Scheduler进行调度处理，在Scheduler里会根据任务的优先级去执行任务
-4. 任务的优先级的指定是根据`车道模型`，将任务进行分类，每一类拥有不同的优先级，所有的分类和优先级都在React中进行了枚举
+### React的patch流程(批处理)  Scheduler调度器原理
+1. Scheduler调度器主要用于调度Fiber节点的生成和更新任务
+2. Reconciler协调器执行组件的render方法生成一个Fiber节点  (之后再递归的去生成Fiber节点的子节点)
+3. `每一个Fiber节点`的生成都是一个单独的任务，交给Scheduler进行调度处理，根据任务的优先级去执行任务
+4. 任务的优先级是根据`lanes车道模型`判断的，将任务进行分类，每一类拥有不同的优先级，所有的分类和优先级都在React中进行了枚举
 5. Scheduler按照优先级执行任务时，会异步的执行，同时每一个任务执行完成之后，都会`通过requestIdleCallBack去判断下一个任务是否能在当前渲染帧的剩余时间内完成`
 6. 如果不能完成就发生中断，把线程的控制权交给浏览器，剩下的任务则在下一个渲染帧内执行
 7. 整个Reconciler和Scheduler的任务执行完成之后，会生成一个新的workInProgressFiber的新的节点树，之后Reconciler触发Commit阶段通知Render渲染器去进行diff操作，也就是我们说的patch流程
@@ -225,9 +184,6 @@ React事务机制的优点包括：
 - 保证更新的一致性：通过事务机制，React可以确保组件更新的顺序和一致性，避免出现更新操作的冲突和不一致。
 - 提高性能：事务机制可以将多个更新操作合并成一个批处理操作，减少不必要的重复渲染，提高页面性能和用户体验。
 - 简化代码逻辑：通过事务机制，开发者可以更方便地管理组件更新过程，简化代码逻辑，提高开发效率。
-
-总的来说，React事务机制是React框架中非常重要的一部分，它可以确保组件更新的一致性和可靠性，提高页面性能和开发效率。
-
 
 ### 1. 什么是 Hooks
 可以在不编写 class 的情况下使用 state 以及其他的 React 特性
@@ -258,14 +214,6 @@ batchedUpdates
 4 ctx = createContext(0)    ctx.Provider     子 useContext(ctx)
 
 ReactDOM.createPortal 创建根节点外的弹窗
-
-### react 性能优化
-1. shouldComponentUpdate  pureComponent(内部实现了shouldComponentUpdate)
-2. react.memo useMemo useCallback 
-3. key
-4. 按需加载 lazy Suspense  
-  - React.lazy(() => import('./SomeComponent'))
-5. 合并多个setState
 
 PureComponent适用于类组件，React.memo适用于函数组件
 
@@ -317,31 +265,6 @@ lane模型：二进制掩码（”用一串二进制数字（掩码）去操作�
 2. 高优先级怎么插队：低优先级已经构建了一部分fiber树，将其还原
 3. 怎么解决饥饿问题：（低优先级的任务也要被执行），优先级调度过程中，遍历【未执行的任务包含的lane】，计算过期时间，加入root.expiredLanes，下次调用时优先返回expiredLanes（到期lane）
 
-### diff算法（单节点diff、双节点diff）
-diff算法三个前提
-- 同级dom比较
-- type不同，则销毁当前节点和子孙节点，并新建节点
-- 同一层级的节点，使用唯一key值来区分
-
-1. 单节点diff（Element、Portal、string、number）
-  - key、type都相同，复用
-  - key不同，删除节点并创建新的
-  - key同、type不同，删除当前节点、以及与兄弟节点的标记，创建新节点
-2. 多节点diff（Array、Iterator）
-会经历三次遍历（而newChildren存在于jsx当中）
-  第一次：处理节点更新（props更新，type更新、删除）
-    1、key不同，结束第一次遍历
-    2、newChildren或oldFiber遍历完，结束第一次遍历（newChildren遍历完但oldFiber存在，则剩余的全都打deletion标签）
-    3、key同，type不同，打deletion标签
-    4、key、type都同，复用
-  第二次：处理节点新增
-    1、newChildren和oldFiber都遍历完，多节点diff结束
-    2、newChildren、oldFiber都没遍历完，进入节点移动逻辑
-    3、newChildren没遍历完，oldFiber遍历完，newChildren剩余值打【插入】的tag
-  第三次：处理节点位置改变
-    1、对比newChildren和oldFiber的各个节点，newChildren[i]能和oldFiber[j]位置对比的上，则i++，j++；否则oldFiber值移动到最后，j++，在与i进行比较
-
-
 ### react17之前jsx文件为什么要声明import React from 'react'，之后为什么不需要了
 jsx经过编译之后编程React.createElement，不引入React就会报错，react17改变了编译方式，变成了jsx.createElement
 
@@ -375,11 +298,6 @@ mount时：组件会经历componnetDidMount
 update时：组件会调用getSnapshotBeforeUpdate、componnetDidUpdate
 unMount时：调用componnetWillUnmount
 error时：调用componnetDidCatch
-
-15. 说说virtual Dom的理解
-是什么：React.createElement函数返回的就是虚拟dom，用js对象描述真实dom的js对象
-优点：处理了浏览器的兼容性 防范xss攻击 跨平台 差异化更新 减少更新的dom操作
-缺点：额外的内存 初次渲染不一定快
 
 17. 我们写的事件是绑定在dom上么，如果不是绑定在哪里？ 
 答：v16绑定在document上，v17绑定在container上

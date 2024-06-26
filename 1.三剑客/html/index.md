@@ -71,6 +71,19 @@ function loadScript(url, callback){
 }
 ```
 
+### script标签有几种执行形式
+1. 内联脚本：在 <script> 标签中直接编写 JavaScript 代码
+2. 外部脚本：通过 src 属性引入外部的 JavaScript 文件:  <script src="script.js"></script>
+3. 延迟执行脚本  defer
+4. 异步执行脚本  async
+5. 动态加载脚本  document.createElement('script')
+6. es modules模块化脚本:  <script type="module" src="./a.mjs"></script>
+
+### src和herf的区别
+src 用于指定嵌入资源的 URL，比如 JavaScript、图片、音频、视频等。
+href 用于指定超链接的 URL，比如页面链接、样式表链接等。
+
+
 ### HTML5新特性
 1. canvas
 2. SVG
@@ -226,24 +239,11 @@ wxinvoke(cb) {
 - JavaScript
 > 避免频繁操作样式，最好一次性重写style属性，或者将样式列表定义为class并
 一次性更改class属性
-> 避免频繁操作DOM，创建一个documentFragment，在它上面应用所有DOM操作，最
-后再把它添加到文档中
+> 避免频繁操作DOM，创建一个documentFragment，在它上面应用所有DOM操作，最后再把它添加到文档中
 > 也可以先为元素设置display: none，操作结束后再把它显示出来。因为在
 display属性为none的元素上进行的DOM操作不会引发回流和重绘
-> 避免频繁读取会引发回流/重绘的属性，如果确实需要多次使用，就用一个变量缓
-存起来
-> 对具有复杂动画的元素使用绝对定位，使它脱离文档流，否则会引起父元素及后续
-元素频繁回流
-
-
-
-
-
-
-
-
-
-
+> 避免频繁读取会引发回流/重绘的属性，如果确实需要多次使用，就用一个变量缓存起来
+> 对具有复杂动画的元素使用绝对定位，使它脱离文档流，否则会引起父元素及后续元素频繁回流
 
 
 ### CSS加载会造成阻塞吗
@@ -263,8 +263,7 @@ display属性为none的元素上进行的DOM操作不会引发回流和重绘
 ### 为什么 JS 阻塞页面加载 ?
 由于 JavaScript 是可操纵 DOM 的,如果在修改这些元素属性同时渲染界面（即 JavaScript 线程和 UI 线程同时运行）,那么渲染线程前后获得的元素数据就可能不一致了。
 因此为了防止渲染出现不可预期的结果,浏览器设置 GUI 渲染线程与 JavaScript 引擎为互斥的关系。
-当 JavaScript 引擎执行时 GUI 线程会被挂起,GUI 更新会被保存在一个队列中等到引擎线程空闲时立即被执行。
-从上面我们可以推理出,由于 GUI 渲染线程与 JavaScript 执行线程是互斥的关系,
+
 当浏览器在执行 JavaScript 程序的时候,GUI 渲染线程会被保存在一个队列中,直到 JS 程序执行完成,才会接着执行。
 因此如果 JS 执行的时间过长,这样就会造成页面的渲染不连贯,导致页面渲染加载阻塞的感觉。
 - `js的加载会阻塞DOM树的解析`
@@ -280,7 +279,8 @@ JavaScript的加载、解析与执行会阻塞DOM的构建，也就是说，在�
 
 - 这是什么情况？
 
-这是因为JavaScript不只是可以改DOM，它还可以更改样式，也就是它可以更改CSSOM。前面我们介绍，不完整的CSSOM是无法使用的，但JavaScript中想访问CSSOM并更改它，那么在执行JavaScript时，必须要能拿到完整的CSSOM。所以就导致了一个现象，如果浏览器尚未完成CSSOM的下载和构建，而我们却想在此时运行脚本，那么浏览器将延迟脚本执行和DOM构建，直至其完成CSSOM的下载和构建。也就是说，在这种情况下，**浏览器会先下载和构建CSSOM，然后再执行JavaScript，最后在继续构建DOM**。
+JavaScript不只是可以改DOM，它可以更改CSSOM。前面我们介绍，不完整的CSSOM是无法使用的，但JavaScript中想访问CSSOM并更改它，那么在执行JavaScript时，必须要能拿到完整的CSSOM。所以就导致了一个现象，如果浏览器尚未完成CSSOM的下载和构建，而我们却想在此时运行脚本，那么浏览器将延迟脚本执行和DOM构建，直至其完成CSSOM的下载和构建。也就是说，在这种情况下，
+**浏览器会先下载和构建CSSOM，然后再执行JavaScript，最后在继续构建DOM**。
 
 ### DOMContentLoaded 与 load 的区别 ?
 当 DOMContentLoaded 事件触发时,仅当 DOM 解析完成后,不包括样式表,图片。我们前面提到 CSS 加载会阻塞 Dom 的渲染和后面 js 的执行,js 会阻塞 Dom 解析,所以我们可以得到结论:当文档中没有脚本时,浏览器解析完文档便能触发 DOMContentLoaded 事件。如果文档中包含脚本,则脚本会阻塞文档的解析,而脚本需要等 CSSOM 构建完成才能执行。在任何情况下,DOMContentLoaded 的触发不需要等待图片等其他资源加载完成。
@@ -293,7 +293,7 @@ DOMContentLoaded -> load。
 ```js
 <script>
 渲染过程中，如果遇到 JS 就停止渲染，执行 JS 代码。
-如果 JS 需要操作CSSOM，则会先让CSSOM构建完，再执行JS，最后构建DOM
+{/* 如果 JS 需要操作CSSOM，则会先让CSSOM构建完，再执行JS，最后构建DOM */}
 
 <script async>
 异步执行引入的 JavaScript，加载完成后就执行 JS，阻塞DOM

@@ -290,6 +290,15 @@ function f1(root) {
     console.log(root.value) // ACFGBDE
     f1(root.left)
     f1(root.right)
+
+    // 非递归
+    // const stack = [root];
+    // while(stack.length) {
+    //   const n = stack.pop();
+    //   console.log(n.val);
+    //   if (n.right) stack.push(n.right)
+    //   if (n.left) stack.push(n.left)
+    // }
 }
 f1(a)
 
@@ -299,6 +308,16 @@ function f2(root) {
     f2(root.left)
     console.log(root.value) // FCGADBE
     f2(root.right)
+
+    // const stack = [];
+    // let p = root
+    // while(p) {
+    //   stack.push(p);
+    //   p = p.left;
+    // }
+    // const n = stack.pop();
+    // console.log(n.val);
+    // p = n.right;
 }
 f2(a)
 
@@ -308,6 +327,19 @@ function f3(root) {
     f3(root.left)
     f3(root.right)
     console.log(root.value) // FGCDEBA
+
+    // const stack = [];
+    // const outputStack = [];
+    // while(stack.length) {
+    //   const n = stack.pop();
+    //   outputStack.push(n)
+    //   if (n.right) stack.push(n.right)
+    //   if (n.left) stack.push(n.left)
+    // }
+    // while(outputStack.length) {
+    //   const n = outputStack.pop();
+    //   console.log(n.val)
+    // }
 }
 f3(a)
 ```
@@ -381,7 +413,7 @@ function f1(hou, zhong) {
 f1(hou,zhong)
 ```
 
-深度优先搜索：适合探索未知
+### 深度优先搜索：适合探索未知
 ```js
 function Node(value) {
     this.value = value;
@@ -415,7 +447,7 @@ deepSearch(a, 'n')
 // 对于二叉树来说，深度优先搜索和前序遍历的顺序是一样的
 ```
 
-广度优先搜索：适合探索局域
+### 广度优先搜索：适合探索局域
 ```js
 function Node(value) {
     this.value = value;

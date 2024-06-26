@@ -28,7 +28,9 @@ class RedPackage {
         //  正常应该用第三方库或者字符串算法实现一个精准的加减乘除
         //  这里为了简单就这么直接做了
         let youGet = (this.money * ratio).toFixed(2);
+        // 还剩下的钱
         const tempRemain = +(this._remain - youGet).toFixed(2);
+        // 最少必须剩余的钱
         const allLeast = this.count * 0.01;
 
         //  如果剩余的金额不够每人一分钱，那么需要减少本次获得的金额
