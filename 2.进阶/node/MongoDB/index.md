@@ -48,3 +48,4 @@ MongoDB Server 3.2.x: mongoose ^4.3.0 or 5.x
 MongoDB Server 3.4.x: mongoose ^4.7.3 or 5.x
 MongoDB Server 3.6.x: mongoose 5.x
 MongoDB Server 4.0.x: mongoose ^5.2.0
+MongoDB Server 4.2.x: mongoose 7.x
